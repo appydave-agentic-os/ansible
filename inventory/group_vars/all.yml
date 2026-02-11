@@ -34,7 +34,7 @@ homebrew_formulae:
   - pipx
   - postgresql@17
   - pyenv
-  - python@3.13
+  - python@3.14
   - rbenv
   - ruby-build
   - rustup
