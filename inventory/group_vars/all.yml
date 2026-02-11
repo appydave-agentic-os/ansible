@@ -7,6 +7,14 @@
 # without overriding these defaults.
 
 # -----------------------------------------------------------------------------
+# Upgrade mode
+# -----------------------------------------------------------------------------
+# Default: false (install missing packages only)
+# Set to true to upgrade all packages to latest versions:
+#   ansible-playbook site.yml --limit mac-mini-m2 -e upgrade_packages=true
+upgrade_packages: false
+
+# -----------------------------------------------------------------------------
 # Homebrew taps
 # -----------------------------------------------------------------------------
 homebrew_taps: []

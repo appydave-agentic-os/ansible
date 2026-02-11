@@ -1,7 +1,7 @@
 ---
-- name: Install Homebrew cask applications
+- name: Install/upgrade Homebrew cask applications
   community.general.homebrew_cask:
     name: "{{ item }}"
-    state: present
+    state: "{{ 'upgraded' if upgrade_packages | bool else 'present' }}"
   loop: "{{ homebrew_casks + homebrew_casks_extra }}"
   when: (homebrew_casks + homebrew_casks_extra) | length > 0

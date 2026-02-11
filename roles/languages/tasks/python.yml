@@ -35,3 +35,16 @@
   register: pip_install
   changed_when: "'Successfully installed' in pip_install.stdout"
   loop: "{{ pyenv_global_packages }}"
+
+- name: Update global Python packages
+  ansible.builtin.shell: |
+    export PYENV_ROOT="$HOME/.pyenv"
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init --path)"
+    pip install --upgrade {{ item }}
+  args:
+    executable: /bin/zsh
+  register: pip_upgrade
+  changed_when: "'Successfully installed' in pip_upgrade.stdout"
+  loop: "{{ pyenv_global_packages }}"
+  when: upgrade_packages | bool

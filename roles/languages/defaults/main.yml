@@ -1,4 +1,5 @@
 ---
+upgrade_packages: false
 rbenv_ruby_versions: []
 rbenv_ruby_global: ""
 rbenv_gems: []
