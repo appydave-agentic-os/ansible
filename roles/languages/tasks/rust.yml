@@ -1,0 +1,28 @@
+---
+- name: Install Rust toolchain via rustup
+  ansible.builtin.shell: |
+    rustup toolchain install {{ rust_toolchain }}
+    rustup default {{ rust_toolchain }}
+  args:
+    executable: /bin/zsh
+  register: rust_install
+  changed_when: "'installed' in rust_install.stdout or 'updated' in rust_install.stdout"
+
+- name: Install Rust components
+  ansible.builtin.shell: |
+    rustup component add {{ item }}
+  args:
+    executable: /bin/zsh
+  register: rust_component
+  changed_when: "'installing' in rust_component.stdout"
+  loop: "{{ rust_components }}"
+  when: rust_components | length > 0
+
+- name: Update Rust toolchain
+  ansible.builtin.shell: |
+    rustup update {{ rust_toolchain }}
+  args:
+    executable: /bin/zsh
+  register: rust_update
+  changed_when: "'updated' in rust_update.stdout"
+  when: upgrade_packages | bool
