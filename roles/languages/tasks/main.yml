@@ -10,3 +10,7 @@
 - name: Configure Python via pyenv
   ansible.builtin.include_tasks: python.yml
   when: pyenv_python_versions | length > 0
+
+- name: Configure Rust via rustup
+  ansible.builtin.include_tasks: rust.yml
+  when: rust_toolchain | length > 0

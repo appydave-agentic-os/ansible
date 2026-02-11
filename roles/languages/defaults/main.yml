@@ -11,3 +11,6 @@ nvm_global_packages: []
 pyenv_python_versions: []
 pyenv_python_global: ""
 pyenv_global_packages: []
+
+rust_toolchain: ""
+rust_components: []

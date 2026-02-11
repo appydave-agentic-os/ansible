@@ -37,6 +37,7 @@ homebrew_formulae:
   - python@3.13
   - rbenv
   - ruby-build
+  - rustup
   - sqlite
   - tesseract
   - uv
@@ -167,23 +168,28 @@ macos_defaults_extra: []
 # -----------------------------------------------------------------------------
 # Ruby (rbenv)
 rbenv_ruby_versions:
-  - "3.4.2"
-rbenv_ruby_global: "3.4.2"
+  - "3.4.4"
+rbenv_ruby_global: "3.4.4"
 rbenv_gems:
   - bundler
 
 # Node.js (nvm)
 nvm_node_versions:
+  - "24.13.0"
   - "22.14.0"
-nvm_node_global: "22.14.0"
+nvm_node_global: "24.13.0"
 nvm_global_packages:
   - yarn
 
 # Python (pyenv)
 pyenv_python_versions:
-  - "3.13.3"
-pyenv_python_global: "3.13.3"
+  - "3.14.3"
+pyenv_python_global: "3.14.3"
 pyenv_global_packages: []
+
+# Rust (rustup — installed via Homebrew, toolchain managed here)
+rust_toolchain: stable
+rust_components: []
 
 # -----------------------------------------------------------------------------
 # Git settings
