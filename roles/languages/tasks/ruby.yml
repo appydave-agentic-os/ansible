@@ -29,3 +29,14 @@
   register: gem_install
   changed_when: "'Successfully installed' in gem_install.stdout"
   loop: "{{ rbenv_gems }}"
+
+- name: Update global Ruby gems
+  ansible.builtin.shell: |
+    eval "$(rbenv init -)"
+    gem update {{ item }}
+  args:
+    executable: /bin/zsh
+  register: gem_update
+  changed_when: "'Gems updated' in gem_update.stdout or 'Updating' in gem_update.stdout"
+  loop: "{{ rbenv_gems }}"
+  when: upgrade_packages | bool

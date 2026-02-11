@@ -12,6 +12,18 @@
   changed_when: "'Now using' in node_install.stdout or 'Now using' in node_install.stderr"
   loop: "{{ nvm_node_versions }}"
 
+- name: Reinstall Node.js versions to pick up latest patch
+  ansible.builtin.shell: |
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm install {{ item }} --reinstall-packages-from={{ item }}
+  args:
+    executable: /bin/zsh
+  register: node_upgrade
+  changed_when: "'Now using' in node_upgrade.stdout or 'Now using' in node_upgrade.stderr"
+  loop: "{{ nvm_node_versions }}"
+  when: upgrade_packages | bool
+
 - name: Set default Node.js version
   ansible.builtin.shell: |
     export NVM_DIR="$HOME/.nvm"
@@ -33,3 +45,16 @@
   register: npm_install
   changed_when: "'added' in npm_install.stdout or 'added' in npm_install.stderr"
   loop: "{{ nvm_global_packages }}"
+
+- name: Update global npm packages
+  ansible.builtin.shell: |
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm use {{ nvm_node_global }}
+    npm update -g {{ item }}
+  args:
+    executable: /bin/zsh
+  register: npm_update
+  changed_when: "'updated' in npm_update.stdout or 'added' in npm_update.stdout"
+  loop: "{{ nvm_global_packages }}"
+  when: upgrade_packages | bool

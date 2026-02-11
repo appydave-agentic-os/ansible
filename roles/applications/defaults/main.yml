@@ -1,3 +1,4 @@
 ---
+upgrade_packages: false
 homebrew_casks: []
 homebrew_casks_extra: []
