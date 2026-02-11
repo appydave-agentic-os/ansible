@@ -1,0 +1,49 @@
+---
+- name: Check if Oh My Zsh is installed
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.oh-my-zsh"
+  register: ohmyzsh_dir
+
+- name: Install Oh My Zsh
+  ansible.builtin.shell: >
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    --unattended
+  args:
+    creates: "{{ ansible_env.HOME }}/.oh-my-zsh"
+  when: not ohmyzsh_dir.stat.exists
+
+- name: Clone zsh-autosuggestions plugin
+  ansible.builtin.git:
+    repo: https://github.com/zsh-users/zsh-autosuggestions.git
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+    depth: 1
+    update: true
+
+- name: Clone zsh-syntax-highlighting plugin
+  ansible.builtin.git:
+    repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+    depth: 1
+    update: true
+
+- name: Deploy .zshrc from template
+  ansible.builtin.template:
+    src: zshrc.j2
+    dest: "{{ ansible_env.HOME }}/.zshrc"
+    backup: true
+    mode: "0644"
+
+- name: Deploy .zprofile from template
+  ansible.builtin.template:
+    src: zprofile.j2
+    dest: "{{ ansible_env.HOME }}/.zprofile"
+    backup: true
+    mode: "0644"
+
+- name: Create ~/.secrets placeholder
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.secrets"
+    state: touch
+    mode: "0600"
+    modification_time: preserve
+    access_time: preserve

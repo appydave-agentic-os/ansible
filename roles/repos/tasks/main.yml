@@ -1,0 +1,32 @@
+---
+- name: Configure git user name
+  community.general.git_config:
+    name: user.name
+    scope: global
+    value: "{{ git_user_name }}"
+  when: git_user_name | length > 0
+
+- name: Configure git user email
+  community.general.git_config:
+    name: user.email
+    scope: global
+    value: "{{ git_user_email }}"
+  when: git_user_email | length > 0
+
+- name: Create parent directories for repos
+  ansible.builtin.file:
+    path: "{{ item.dest | dirname }}"
+    state: directory
+    mode: "0755"
+  loop: "{{ git_repos + git_repos_extra }}"
+  when: (git_repos + git_repos_extra) | length > 0
+
+- name: Clone or update git repos
+  ansible.builtin.git:
+    repo: "{{ item.repo }}"
+    dest: "{{ item.dest }}"
+    version: "{{ item.version | default('main') }}"
+    update: true
+    accept_hostkey: true
+  loop: "{{ git_repos + git_repos_extra }}"
+  when: (git_repos + git_repos_extra) | length > 0

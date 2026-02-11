@@ -1,0 +1,35 @@
+---
+- name: Install Node.js versions via nvm
+  ansible.builtin.shell: |
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    if ! nvm ls {{ item }} >/dev/null 2>&1; then
+      nvm install {{ item }}
+    fi
+  args:
+    executable: /bin/zsh
+  register: node_install
+  changed_when: "'Now using' in node_install.stdout or 'Now using' in node_install.stderr"
+  loop: "{{ nvm_node_versions }}"
+
+- name: Set default Node.js version
+  ansible.builtin.shell: |
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm alias default {{ nvm_node_global }}
+  args:
+    executable: /bin/zsh
+  changed_when: false
+  when: nvm_node_global | length > 0
+
+- name: Install global npm packages
+  ansible.builtin.shell: |
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm use {{ nvm_node_global }}
+    npm install -g {{ item }}
+  args:
+    executable: /bin/zsh
+  register: npm_install
+  changed_when: "'added' in npm_install.stdout or 'added' in npm_install.stderr"
+  loop: "{{ nvm_global_packages }}"

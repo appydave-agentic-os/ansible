@@ -1,0 +1,19 @@
+---
+- name: Add Homebrew taps
+  community.general.homebrew_tap:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ homebrew_taps + homebrew_taps_extra }}"
+  when: (homebrew_taps + homebrew_taps_extra) | length > 0
+
+- name: Install Homebrew formulae
+  community.general.homebrew:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ homebrew_formulae + homebrew_formulae_extra }}"
+  when: (homebrew_formulae + homebrew_formulae_extra) | length > 0
+
+- name: Update Homebrew formulae
+  community.general.homebrew:
+    update_homebrew: true
+  changed_when: false

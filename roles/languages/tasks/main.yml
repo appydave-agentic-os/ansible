@@ -1,0 +1,12 @@
+---
+- name: Configure Ruby via rbenv
+  ansible.builtin.include_tasks: ruby.yml
+  when: rbenv_ruby_versions | length > 0
+
+- name: Configure Node.js via nvm
+  ansible.builtin.include_tasks: node.yml
+  when: nvm_node_versions | length > 0
+
+- name: Configure Python via pyenv
+  ansible.builtin.include_tasks: python.yml
+  when: pyenv_python_versions | length > 0
