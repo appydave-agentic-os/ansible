@@ -1,0 +1,194 @@
+---
+# =============================================================================
+# Shared configuration for all macOS workstations
+# =============================================================================
+# Per-machine overrides go in host_vars/<hostname>.yml
+# Roles merge base lists with *_extra lists, so host_vars can add items
+# without overriding these defaults.
+
+# -----------------------------------------------------------------------------
+# Homebrew taps
+# -----------------------------------------------------------------------------
+homebrew_taps: []
+homebrew_taps_extra: []
+
+# -----------------------------------------------------------------------------
+# Homebrew formulae (explicitly installed packages)
+# -----------------------------------------------------------------------------
+homebrew_formulae:
+  - ffmpeg
+  - fzf
+  - gh
+  - git
+  - nvm
+  - openssl@3
+  - pgvector
+  - pipx
+  - postgresql@17
+  - pyenv
+  - python@3.13
+  - rbenv
+  - ruby-build
+  - sqlite
+  - tesseract
+  - uv
+  - whisper-cpp
+  - zeromq
+
+homebrew_formulae_extra: []
+
+# -----------------------------------------------------------------------------
+# Homebrew casks (GUI applications)
+# -----------------------------------------------------------------------------
+homebrew_casks:
+  - ngrok
+  # - visual-studio-code
+  # - iterm2
+  # - docker
+  # - google-chrome
+
+homebrew_casks_extra: []
+
+# -----------------------------------------------------------------------------
+# Shell configuration
+# -----------------------------------------------------------------------------
+zsh_theme: robbyrussell
+zsh_plugins:
+  - git
+  - zsh-autosuggestions
+  - zsh-syntax-highlighting
+
+shell_extra_paths:
+  - /opt/homebrew/bin
+  - /opt/homebrew/sbin
+  - $HOME/.rbenv/bin
+  - $HOME/.pyenv/bin
+  - $HOME/.local/bin
+
+shell_env_vars:
+  EDITOR: vim
+  LANG: en_US.UTF-8
+  HOMEBREW_NO_ANALYTICS: "1"
+
+# -----------------------------------------------------------------------------
+# macOS defaults (Finder, Dock, system preferences)
+# -----------------------------------------------------------------------------
+macos_defaults:
+  # Finder: show all file extensions
+  - domain: NSGlobalDomain
+    key: AppleShowAllExtensions
+    type: bool
+    value: true
+
+  # Finder: show hidden files
+  - domain: com.apple.finder
+    key: AppleShowAllFiles
+    type: bool
+    value: true
+
+  # Finder: show path bar
+  - domain: com.apple.finder
+    key: ShowPathbar
+    type: bool
+    value: true
+
+  # Finder: show status bar
+  - domain: com.apple.finder
+    key: ShowStatusBar
+    type: bool
+    value: true
+
+  # Finder: default to list view
+  - domain: com.apple.finder
+    key: FXPreferredViewStyle
+    type: string
+    value: Nlsv
+
+  # Finder: search current folder by default
+  - domain: com.apple.finder
+    key: FXDefaultSearchScope
+    type: string
+    value: SCcf
+
+  # Dock: set icon size
+  - domain: com.apple.dock
+    key: tilesize
+    type: float
+    value: 48
+
+  # Dock: auto-hide
+  - domain: com.apple.dock
+    key: autohide
+    type: bool
+    value: true
+
+  # Dock: minimize using scale effect
+  - domain: com.apple.dock
+    key: mineffect
+    type: string
+    value: scale
+
+  # Disable natural scrolling
+  - domain: NSGlobalDomain
+    key: com.apple.swipescrolldirection
+    type: bool
+    value: false
+
+  # Enable key repeat (disable press-and-hold)
+  - domain: NSGlobalDomain
+    key: ApplePressAndHoldEnabled
+    type: bool
+    value: false
+
+  # Fast key repeat rate
+  - domain: NSGlobalDomain
+    key: KeyRepeat
+    type: int
+    value: 2
+
+  # Short delay before key repeat
+  - domain: NSGlobalDomain
+    key: InitialKeyRepeat
+    type: int
+    value: 15
+
+macos_defaults_extra: []
+
+# -----------------------------------------------------------------------------
+# Language version managers
+# -----------------------------------------------------------------------------
+# Ruby (rbenv)
+rbenv_ruby_versions:
+  - "3.4.2"
+rbenv_ruby_global: "3.4.2"
+rbenv_gems:
+  - bundler
+
+# Node.js (nvm)
+nvm_node_versions:
+  - "22.14.0"
+nvm_node_global: "22.14.0"
+nvm_global_packages:
+  - yarn
+
+# Python (pyenv)
+pyenv_python_versions:
+  - "3.13.3"
+pyenv_python_global: "3.13.3"
+pyenv_global_packages: []
+
+# -----------------------------------------------------------------------------
+# Git settings
+# -----------------------------------------------------------------------------
+git_user_name: David Cruwys
+git_user_email: david@ideasmen.com.au
+
+# -----------------------------------------------------------------------------
+# Git repositories to clone/update
+# -----------------------------------------------------------------------------
+git_repos: []
+  # Example:
+  # - repo: git@github.com:appydave/appydave.git
+  #   dest: "{{ ansible_env.HOME }}/dev/ad/appydave/appydave"
+
+git_repos_extra: []

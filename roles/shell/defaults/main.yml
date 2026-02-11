@@ -1,0 +1,6 @@
+---
+zsh_theme: robbyrussell
+zsh_plugins:
+  - git
+shell_extra_paths: []
+shell_env_vars: {}

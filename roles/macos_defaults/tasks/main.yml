@@ -1,0 +1,12 @@
+---
+- name: Apply macOS defaults
+  community.general.osx_defaults:
+    domain: "{{ item.domain }}"
+    key: "{{ item.key }}"
+    type: "{{ item.type }}"
+    value: "{{ item.value }}"
+    state: present
+  loop: "{{ macos_defaults + macos_defaults_extra }}"
+  notify:
+    - Restart Dock
+    - Restart Finder

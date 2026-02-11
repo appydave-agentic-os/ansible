@@ -1,0 +1,12 @@
+---
+rbenv_ruby_versions: []
+rbenv_ruby_global: ""
+rbenv_gems: []
+
+nvm_node_versions: []
+nvm_node_global: ""
+nvm_global_packages: []
+
+pyenv_python_versions: []
+pyenv_python_global: ""
+pyenv_global_packages: []

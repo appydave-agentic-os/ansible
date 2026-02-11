@@ -1,0 +1,13 @@
+---
+# =============================================================================
+# Mac Mini M4 overrides
+# =============================================================================
+
+# Extra formulae specific to this machine
+# homebrew_formulae_extra: []
+
+# Extra casks specific to this machine
+# homebrew_casks_extra: []
+
+# Extra repos specific to this machine
+# git_repos_extra: []

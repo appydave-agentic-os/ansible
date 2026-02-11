@@ -1,0 +1,29 @@
+---
+- name: Provision macOS development environment
+  hosts: all
+
+  pre_tasks:
+    - name: Verify Homebrew is installed
+      ansible.builtin.command: brew --version
+      register: brew_check
+      changed_when: false
+      failed_when: brew_check.rc != 0
+
+  roles:
+    - role: homebrew
+      tags: [homebrew]
+
+    - role: applications
+      tags: [applications]
+
+    - role: shell
+      tags: [shell]
+
+    - role: macos_defaults
+      tags: [macos]
+
+    - role: languages
+      tags: [languages]
+
+    - role: repos
+      tags: [repos]
