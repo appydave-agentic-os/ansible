@@ -32,17 +32,14 @@ homebrew_formulae:
   - openssl@3
   - pgvector
   - pipx
-  - postgresql@17
   - pyenv
   - python@3.14
   - rbenv
   - ruby-build
   - rustup
   - sqlite
-  - tesseract
   - uv
   - whisper-cpp
-  - zeromq
 
 homebrew_formulae_extra: []
 
