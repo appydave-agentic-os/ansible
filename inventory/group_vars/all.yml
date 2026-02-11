@@ -30,7 +30,6 @@ homebrew_formulae:
   - git
   - nvm
   - openssl@3
-  - pgvector
   - pipx
   - pyenv
   - python@3.14
