@@ -70,3 +70,10 @@ export CPPFLAGS="-I/opt/homebrew/opt/libpq/include"
 # Secrets (API keys, tokens - never committed to version control)
 # -----------------------------------------------------------------------------
 [ -f "$HOME/.secrets" ] && source "$HOME/.secrets"
+
+# -----------------------------------------------------------------------------
+# Custom user configuration (not managed by Ansible)
+# -----------------------------------------------------------------------------
+# Add your personal aliases, functions, and customizations to ~/.zshrc.local
+# This file is sourced last and will override any Ansible-managed settings
+[ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"

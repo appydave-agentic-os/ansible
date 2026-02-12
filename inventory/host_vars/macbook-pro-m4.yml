@@ -1,13 +1,71 @@
 ---
 # =============================================================================
-# MacBook Pro M4 overrides
+# MacBook Pro M4 - Curated Minimal Configuration
 # =============================================================================
+# Generated: 2026-02-12
+# This is a RECOMMENDED config for a minimal/fresh start
+# Review and adjust before applying
 
-# Extra formulae specific to this machine
-# homebrew_formulae_extra: []
+# -----------------------------------------------------------------------------
+# Homebrew formulae
+# -----------------------------------------------------------------------------
+# Base config provides: ffmpeg, fzf, gh, git, nvm, openssl@3, pgvector, pipx,
+#                       pyenv, python@3.14, rbenv, ruby-build, rustup, sqlite,
+#                       uv, whisper-cpp
+# Adding these essentials:
 
-# Extra casks specific to this machine
-# homebrew_casks_extra: []
+homebrew_formulae_extra:
+  - ripgrep           # Fast grep - Claude Code's Grep tool uses this!
+  - yt-dlp            # Video downloader (YouTube + 1000+ sites) - UPDATE IT: brew upgrade yt-dlp
+  - tmux              # Terminal multiplexer
+  - gitleaks          # Scan for secrets in git repos (security)
 
-# Extra repos specific to this machine
-# git_repos_extra: []
+  # Conditional - uncomment if needed:
+  # - git-filter-repo   # Git history rewriting (only if you rewrite Git history)
+  # - imagemagick     # Image manipulation (only if actively using)
+  # - cmake           # Build system (only if building C/C++ projects)
+  # - postgresql@17   # Database (only if running local DB)
+  # - duti            # Set default apps (only if you've configured it)
+
+# -----------------------------------------------------------------------------
+# Homebrew casks
+# -----------------------------------------------------------------------------
+homebrew_casks_extra:
+  - hammerspoon       # macOS automation tool
+
+# -----------------------------------------------------------------------------
+# Language versions (UPGRADED to target versions)
+# -----------------------------------------------------------------------------
+
+# Ruby (rbenv) - Keep current version (projects depend on it)
+rbenv_ruby_versions:
+  - "3.4.2"
+rbenv_ruby_global: "3.4.2"
+# Note: Can add 3.4.4 later if needed: rbenv install 3.4.4
+
+# Node.js (nvm) - Keep current version (projects depend on it)
+nvm_node_versions:
+  - "22.16.0"         # Current LTS
+  # - "24.13.0"       # Uncomment to add newer LTS alongside
+nvm_node_global: "22.16.0"
+# Note: Can add versions anytime: nvm install 24.13.0
+
+# Python (pyenv) - Keep current versions (projects depend on them)
+pyenv_python_versions:
+  - "3.13.3"          # Current
+  - "3.11.12"         # Also installed
+  # - "3.14.3"        # Uncomment to add newer version alongside
+pyenv_python_global: "3.13.3"
+# Note: Can add versions anytime: pyenv install 3.14.3
+
+# Rust (rustup) - using default from base config
+# rust_toolchain: stable
+
+# -----------------------------------------------------------------------------
+# Git repositories
+# -----------------------------------------------------------------------------
+# Add any repos you want automatically cloned/updated
+git_repos_extra: []
+  # Example:
+  # - repo: git@github.com:appydave-agentic-os/ansible.git
+  #   dest: "{{ ansible_env.HOME }}/dev/ad/appydave-agentic-os"

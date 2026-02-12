@@ -1,22 +1,42 @@
-# Ansible macOS Dev Environment
+# Ansible macOS Dev Environment — Agentic OS
 
-Ansible project that provisions and keeps 3 macOS workstations in sync.
+Ansible automation for the **Agentic OS** — a three-machine development environment with Claude Code at its core.
+
+## Context
+
+This is part of David Cruwys's **Agentic OS** project documented in `/dev/ad/brains/agentic-os/`. The goal is to maintain three synchronized Mac workstations for seamless development using Claude Code, Universal Control, Screen Sharing, and Tailscale.
+
+**Repository location**: `~/dev/ad/appydave-agentic-os`
 
 ## Machines
 
-| Host            | Hardware         | Connection | Notes                    |
-|-----------------|------------------|------------|--------------------------|
-| `mac-mini-m2`   | Mac Mini M2 Pro  | local      | Primary dev machine      |
-| `mac-mini-m4`   | Mac Mini M4      | SSH        | Second workstation       |
-| `macbook-pro-m4`| MacBook Pro M4   | SSH        | Laptop                   |
+| Host            | Hardware              | Connection | Role                          |
+|-----------------|-----------------------|------------|-------------------------------|
+| `macbook-pro-m4`| MacBook Pro M4 Pro    | local      | Control machine (Claude Code) |
+| `mac-mini-m2`   | Mac Mini M2 Pro       | SSH        | Target: Headless dev machine  |
+| `mac-mini-m4`   | Mac Mini M4           | SSH        | Target: Second workstation    |
 
 Owner: David Cruwys (`davidcruwys`), GitHub orgs: `appydave-agentic-os`, `klueless-io`, `AppyDave`
+
+## Three-Phase Approach
+
+1. **Discovery** — Query current state, document what's installed
+2. **Provisioning** — Install and configure development environment consistently
+3. **Maintenance** — Keep machines in sync, prevent configuration drift
 
 ## How to Run
 
 ```bash
-cd ~/dev/ad/agentic-os/ansible
+cd ~/dev/ad/appydave-agentic-os
 
+# --- Discovery (query current state) ---
+# Gather facts about a machine
+ansible-playbook discovery.yml --limit mac-mini-m2
+
+# Query all machines
+ansible-playbook discovery.yml
+
+# --- Provisioning (install/configure) ---
 # Normal run — install missing packages only
 ansible-playbook site.yml --limit mac-mini-m2
 
@@ -32,6 +52,19 @@ ansible-playbook site.yml --limit mac-mini-m2 --tags homebrew
 # All machines at once
 ansible-playbook site.yml
 ```
+
+## Discovery Mode
+
+Before making changes, use `discovery.yml` to query what's currently installed:
+
+- Homebrew formulae and casks
+- Installed applications
+- Shell configuration
+- Language versions (Ruby, Node, Python)
+- Git repositories
+- macOS defaults
+
+Output is saved to `discovery_output/` for documentation and comparison.
 
 ## Key Architecture
 

@@ -148,13 +148,13 @@ macos_defaults:
   # Fast key repeat rate
   - domain: NSGlobalDomain
     key: KeyRepeat
-    type: int
+    type: float
     value: 2
 
   # Short delay before key repeat
   - domain: NSGlobalDomain
     key: InitialKeyRepeat
-    type: int
+    type: float
     value: 15
 
 macos_defaults_extra: []
