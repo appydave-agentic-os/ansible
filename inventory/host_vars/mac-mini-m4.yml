@@ -1,13 +1,94 @@
 ---
 # =============================================================================
-# Mac Mini M4 overrides
+# Mac Mini M4 - PRIMARY Development Machine Configuration
 # =============================================================================
+# This will be your primary workstation
+# Based on MacBook Pro M4 setup, streamlined for desktop use
 
-# Extra formulae specific to this machine
-# homebrew_formulae_extra: []
+# -----------------------------------------------------------------------------
+# Homebrew formulae
+# -----------------------------------------------------------------------------
+# Base config provides: ffmpeg, fzf, gh, git, nvm, openssl@3, pgvector, pipx,
+#                       pyenv, python@3.14, rbenv, ruby-build, rustup, sqlite,
+#                       uv, whisper-cpp
 
-# Extra casks specific to this machine
-# homebrew_casks_extra: []
+homebrew_formulae_extra:
+  - ripgrep           # Fast grep - Claude Code's Grep tool uses this!
+  - yt-dlp            # Video downloader (YouTube + 1000+ sites)
+  - tmux              # Terminal multiplexer
+  - gitleaks          # Scan for secrets in git repos (security)
 
-# Extra repos specific to this machine
-# git_repos_extra: []
+  # Conditional - uncomment if needed:
+  # - git-filter-repo   # Git history rewriting (only if you rewrite Git history)
+  # - imagemagick     # Image manipulation (only if actively using)
+  # - cmake           # Build system (only if building C/C++ projects)
+  # - postgresql@17   # Database (only if running local DB)
+
+# -----------------------------------------------------------------------------
+# Homebrew casks - GUI Applications
+# -----------------------------------------------------------------------------
+homebrew_casks_extra:
+  # === ESSENTIAL DEV TOOLS ===
+  - google-chrome          # Web browser
+  - visual-studio-code     # Code editor
+  - iterm2                 # Terminal
+  - docker                 # Containers
+
+  # === COMMUNICATION ===
+  - slack                  # Team communication
+  - zoom                   # Video conferencing
+  # - microsoft-teams      # Uncomment if using Teams
+
+  # === PRODUCTIVITY ===
+  - obsidian              # Note-taking (markdown)
+  - alfred                # Launcher/productivity (requires license)
+  - rectangle             # Window management (free alternative to Moom)
+  - dropbox               # File sync
+  - hammerspoon           # Automation
+
+  # === UTILITIES ===
+  - loom                  # Screen recording
+  - claude                # Anthropic Claude desktop app
+
+  # === OPTIONAL - Uncomment if needed ===
+  # - ollama               # Local LLMs
+  # - tunnelblick          # VPN client
+  # - hazel                # Automated file organization (requires license)
+  # - logitech-options-plus # Logitech devices
+  # - whatsapp             # WhatsApp desktop
+  # - anydesk              # Remote desktop
+
+  # === VIDEO PRODUCTION - Uncomment if doing video work ===
+  # - obs                  # Streaming/recording (alternative to Ecamm)
+  # NOTE: Ecamm Live, DaVinci Resolve, Elgato tools must be manually installed
+
+# -----------------------------------------------------------------------------
+# Language versions - Match base config (latest stable)
+# -----------------------------------------------------------------------------
+# Using base config defaults:
+# - Ruby: 3.4.4
+# - Node.js: 24.13.0, 22.14.0
+# - Python: 3.14.3
+
+# Uncomment to override:
+# rbenv_ruby_global: "3.4.4"
+# nvm_node_global: "24.13.0"
+# pyenv_python_global: "3.14.3"
+
+# -----------------------------------------------------------------------------
+# Git repositories
+# -----------------------------------------------------------------------------
+# Add any repos you want automatically cloned/updated
+git_repos_extra: []
+  # Example:
+  # - repo: git@github.com:appydave-agentic-os/ansible.git
+  #   dest: "{{ ansible_env.HOME }}/dev/ad/appydave-agentic-os"
+
+# -----------------------------------------------------------------------------
+# Notes
+# -----------------------------------------------------------------------------
+# Manual installs required after Ansible:
+# - Mac App Store apps (GarageBand, iMovie, Keynote, Numbers, Pages)
+# - Licensed software (Alfred license, Hazel license)
+# - Video production tools (Ecamm Live, DaVinci Resolve, Elgato Stream Deck)
+# - Specialized tools (Auto-Claude, Wispr Flow)

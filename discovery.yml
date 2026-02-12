@@ -1,0 +1,212 @@
+---
+- name: Discover current macOS configuration
+  hosts: all
+  gather_facts: true
+
+  tasks:
+    - name: Create discovery output directory
+      ansible.builtin.file:
+        path: "{{ playbook_dir }}/discovery_output"
+        state: directory
+        mode: '0755'
+      delegate_to: localhost
+      run_once: true
+
+    - name: Gather Homebrew formulae
+      ansible.builtin.shell: brew list --formula
+      register: brew_formulae
+      changed_when: false
+      failed_when: false
+
+    - name: Gather Homebrew casks
+      ansible.builtin.shell: brew list --cask
+      register: brew_casks
+      changed_when: false
+      failed_when: false
+
+    - name: Gather Homebrew taps
+      ansible.builtin.shell: brew tap
+      register: brew_taps
+      changed_when: false
+      failed_when: false
+
+    - name: Check Ruby version (rbenv)
+      ansible.builtin.shell: |
+        if command -v rbenv >/dev/null 2>&1; then
+          rbenv version
+        else
+          echo "rbenv not installed"
+        fi
+      register: ruby_version
+      changed_when: false
+      failed_when: false
+
+    - name: List installed Ruby versions (rbenv)
+      ansible.builtin.shell: |
+        if command -v rbenv >/dev/null 2>&1; then
+          rbenv versions
+        else
+          echo "rbenv not installed"
+        fi
+      register: ruby_versions
+      changed_when: false
+      failed_when: false
+
+    - name: Check Node.js version (nvm)
+      ansible.builtin.shell: |
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        if command -v nvm >/dev/null 2>&1; then
+          nvm current
+        else
+          echo "nvm not installed"
+        fi
+      args:
+        executable: /bin/zsh
+      register: node_version
+      changed_when: false
+      failed_when: false
+
+    - name: List installed Node.js versions (nvm)
+      ansible.builtin.shell: |
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        if command -v nvm >/dev/null 2>&1; then
+          nvm list
+        else
+          echo "nvm not installed"
+        fi
+      args:
+        executable: /bin/zsh
+      register: node_versions
+      changed_when: false
+      failed_when: false
+
+    - name: Check Python version (pyenv)
+      ansible.builtin.shell: |
+        if command -v pyenv >/dev/null 2>&1; then
+          pyenv version
+        else
+          echo "pyenv not installed"
+        fi
+      register: python_version
+      changed_when: false
+      failed_when: false
+
+    - name: List installed Python versions (pyenv)
+      ansible.builtin.shell: |
+        if command -v pyenv >/dev/null 2>&1; then
+          pyenv versions
+        else
+          echo "pyenv not installed"
+        fi
+      register: python_versions
+      changed_when: false
+      failed_when: false
+
+    - name: Check Rust toolchain (rustup)
+      ansible.builtin.shell: |
+        if command -v rustup >/dev/null 2>&1; then
+          rustup show
+        else
+          echo "rustup not installed"
+        fi
+      register: rust_toolchain
+      changed_when: false
+      failed_when: false
+
+    - name: Check Oh My Zsh installation
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.oh-my-zsh"
+      register: oh_my_zsh
+
+    - name: Get macOS version
+      ansible.builtin.command: sw_vers -productVersion
+      register: macos_version
+      changed_when: false
+
+    - name: Get hardware info
+      ansible.builtin.command: system_profiler SPHardwareDataType
+      register: hardware_info
+      changed_when: false
+
+    - name: Save discovery report
+      ansible.builtin.copy:
+        content: |
+          # Discovery Report: {{ inventory_hostname }}
+          Generated: {{ ansible_date_time.iso8601 }}
+
+          ## System Information
+          - **Hostname**: {{ inventory_hostname }}
+          - **macOS Version**: {{ macos_version.stdout }}
+          - **Architecture**: {{ ansible_architecture }}
+          - **User**: {{ ansible_user_id }}
+
+          ## Hardware
+          ```
+          {{ hardware_info.stdout }}
+          ```
+
+          ## Homebrew Formulae ({{ brew_formulae.stdout_lines | length }} installed)
+          ```
+          {{ brew_formulae.stdout }}
+          ```
+
+          ## Homebrew Casks ({{ brew_casks.stdout_lines | length }} installed)
+          ```
+          {{ brew_casks.stdout }}
+          ```
+
+          ## Homebrew Taps
+          ```
+          {{ brew_taps.stdout }}
+          ```
+
+          ## Ruby (rbenv)
+          **Current version**:
+          ```
+          {{ ruby_version.stdout }}
+          ```
+
+          **Installed versions**:
+          ```
+          {{ ruby_versions.stdout }}
+          ```
+
+          ## Node.js (nvm)
+          **Current version**:
+          ```
+          {{ node_version.stdout }}
+          ```
+
+          **Installed versions**:
+          ```
+          {{ node_versions.stdout }}
+          ```
+
+          ## Python (pyenv)
+          **Current version**:
+          ```
+          {{ python_version.stdout }}
+          ```
+
+          **Installed versions**:
+          ```
+          {{ python_versions.stdout }}
+          ```
+
+          ## Rust (rustup)
+          ```
+          {{ rust_toolchain.stdout }}
+          ```
+
+          ## Shell
+          - **Oh My Zsh**: {{ 'Installed' if oh_my_zsh.stat.exists else 'Not installed' }}
+
+        dest: "{{ playbook_dir }}/discovery_output/{{ inventory_hostname }}_{{ ansible_date_time.date }}.md"
+        mode: '0644'
+      delegate_to: localhost
+
+    - name: Discovery complete
+      ansible.builtin.debug:
+        msg: "Discovery report saved to discovery_output/{{ inventory_hostname }}_{{ ansible_date_time.date }}.md"
