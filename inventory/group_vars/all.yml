@@ -42,6 +42,7 @@ homebrew_formulae:
   - rbenv
   - ruby-build
   - rustup
+  - postgresql@17
   - sqlite
   - supabase
   - uv
@@ -66,7 +67,8 @@ homebrew_casks:
 
   # === DEVELOPMENT ===
   - visual-studio-code     # Code editor
-  - iterm2                 # Terminal
+  - ghostty                # Terminal (primary - ADR-0003)
+  - iterm2                 # Terminal (alternative)
   - docker                 # Containers
 
   # === PRODUCTIVITY ===
