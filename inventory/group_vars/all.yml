@@ -42,6 +42,7 @@ homebrew_formulae:
   - rbenv
   - ruby-build
   - rustup
+  - displayplacer
   - postgresql@17
   - sqlite
   - supabase
@@ -58,6 +59,11 @@ homebrew_formulae_extra: []
 homebrew_casks:
   # === NETWORKING ===
   - ngrok                  # Tunnel localhost to internet
+  - tailscale-app          # VPN mesh for secure machine-to-machine networking
+
+  # === SECURITY ===
+  - 1password              # Password manager (migrating from NordPass)
+  - 1password-cli          # 1Password CLI for programmatic secret injection
 
   # === BROWSERS & COMMUNICATION ===
   - google-chrome          # Web browser
