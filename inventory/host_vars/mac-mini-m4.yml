@@ -25,42 +25,22 @@ homebrew_formulae_extra:
   # - postgresql@17   # Database (only if running local DB)
 
 # -----------------------------------------------------------------------------
-# Homebrew casks - GUI Applications
+# Homebrew casks - machine-specific extras
 # -----------------------------------------------------------------------------
-homebrew_casks_extra:
-  # === ESSENTIAL DEV TOOLS ===
-  - google-chrome          # Web browser
-  - visual-studio-code     # Code editor
-  - iterm2                 # Terminal
-  - docker                 # Containers
+# Base casks (Chrome, VSCode, Docker, Zoom, etc.) are in group_vars/all.yml
+# Only add machine-specific apps here
 
-  # === COMMUNICATION ===
-  - zoom                   # Video conferencing
-  - microsoft-teams        # Microsoft Teams
-  - whatsapp               # WhatsApp desktop
+homebrew_casks_extra: []
+  # === VIDEO PRODUCTION - Uncomment if doing video work on this machine ===
+  # - obs                  # Streaming/recording (alternative to Ecamm)
+  # NOTE: Ecamm Live, DaVinci Resolve, Elgato tools must be manually installed
 
-  # === PRODUCTIVITY ===
-  - obsidian              # Note-taking (markdown)
-  - alfred                # Launcher/productivity (requires license)
-  - rectangle             # Window management (free alternative to Moom)
-  - hammerspoon           # Automation
-
-  # === UTILITIES ===
-  - loom                  # Screen recording
-  - claude                # Anthropic Claude desktop app
-  - logitech-options-plus # Logitech mouse/keyboard
-  - ollama                # Local LLMs
-
-  # === OPTIONAL - Uncomment if needed ===
+  # === OPTIONAL ===
   # - slack               # Team communication
   # - dropbox             # File sync
   # - tunnelblick         # VPN client
   # - hazel               # Automated file organization (requires license)
   # - anydesk             # Remote desktop
-
-  # === VIDEO PRODUCTION - Uncomment if doing video work ===
-  # - obs                  # Streaming/recording (alternative to Ecamm)
-  # NOTE: Ecamm Live, DaVinci Resolve, Elgato tools must be manually installed
 
 # -----------------------------------------------------------------------------
 # Language versions - Match base config (latest stable)

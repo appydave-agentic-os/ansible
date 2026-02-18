@@ -51,12 +51,34 @@ homebrew_formulae_extra: []
 # -----------------------------------------------------------------------------
 # Homebrew casks (GUI applications)
 # -----------------------------------------------------------------------------
+# These are installed on ALL machines (including remote desktop machines)
+# Machine-specific extras (e.g. video production) go in host_vars/*_extra
 homebrew_casks:
-  - ngrok
-  # - visual-studio-code
-  # - iterm2
-  # - docker
-  # - google-chrome
+  # === NETWORKING ===
+  - ngrok                  # Tunnel localhost to internet
+
+  # === BROWSERS & COMMUNICATION ===
+  - google-chrome          # Web browser
+  - zoom                   # Video conferencing
+  - microsoft-teams        # Team communication
+  - whatsapp               # Messaging
+
+  # === DEVELOPMENT ===
+  - visual-studio-code     # Code editor
+  - iterm2                 # Terminal
+  - docker                 # Containers
+
+  # === PRODUCTIVITY ===
+  - obsidian               # Note-taking (markdown)
+  - alfred                 # Launcher/productivity (requires license)
+  - rectangle              # Window management
+  - hammerspoon            # macOS automation
+
+  # === UTILITIES ===
+  - loom                   # Screen recording
+  - claude                 # Anthropic Claude desktop app
+  - logitech-options-plus  # Logitech mouse/keyboard
+  - ollama                 # Local LLMs
 
 homebrew_casks_extra: []
 
