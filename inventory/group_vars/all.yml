@@ -7,6 +7,12 @@
 # without overriding these defaults.
 
 # -----------------------------------------------------------------------------
+# Homebrew path (Apple Silicon: /opt/homebrew/bin, Intel: /usr/local/bin)
+# Required for remote SSH connections which don't load shell profiles
+# -----------------------------------------------------------------------------
+homebrew_path: /opt/homebrew/bin
+
+# -----------------------------------------------------------------------------
 # Upgrade mode
 # -----------------------------------------------------------------------------
 # Default: false (install missing packages only)

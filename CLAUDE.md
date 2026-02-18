@@ -6,6 +6,18 @@ Ansible automation for the **Agentic OS** — a three-machine development enviro
 
 This is part of David Cruwys's **Agentic OS** project documented in `/dev/ad/brains/agentic-os/`. The goal is to maintain three synchronized Mac workstations for seamless development using Claude Code, Universal Control, Screen Sharing, and Tailscale.
 
+## Brain References
+
+Consult these before making decisions or asking questions already answered:
+
+| File | What it covers |
+|------|---------------|
+| `/dev/ad/brains/agentic-os/hardware-infrastructure.md` | Machine specs, roles, peripherals, network topology |
+| `/dev/ad/brains/agentic-os/development-environment.md` | Language versions, tools, philosophy |
+| `/dev/ad/brains/agentic-os/machine-to-machine-control.md` | SSH, headless setup, Tailscale |
+| `/dev/ad/brains/agentic-os/decisions/README.md` | ADR index — architectural decisions already made |
+| `/dev/ad/brains/agentic-os/decisions/` | Individual ADRs (Ansible = 0005, Tailscale = 0006) |
+
 **Repository location**: `~/dev/ad/appydave-agentic-os`
 
 ## Machines
