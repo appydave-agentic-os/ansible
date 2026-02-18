@@ -3,5 +3,6 @@
   community.general.homebrew_cask:
     name: "{{ item }}"
     state: "{{ 'upgraded' if upgrade_packages | bool else 'present' }}"
+    path: "{{ homebrew_path }}"
   loop: "{{ homebrew_casks + homebrew_casks_extra }}"
   when: (homebrew_casks + homebrew_casks_extra) | length > 0

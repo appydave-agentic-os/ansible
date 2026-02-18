@@ -2,12 +2,14 @@
 - name: Update Homebrew index
   community.general.homebrew:
     update_homebrew: true
+    path: "{{ homebrew_path }}"
   changed_when: false
 
 - name: Add Homebrew taps
   community.general.homebrew_tap:
     name: "{{ item }}"
     state: present
+    path: "{{ homebrew_path }}"
   loop: "{{ homebrew_taps + homebrew_taps_extra }}"
   when: (homebrew_taps + homebrew_taps_extra) | length > 0
 
@@ -15,5 +17,6 @@
   community.general.homebrew:
     name: "{{ item }}"
     state: "{{ 'latest' if upgrade_packages | bool else 'present' }}"
+    path: "{{ homebrew_path }}"
   loop: "{{ homebrew_formulae + homebrew_formulae_extra }}"
   when: (homebrew_formulae + homebrew_formulae_extra) | length > 0
