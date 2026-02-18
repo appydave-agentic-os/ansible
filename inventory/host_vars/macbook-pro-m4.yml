@@ -28,35 +28,42 @@ homebrew_formulae_extra:
   # - duti            # Set default apps (only if you've configured it)
 
 # -----------------------------------------------------------------------------
-# Homebrew casks
+# Homebrew casks - machine-specific extras
 # -----------------------------------------------------------------------------
-homebrew_casks_extra:
-  - hammerspoon       # macOS automation tool
+# Base casks (Chrome, VSCode, Docker, Zoom, etc.) are in group_vars/all.yml
+# Only add machine-specific apps here
+
+homebrew_casks_extra: []
+  # === VIDEO PRODUCTION - primary video machine ===
+  # - obs                  # Streaming/recording (alternative to Ecamm)
+  # NOTE: Ecamm Live, DaVinci Resolve, Elgato tools must be manually installed
+
+  # === OPTIONAL ===
+  # - slack               # Team communication
+  # - dropbox             # File sync
+  # - tunnelblick         # VPN client
+  # - hazel               # Automated file organization (requires license)
+  # - anydesk             # Remote desktop
 
 # -----------------------------------------------------------------------------
 # Language versions (UPGRADED to target versions)
 # -----------------------------------------------------------------------------
 
-# Ruby (rbenv) - Keep current version (projects depend on it)
+# Ruby (rbenv)
 rbenv_ruby_versions:
-  - "3.4.2"
-rbenv_ruby_global: "3.4.2"
-# Note: Can add 3.4.4 later if needed: rbenv install 3.4.4
+  - "3.4.4"
+rbenv_ruby_global: "3.4.4"
 
-# Node.js (nvm) - Keep current version (projects depend on it)
+# Node.js (nvm)
 nvm_node_versions:
-  - "22.16.0"         # Current LTS
-  # - "24.13.0"       # Uncomment to add newer LTS alongside
-nvm_node_global: "22.16.0"
-# Note: Can add versions anytime: nvm install 24.13.0
+  - "24.13.0"         # Latest LTS
+  - "22.14.0"         # Previous LTS
+nvm_node_global: "24.13.0"
 
-# Python (pyenv) - Keep current versions (projects depend on them)
+# Python (pyenv)
 pyenv_python_versions:
-  - "3.13.3"          # Current
-  - "3.11.12"         # Also installed
-  # - "3.14.3"        # Uncomment to add newer version alongside
-pyenv_python_global: "3.13.3"
-# Note: Can add versions anytime: pyenv install 3.14.3
+  - "3.14.3"
+pyenv_python_global: "3.14.3"
 
 # Rust (rustup) - using default from base config
 # rust_toolchain: stable
