@@ -43,6 +43,7 @@ homebrew_formulae:
   - ruby-build
   - rustup
   - sqlite
+  - supabase
   - uv
   - whisper-cpp
 
