@@ -35,28 +35,28 @@ homebrew_casks_extra:
   - docker                 # Containers
 
   # === COMMUNICATION ===
-  - slack                  # Team communication
   - zoom                   # Video conferencing
-  # - microsoft-teams      # Uncomment if using Teams
+  - microsoft-teams        # Microsoft Teams
+  - whatsapp               # WhatsApp desktop
 
   # === PRODUCTIVITY ===
   - obsidian              # Note-taking (markdown)
   - alfred                # Launcher/productivity (requires license)
   - rectangle             # Window management (free alternative to Moom)
-  - dropbox               # File sync
   - hammerspoon           # Automation
 
   # === UTILITIES ===
   - loom                  # Screen recording
   - claude                # Anthropic Claude desktop app
+  - logitech-options-plus # Logitech mouse/keyboard
+  - ollama                # Local LLMs
 
   # === OPTIONAL - Uncomment if needed ===
-  # - ollama               # Local LLMs
-  # - tunnelblick          # VPN client
-  # - hazel                # Automated file organization (requires license)
-  # - logitech-options-plus # Logitech devices
-  # - whatsapp             # WhatsApp desktop
-  # - anydesk              # Remote desktop
+  # - slack               # Team communication
+  # - dropbox             # File sync
+  # - tunnelblick         # VPN client
+  # - hazel               # Automated file organization (requires license)
+  # - anydesk             # Remote desktop
 
   # === VIDEO PRODUCTION - Uncomment if doing video work ===
   # - obs                  # Streaming/recording (alternative to Ecamm)
