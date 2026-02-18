@@ -1,77 +1,54 @@
 ---
 # =============================================================================
-# MacBook Pro M4 - Curated Minimal Configuration
+# MacBook Pro M4 - Primary Video Production Machine
 # =============================================================================
-# Generated: 2026-02-12
-# This is a RECOMMENDED config for a minimal/fresh start
-# Review and adjust before applying
 
 # -----------------------------------------------------------------------------
-# Homebrew formulae
+# Homebrew formulae - extras beyond group_vars/all.yml base
 # -----------------------------------------------------------------------------
-# Base config provides: ffmpeg, fzf, gh, git, nvm, openssl@3, pgvector, pipx,
-#                       pyenv, python@3.14, rbenv, ruby-build, rustup, sqlite,
-#                       uv, whisper-cpp
-# Adding these essentials:
+# Base provides: ffmpeg, fzf, gh, git, nvm, openssl@3, pipx,
+#                pyenv, python@3.14, rbenv, ruby-build, rustup,
+#                sqlite, uv, whisper-cpp
 
 homebrew_formulae_extra:
   - ripgrep           # Fast grep - Claude Code's Grep tool uses this!
-  - yt-dlp            # Video downloader (YouTube + 1000+ sites) - UPDATE IT: brew upgrade yt-dlp
+  - yt-dlp            # Video downloader (YouTube + 1000+ sites)
   - tmux              # Terminal multiplexer
   - gitleaks          # Scan for secrets in git repos (security)
 
   # Conditional - uncomment if needed:
-  # - git-filter-repo   # Git history rewriting (only if you rewrite Git history)
-  # - imagemagick     # Image manipulation (only if actively using)
-  # - cmake           # Build system (only if building C/C++ projects)
-  # - postgresql@17   # Database (only if running local DB)
-  # - duti            # Set default apps (only if you've configured it)
+  # - git-filter-repo   # Git history rewriting
+  # - imagemagick       # Image manipulation
+  # - cmake             # Build system (C/C++ projects)
+  # - postgresql@17     # Local database
+  # - duti              # Set default apps
 
 # -----------------------------------------------------------------------------
-# Homebrew casks - machine-specific extras
+# Homebrew casks - machine-specific extras beyond group_vars/all.yml base
 # -----------------------------------------------------------------------------
-# Base casks (Chrome, VSCode, Docker, Zoom, etc.) are in group_vars/all.yml
-# Only add machine-specific apps here
 
-homebrew_casks_extra: []
-  # === VIDEO PRODUCTION - primary video machine ===
-  # - obs                  # Streaming/recording (alternative to Ecamm)
-  # NOTE: Ecamm Live, DaVinci Resolve, Elgato tools must be manually installed
+homebrew_casks_extra:
+  # === VIDEO PRODUCTION - this is the primary video machine ===
+  - ecamm-live             # Live streaming & recording
+  - elgato-stream-deck     # Stream Deck software
+
+  # NOTE: Manual installs required (not in Homebrew):
+  # - Gling.AI             # AI video editor - download from gling.ai
+  # - DaVinci Resolve      # Video editing - download from blackmagicdesign.com
 
   # === OPTIONAL ===
-  # - slack               # Team communication
-  # - dropbox             # File sync
-  # - tunnelblick         # VPN client
-  # - hazel               # Automated file organization (requires license)
-  # - anydesk             # Remote desktop
-
-# -----------------------------------------------------------------------------
-# Language versions (UPGRADED to target versions)
-# -----------------------------------------------------------------------------
-
-# Ruby (rbenv)
-rbenv_ruby_versions:
-  - "3.4.4"
-rbenv_ruby_global: "3.4.4"
-
-# Node.js (nvm)
-nvm_node_versions:
-  - "24.13.0"         # Latest LTS
-  - "22.14.0"         # Previous LTS
-nvm_node_global: "24.13.0"
-
-# Python (pyenv)
-pyenv_python_versions:
-  - "3.14.3"
-pyenv_python_global: "3.14.3"
-
-# Rust (rustup) - using default from base config
-# rust_toolchain: stable
+  # - obs                  # Streaming/recording (alternative to Ecamm)
+  # - elgato-wave-link     # Elgato Wave microphone control
+  # - elgato-camera-hub    # Elgato camera control
+  # - slack                # Team communication
+  # - dropbox              # File sync
+  # - tunnelblick          # VPN client
+  # - hazel                # Automated file organization (requires license)
+  # - anydesk              # Remote desktop
 
 # -----------------------------------------------------------------------------
 # Git repositories
 # -----------------------------------------------------------------------------
-# Add any repos you want automatically cloned/updated
 git_repos_extra: []
   # Example:
   # - repo: git@github.com:appydave-agentic-os/ansible.git
