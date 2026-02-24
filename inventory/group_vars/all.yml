@@ -30,24 +30,30 @@ homebrew_taps_extra: []
 # Homebrew formulae (explicitly installed packages)
 # -----------------------------------------------------------------------------
 homebrew_formulae:
+  # Core utilities — every machine
   - ffmpeg
   - fzf
+  - rsync                  # Modern rsync v3.x (macOS ships with ancient v2.6.9 from 2006)
   - gh
   - git
-  - nvm
   - openssl@3
+  - sqlite
+  - uv
+  - dockutil               # Manage macOS Dock items via CLI (used by dock role)
+
+  # Language version managers — every machine
+  - tmux                   # Terminal multiplexer — every machine
+  - nvm
   - pipx
   - pyenv
   - python@3.14
   - rbenv
   - ruby-build
   - rustup
-  - displayplacer
+
+  # Services — every machine
   - postgresql@17
-  - sqlite
   - supabase
-  - uv
-  - whisper-cpp
 
 homebrew_formulae_extra: []
 
@@ -57,37 +63,14 @@ homebrew_formulae_extra: []
 # These are installed on ALL machines (including remote desktop machines)
 # Machine-specific extras (e.g. video production) go in host_vars/*_extra
 homebrew_casks:
-  # === NETWORKING ===
-  - ngrok                  # Tunnel localhost to internet
-  - tailscale-app          # VPN mesh for secure machine-to-machine networking
+  # Universal — every machine regardless of role
+  - 1password              # Password manager
+  - 1password-cli          # 1Password CLI for secret injection
+  - claude                 # Claude desktop app — AI co-working tool (infrastructure, not a GUI app)
 
-  # === SECURITY ===
-  - 1password              # Password manager (migrating from NordPass)
-  - 1password-cli          # 1Password CLI for programmatic secret injection
-
-  # === BROWSERS & COMMUNICATION ===
-  - google-chrome          # Web browser
-  - zoom                   # Video conferencing
-  - microsoft-teams        # Team communication
-  - whatsapp               # Messaging
-
-  # === DEVELOPMENT ===
-  - visual-studio-code     # Code editor
-  - ghostty                # Terminal (primary - ADR-0003)
-  - iterm2                 # Terminal (alternative)
-  - docker                 # Containers
-
-  # === PRODUCTIVITY ===
-  - obsidian               # Note-taking (markdown)
-  - alfred                 # Launcher/productivity (requires license)
-  - rectangle              # Window management
-  - hammerspoon            # macOS automation
-
-  # === UTILITIES ===
-  - loom                   # Screen recording
-  - claude                 # Anthropic Claude desktop app
-  - logitech-options-plus  # Logitech mouse/keyboard
-  - ollama                 # Local LLMs
+  # Manual install — use Mac App Store (brew cask pkg installer is unreliable):
+  # App Store: https://apps.apple.com/app/tailscale/id1475387142
+  # After install: open Tailscale → log in → run: tailscale ip → update inventory/hosts.yml
 
 homebrew_casks_extra: []
 
@@ -170,6 +153,15 @@ macos_defaults:
     type: string
     value: scale
 
+  # Desktop & Dock: click wallpaper to reveal desktop → Only in Stage Manager
+  # System Settings path: Desktop & Dock → "Click wallpaper to reveal desktop"
+  # false = Only in Stage Manager (default click does nothing in normal mode)
+  # true  = Always (clicking wallpaper hides all windows)
+  - domain: com.apple.WindowManager
+    key: EnableStandardClickToShowDesktop
+    type: bool
+    value: false
+
   # Disable natural scrolling
   - domain: NSGlobalDomain
     key: com.apple.swipescrolldirection
@@ -194,6 +186,72 @@ macos_defaults:
     type: float
     value: 15
 
+  # Dark mode
+  - domain: NSGlobalDomain
+    key: AppleInterfaceStyle
+    type: string
+    value: Dark
+
+  # Locale: Australian English
+  - domain: NSGlobalDomain
+    key: AppleLocale
+    type: string
+    value: en_AU
+
+  # Fn keys act as standard function keys (not media keys)
+  - domain: NSGlobalDomain
+    key: com.apple.keyboard.fnState
+    type: bool
+    value: true
+
+  # Disable swipe to navigate (back/forward in browsers etc.)
+  - domain: NSGlobalDomain
+    key: AppleEnableSwipeNavigateWithScrolls
+    type: bool
+    value: false
+
+  # Restore windows when re-opening an app
+  - domain: NSGlobalDomain
+    key: NSQuitAlwaysKeepsWindows
+    type: bool
+    value: true
+
+  # Disable force click on trackpad
+  - domain: NSGlobalDomain
+    key: com.apple.trackpad.forceClick
+    type: bool
+    value: false
+
+  # Finder: show internal hard drives on desktop
+  - domain: com.apple.finder
+    key: ShowHardDrivesOnDesktop
+    type: bool
+    value: true
+
+  # Stage Manager: hide desktop icons when Stage Manager is active
+  - domain: com.apple.WindowManager
+    key: HideDesktop
+    type: bool
+    value: true
+
+  # Tiling: no margins between tiled windows
+  - domain: com.apple.WindowManager
+    key: EnableTiledWindowMargins
+    type: bool
+    value: false
+
+  # Tiling: disable edge-drag to tile windows
+  - domain: com.apple.WindowManager
+    key: EnableTilingByEdgeDrag
+    type: bool
+    value: false
+
+  # Tiling: disable top-edge drag to tile windows
+  - domain: com.apple.WindowManager
+    key: EnableTopTilingByEdgeDrag
+    type: bool
+    value: false
+
 macos_defaults_extra: []
 
 # -----------------------------------------------------------------------------
@@ -213,6 +271,7 @@ nvm_node_versions:
 nvm_node_global: "24.13.0"
 nvm_global_packages:
   - yarn
+  - "@anthropic-ai/claude-code"
 
 # Python (pyenv)
 pyenv_python_versions:
