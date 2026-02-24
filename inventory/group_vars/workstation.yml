@@ -1,0 +1,39 @@
+---
+# =============================================================================
+# Workstation group — machines with a display, keyboard, and mouse
+# Applies to: macbook-pro-m4, mac-mini-m4, mac-mini-jan, mac-mini-mary
+# =============================================================================
+
+homebrew_formulae_workstation:
+  - ripgrep                # Fast grep (Claude Code's Grep tool uses this)
+  - yt-dlp                 # Video downloader (YouTube + 1000+ sites)
+  - gitleaks               # Scan for secrets in git repos
+  - displayplacer          # Programmatic display arrangement (meaningless on headless)
+  - whisper-cpp            # Local speech-to-text
+
+homebrew_casks_workstation:
+  # === BROWSERS & COMMUNICATION ===
+  - google-chrome
+  - zoom
+  - microsoft-teams
+  - whatsapp
+
+  # === DEVELOPMENT ===
+  - visual-studio-code
+  - ghostty                # Primary terminal (ADR-0003)
+  - iterm2                 # Alternative terminal
+
+  # === PRODUCTIVITY ===
+  - obsidian               # Note-taking (markdown)
+  - alfred                 # Launcher (requires license)
+  - rectangle              # Window management
+  - hammerspoon            # macOS automation
+
+  # === UTILITIES ===
+  - loom                   # Screen recording
+  - ollama                 # Local LLMs
+  - ngrok                  # Tunnel localhost to internet
+
+  # Manual installs (system/network extensions — download from website, not brew):
+  # Docker            → https://www.docker.com/products/docker-desktop/ (brew cask unreliable)
+  # logi-options-plus → no Homebrew cask available → download from logitech.com/software/logi-options-plus.html
