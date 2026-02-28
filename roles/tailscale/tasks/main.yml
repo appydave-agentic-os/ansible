@@ -1,0 +1,52 @@
+---
+# =============================================================================
+# Tailscale — VPN mesh for secure remote access between all three Macs
+#
+# NOTE: Tailscale installation is handled by the applications role via
+# homebrew_casks (tailscale-app) in group_vars/all.yml.
+# tailscale-app is the correct cask (GUI app + daemon, works headless too).
+# Do NOT install tailscale formula here — that is CLI-only and conflicts.
+#
+# This role handles ONLY:
+#   1. Enable Screen Sharing (VNC) on remote machines — visual remote desktop
+#   2. Enable Remote Login (SSH) on remote machines — CLI + Ansible access
+#   3. Enable SMB File Sharing on remote machines — Finder sidebar access
+#
+# Manual step required after provisioning (one-time per machine):
+#   Open Tailscale from the menu bar → Log in → Machine joins your tailnet
+#   Then check your tailnet IPs: tailscale ip
+# =============================================================================
+
+- name: Enable Remote Login (SSH)
+  ansible.builtin.command: systemsetup -setremotelogin on
+  changed_when: false
+  become: true
+  when:
+    - inventory_hostname in groups['remote']
+    - tailscale_enable_remote_login | bool
+
+- name: Enable Screen Sharing (VNC / visual remote desktop)
+  ansible.builtin.command: >
+    /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart
+    -activate -configure -access -on -allowAccessFor -allUsers -privs -all
+  changed_when: false
+  become: true
+  when:
+    - inventory_hostname in groups['remote']
+    - tailscale_enable_screen_sharing | bool
+
+- name: Enable SMB File Sharing
+  ansible.builtin.command: launchctl enable system/com.apple.smbd
+  changed_when: false
+  become: true
+  when:
+    - inventory_hostname in groups['remote']
+    - tailscale_enable_smb | bool
+
+- name: Remind user to authenticate Tailscale
+  ansible.builtin.debug:
+    msg: |
+      ⚠️  Tailscale is installed on {{ inventory_hostname }} but needs manual login.
+          Click the Tailscale icon in the menu bar (or: open -a Tailscale)
+          Log in via the browser to join your tailnet.
+          After auth: tailscale ip   →  note this IP and update inventory/hosts.yml

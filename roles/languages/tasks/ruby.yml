@@ -1,6 +1,12 @@
 ---
+- name: "⏳ Ruby compile warning"
+  ansible.builtin.debug:
+    msg: "Installing Ruby {{ item }} via rbenv — compiles from source, takes 2-3 minutes. This is normal."
+  loop: "{{ rbenv_ruby_versions }}"
+
 - name: Install Ruby versions via rbenv
   ansible.builtin.shell: |
+    export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
     eval "$(rbenv init -)"
     if ! rbenv versions --bare | grep -qx '{{ item }}'; then
       rbenv install {{ item }}
@@ -13,6 +19,7 @@
 
 - name: Set global Ruby version
   ansible.builtin.shell: |
+    export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
     eval "$(rbenv init -)"
     rbenv global {{ rbenv_ruby_global }}
   args:
@@ -22,6 +29,7 @@
 
 - name: Install global Ruby gems
   ansible.builtin.shell: |
+    export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
     eval "$(rbenv init -)"
     gem install {{ item }}
   args:
@@ -32,6 +40,7 @@
 
 - name: Update global Ruby gems
   ansible.builtin.shell: |
+    export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
     eval "$(rbenv init -)"
     gem update {{ item }}
   args:

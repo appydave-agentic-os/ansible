@@ -1,8 +1,18 @@
 ---
+- name: Build combined cask list from all applicable groups
+  ansible.builtin.set_fact:
+    _all_casks: >-
+      {{ homebrew_casks
+         + (homebrew_casks_workstation | default([]))
+         + (homebrew_casks_creator     | default([]))
+         + (homebrew_casks_agent       | default([]))
+         + (homebrew_casks_headless    | default([]))
+         + homebrew_casks_extra }}
+
 - name: Install/upgrade Homebrew cask applications
   community.general.homebrew_cask:
     name: "{{ item }}"
     state: "{{ 'upgraded' if upgrade_packages | bool else 'present' }}"
     path: "{{ homebrew_path }}"
-  loop: "{{ homebrew_casks + homebrew_casks_extra }}"
-  when: (homebrew_casks + homebrew_casks_extra) | length > 0
+  loop: "{{ _all_casks }}"
+  when: _all_casks | length > 0

@@ -1,55 +1,14 @@
 ---
 # =============================================================================
-# MacBook Pro M4 - Primary Video Production Machine
+# MacBook Pro M4 — Field Machine / Ansible Control Node
+# Groups: workstation + creator + thailand
+# =============================================================================
+# workstation group provides: Chrome, VSCode, iTerm, Ghostty, Docker, Alfred,
+#                             Rectangle, Zoom, WhatsApp, Claude, Ollama, etc.
+# creator group provides:     Ecamm Live, Elgato Stream Deck
 # =============================================================================
 
-# -----------------------------------------------------------------------------
-# Homebrew formulae - extras beyond group_vars/all.yml base
-# -----------------------------------------------------------------------------
-# Base provides: ffmpeg, fzf, gh, git, nvm, openssl@3, pipx,
-#                pyenv, python@3.14, rbenv, ruby-build, rustup,
-#                sqlite, uv, whisper-cpp
-
-homebrew_formulae_extra:
-  - ripgrep           # Fast grep - Claude Code's Grep tool uses this!
-  - yt-dlp            # Video downloader (YouTube + 1000+ sites)
-  - tmux              # Terminal multiplexer
-  - gitleaks          # Scan for secrets in git repos (security)
-
-  # Conditional - uncomment if needed:
-  # - git-filter-repo   # Git history rewriting
-  # - imagemagick       # Image manipulation
-  # - cmake             # Build system (C/C++ projects)
-  # - postgresql@17     # Local database
-  # - duti              # Set default apps
-
-# -----------------------------------------------------------------------------
-# Homebrew casks - machine-specific extras beyond group_vars/all.yml base
-# -----------------------------------------------------------------------------
-
-homebrew_casks_extra:
-  # === VIDEO PRODUCTION - this is the primary video machine ===
-  - ecamm-live             # Live streaming & recording
-  - elgato-stream-deck     # Stream Deck software
-
-  # NOTE: Manual installs required (not in Homebrew):
-  # - Gling.AI             # AI video editor - download from gling.ai
-  # - DaVinci Resolve      # Video editing - download from blackmagicdesign.com
-
-  # === OPTIONAL ===
-  # - obs                  # Streaming/recording (alternative to Ecamm)
-  # - elgato-wave-link     # Elgato Wave microphone control
-  # - elgato-camera-hub    # Elgato camera control
-  # - slack                # Team communication
-  # - dropbox              # File sync
-  # - tunnelblick          # VPN client
-  # - hazel                # Automated file organization (requires license)
-  # - anydesk              # Remote desktop
-
-# -----------------------------------------------------------------------------
-# Git repositories
-# -----------------------------------------------------------------------------
+# Machine-specific extras beyond what groups provide
+homebrew_formulae_extra: []
+homebrew_casks_extra: []
 git_repos_extra: []
-  # Example:
-  # - repo: git@github.com:appydave-agentic-os/ansible.git
-  #   dest: "{{ ansible_env.HOME }}/dev/ad/appydave-agentic-os"

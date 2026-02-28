@@ -1,0 +1,9 @@
+---
+# Apps to pin in the Dock, in order (left to right)
+# Finder is always present and cannot be removed — don't list it here
+dock_apps:
+  - /Applications/Google Chrome.app
+  - /Applications/iTerm.app
+  - /Applications/Visual Studio Code.app
+
+dock_apps_extra: []

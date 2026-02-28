@@ -1,0 +1,9 @@
+---
+# Enable Screen Sharing (VNC) on remote machines — visual remote desktop
+tailscale_enable_screen_sharing: true
+
+# Enable Remote Login (SSH) on remote machines — CLI and Ansible access
+tailscale_enable_remote_login: true
+
+# Enable SMB File Sharing on remote machines — shows in Finder sidebar
+tailscale_enable_smb: true

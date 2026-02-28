@@ -1,0 +1,10 @@
+---
+# =============================================================================
+# Headless group — machines with no display, running autonomously
+# Applies to: mac-mini-m2
+# =============================================================================
+# No GUI apps. No display tools. Minimal footprint.
+# Access via Screen Sharing over Tailscale only.
+
+homebrew_formulae_headless: []
+homebrew_casks_headless: []
