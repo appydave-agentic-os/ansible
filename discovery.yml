@@ -115,9 +115,33 @@
       changed_when: false
       failed_when: false
 
+    - name: Read macOS global defaults (NSGlobalDomain)
+      ansible.builtin.shell: defaults read NSGlobalDomain
+      register: macos_global_defaults
+      changed_when: false
+      failed_when: false
+
+    - name: Read Finder defaults
+      ansible.builtin.shell: defaults read com.apple.finder
+      register: macos_finder_defaults
+      changed_when: false
+      failed_when: false
+
+    - name: Read Dock defaults
+      ansible.builtin.shell: defaults read com.apple.dock
+      register: macos_dock_defaults
+      changed_when: false
+      failed_when: false
+
+    - name: Read WindowManager defaults
+      ansible.builtin.shell: defaults read com.apple.WindowManager
+      register: macos_windowmanager_defaults
+      changed_when: false
+      failed_when: false
+
     - name: Check Oh My Zsh installation
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/.oh-my-zsh"
+        path: "~/.oh-my-zsh"
       register: oh_my_zsh
 
     - name: Get macOS version
@@ -134,13 +158,13 @@
       ansible.builtin.copy:
         content: |
           # Discovery Report: {{ inventory_hostname }}
-          Generated: {{ ansible_date_time.iso8601 }}
+          Generated: {{ now(utc=True, fmt='%Y-%m-%dT%H:%M:%SZ') }}
 
           ## System Information
           - **Hostname**: {{ inventory_hostname }}
           - **macOS Version**: {{ macos_version.stdout }}
-          - **Architecture**: {{ ansible_architecture }}
-          - **User**: {{ ansible_user_id }}
+          - **Architecture**: {{ ansible_facts['architecture'] }}
+          - **User**: {{ ansible_facts['user_id'] }}
 
           ## Hardware
           ```
@@ -200,13 +224,35 @@
           {{ rust_toolchain.stdout }}
           ```
 
+          ## macOS Defaults
+
+          ### NSGlobalDomain (key repeat, scrolling, extensions)
+          ```
+          {{ macos_global_defaults.stdout }}
+          ```
+
+          ### com.apple.finder
+          ```
+          {{ macos_finder_defaults.stdout }}
+          ```
+
+          ### com.apple.dock
+          ```
+          {{ macos_dock_defaults.stdout }}
+          ```
+
+          ### com.apple.WindowManager
+          ```
+          {{ macos_windowmanager_defaults.stdout }}
+          ```
+
           ## Shell
           - **Oh My Zsh**: {{ 'Installed' if oh_my_zsh.stat.exists else 'Not installed' }}
 
-        dest: "{{ playbook_dir }}/discovery_output/{{ inventory_hostname }}_{{ ansible_date_time.date }}.md"
+        dest: "{{ playbook_dir }}/discovery_output/{{ inventory_hostname }}_{{ now(fmt='%Y-%m-%d') }}.md"
         mode: '0644'
       delegate_to: localhost
 
     - name: Discovery complete
       ansible.builtin.debug:
-        msg: "Discovery report saved to discovery_output/{{ inventory_hostname }}_{{ ansible_date_time.date }}.md"
+        msg: "Discovery report saved to discovery_output/{{ inventory_hostname }}_{{ now(fmt='%Y-%m-%d') }}.md"

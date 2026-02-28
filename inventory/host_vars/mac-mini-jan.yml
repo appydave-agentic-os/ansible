@@ -1,0 +1,22 @@
+---
+# =============================================================================
+# Mac Mini Jan - Philippines Node (Jan's machine)
+# =============================================================================
+# Location: Philippines (remote — Tailscale only, no .local access)
+# Role: Automation / agent node — NOT a creator machine
+# Spec: Mac Mini M4, ~16GB RAM, 512GB SSD (not yet purchased)
+# Status: PLANNED — machine not yet acquired
+# =============================================================================
+
+# Creator tools are excluded from this machine.
+# Base casks (Chrome, VSCode, Docker, Zoom, etc.) come from group_vars/all.yml.
+# Only add machine-specific extras here when the machine is set up.
+
+# homebrew_formulae_extra: []
+
+homebrew_casks_extra: []
+  # Ecamm Live intentionally excluded — not a creator machine
+  # Uncomment if needed later:
+  # - ecamm-live
+
+# git_repos_extra: []

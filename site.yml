@@ -2,12 +2,21 @@
 - name: Provision macOS development environment
   hosts: all
 
+  environment:
+    PATH: "/opt/homebrew/bin:/opt/homebrew/sbin:{{ ansible_env.PATH }}"
+
   pre_tasks:
-    - name: Verify Homebrew is installed
-      ansible.builtin.command: brew --version
-      register: brew_check
-      changed_when: false
-      failed_when: brew_check.rc != 0
+    - name: Check if Homebrew is installed
+      ansible.builtin.stat:
+        path: /opt/homebrew/bin/brew
+      register: brew_binary
+
+    - name: Install Homebrew if missing
+      ansible.builtin.shell: >
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      environment:
+        NONINTERACTIVE: "1"
+      when: not brew_binary.stat.exists
 
   roles:
     - role: homebrew
@@ -22,8 +31,14 @@
     - role: macos_defaults
       tags: [macos]
 
+    - role: dock
+      tags: [dock]
+
     - role: languages
       tags: [languages]
 
     - role: repos
       tags: [repos]
+
+    - role: tailscale
+      tags: [tailscale]

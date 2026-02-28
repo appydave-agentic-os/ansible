@@ -1,6 +1,12 @@
 ---
+- name: "⏳ Python compile warning"
+  ansible.builtin.debug:
+    msg: "Installing Python {{ item }} via pyenv — compiles from source, takes 5-10 minutes. This is normal."
+  loop: "{{ pyenv_python_versions }}"
+
 - name: Install Python versions via pyenv
   ansible.builtin.shell: |
+    export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
     export PYENV_ROOT="$HOME/.pyenv"
     export PATH="$PYENV_ROOT/bin:$PATH"
     eval "$(pyenv init --path)"
@@ -15,6 +21,7 @@
 
 - name: Set global Python version
   ansible.builtin.shell: |
+    export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
     export PYENV_ROOT="$HOME/.pyenv"
     export PATH="$PYENV_ROOT/bin:$PATH"
     eval "$(pyenv init --path)"
@@ -26,6 +33,7 @@
 
 - name: Install global Python packages
   ansible.builtin.shell: |
+    export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
     export PYENV_ROOT="$HOME/.pyenv"
     export PATH="$PYENV_ROOT/bin:$PATH"
     eval "$(pyenv init --path)"
@@ -38,6 +46,7 @@
 
 - name: Update global Python packages
   ansible.builtin.shell: |
+    export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
     export PYENV_ROOT="$HOME/.pyenv"
     export PATH="$PYENV_ROOT/bin:$PATH"
     eval "$(pyenv init --path)"

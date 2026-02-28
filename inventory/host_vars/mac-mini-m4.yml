@@ -1,74 +1,17 @@
 ---
 # =============================================================================
-# Mac Mini M4 - PRIMARY Development Machine Configuration
+# Mac Mini M4 — Primary Workstation
+# Groups: workstation + creator + thailand
 # =============================================================================
-# This will be your primary workstation
-# Based on MacBook Pro M4 setup, streamlined for desktop use
+# workstation group provides: Chrome, VSCode, iTerm, Ghostty, Docker, Alfred,
+#                             Rectangle, Zoom, WhatsApp, Claude, Ollama, etc.
+# creator group provides:     Ecamm Live, Elgato Stream Deck
+# =============================================================================
 
-# -----------------------------------------------------------------------------
-# Homebrew formulae
-# -----------------------------------------------------------------------------
-# Base config provides: ffmpeg, fzf, gh, git, nvm, openssl@3, pgvector, pipx,
-#                       pyenv, python@3.14, rbenv, ruby-build, rustup, sqlite,
-#                       uv, whisper-cpp
+homebrew_casks_extra:
+  - blackhole-2ch          # Virtual audio driver — routes mic to multiple apps
+                           # Solves: Ecamm Live hijacking audio from Wispr Flow
+                           # Requires manual Aggregate Device setup in Audio MIDI Setup
 
-homebrew_formulae_extra:
-  - ripgrep           # Fast grep - Claude Code's Grep tool uses this!
-  - yt-dlp            # Video downloader (YouTube + 1000+ sites)
-  - tmux              # Terminal multiplexer
-  - gitleaks          # Scan for secrets in git repos (security)
-
-  # Conditional - uncomment if needed:
-  # - git-filter-repo   # Git history rewriting (only if you rewrite Git history)
-  # - imagemagick     # Image manipulation (only if actively using)
-  # - cmake           # Build system (only if building C/C++ projects)
-  # - postgresql@17   # Database (only if running local DB)
-
-# -----------------------------------------------------------------------------
-# Homebrew casks - machine-specific extras
-# -----------------------------------------------------------------------------
-# Base casks (Chrome, VSCode, Docker, Zoom, etc.) are in group_vars/all.yml
-# Only add machine-specific apps here
-
-homebrew_casks_extra: []
-  # === VIDEO PRODUCTION - Uncomment if doing video work on this machine ===
-  # - obs                  # Streaming/recording (alternative to Ecamm)
-  # NOTE: Ecamm Live, DaVinci Resolve, Elgato tools must be manually installed
-
-  # === OPTIONAL ===
-  # - slack               # Team communication
-  # - dropbox             # File sync
-  # - tunnelblick         # VPN client
-  # - hazel               # Automated file organization (requires license)
-  # - anydesk             # Remote desktop
-
-# -----------------------------------------------------------------------------
-# Language versions - Match base config (latest stable)
-# -----------------------------------------------------------------------------
-# Using base config defaults:
-# - Ruby: 3.4.4
-# - Node.js: 24.13.0, 22.14.0
-# - Python: 3.14.3
-
-# Uncomment to override:
-# rbenv_ruby_global: "3.4.4"
-# nvm_node_global: "24.13.0"
-# pyenv_python_global: "3.14.3"
-
-# -----------------------------------------------------------------------------
-# Git repositories
-# -----------------------------------------------------------------------------
-# Add any repos you want automatically cloned/updated
+homebrew_formulae_extra: []
 git_repos_extra: []
-  # Example:
-  # - repo: git@github.com:appydave-agentic-os/ansible.git
-  #   dest: "{{ ansible_env.HOME }}/dev/ad/appydave-agentic-os"
-
-# -----------------------------------------------------------------------------
-# Notes
-# -----------------------------------------------------------------------------
-# Manual installs required after Ansible:
-# - Mac App Store apps (GarageBand, iMovie, Keynote, Numbers, Pages)
-# - Licensed software (Alfred license, Hazel license)
-# - Video production tools (Ecamm Live, DaVinci Resolve, Elgato Stream Deck)
-# - Specialized tools (Auto-Claude, Wispr Flow)

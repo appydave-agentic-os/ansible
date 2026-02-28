@@ -2,7 +2,8 @@
 - name: Install Node.js versions via nvm
   ansible.builtin.shell: |
     export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    mkdir -p "$NVM_DIR"
+    [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
     if ! nvm ls {{ item }} >/dev/null 2>&1; then
       nvm install {{ item }}
     fi
@@ -15,7 +16,8 @@
 - name: Reinstall Node.js versions to pick up latest patch
   ansible.builtin.shell: |
     export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    mkdir -p "$NVM_DIR"
+    [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
     nvm install {{ item }} --reinstall-packages-from={{ item }}
   args:
     executable: /bin/zsh
@@ -27,7 +29,8 @@
 - name: Set default Node.js version
   ansible.builtin.shell: |
     export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    mkdir -p "$NVM_DIR"
+    [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
     nvm alias default {{ nvm_node_global }}
   args:
     executable: /bin/zsh
@@ -37,7 +40,8 @@
 - name: Install global npm packages
   ansible.builtin.shell: |
     export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    mkdir -p "$NVM_DIR"
+    [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
     nvm use {{ nvm_node_global }}
     npm install -g {{ item }}
   args:
@@ -49,7 +53,8 @@
 - name: Update global npm packages
   ansible.builtin.shell: |
     export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    mkdir -p "$NVM_DIR"
+    [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
     nvm use {{ nvm_node_global }}
     npm update -g {{ item }}
   args:

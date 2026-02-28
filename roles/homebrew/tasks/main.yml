@@ -13,10 +13,20 @@
   loop: "{{ homebrew_taps + homebrew_taps_extra }}"
   when: (homebrew_taps + homebrew_taps_extra) | length > 0
 
+- name: Build combined formulae list from all applicable groups
+  ansible.builtin.set_fact:
+    _all_formulae: >-
+      {{ homebrew_formulae
+         + (homebrew_formulae_workstation | default([]))
+         + (homebrew_formulae_creator     | default([]))
+         + (homebrew_formulae_agent       | default([]))
+         + (homebrew_formulae_headless    | default([]))
+         + homebrew_formulae_extra }}
+
 - name: Install/upgrade Homebrew formulae
   community.general.homebrew:
     name: "{{ item }}"
     state: "{{ 'latest' if upgrade_packages | bool else 'present' }}"
     path: "{{ homebrew_path }}"
-  loop: "{{ homebrew_formulae + homebrew_formulae_extra }}"
-  when: (homebrew_formulae + homebrew_formulae_extra) | length > 0
+  loop: "{{ _all_formulae }}"
+  when: _all_formulae | length > 0

@@ -1,0 +1,14 @@
+---
+# =============================================================================
+# Agent group — automation and bot nodes
+# Applies to: mac-mini-m2, mac-mini-jan, mac-mini-mary
+# =============================================================================
+# These machines run background tasks, bots, and automation workflows.
+# Jan and Mary are also workstations (they get GUI apps via workstation group).
+# M2 is headless (no GUI apps via headless group).
+
+homebrew_formulae_agent: []
+  # Future: n8n dependencies, bot frameworks, etc.
+
+homebrew_casks_agent: []
+  # Future: automation-specific tools

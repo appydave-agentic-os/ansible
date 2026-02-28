@@ -1,0 +1,12 @@
+---
+- name: Remove all current Dock items
+  ansible.builtin.command: /opt/homebrew/bin/dockutil --remove all --no-restart
+  changed_when: true
+  when: inventory_hostname not in groups['headless']
+
+- name: Add apps to Dock
+  ansible.builtin.command: >
+    /opt/homebrew/bin/dockutil --add "{{ item }}" --no-restart
+  loop: "{{ dock_apps + dock_apps_extra }}"
+  notify: Restart Dock
+  when: inventory_hostname not in groups['headless']

@@ -1,0 +1,17 @@
+---
+# =============================================================================
+# Creator group — video production and live streaming machines
+# Applies to: macbook-pro-m4, mac-mini-m4
+# =============================================================================
+
+homebrew_formulae_creator: []
+  # Nothing formula-specific yet for creator machines
+
+homebrew_casks_creator: []
+  # Nothing automated — creator casks require system extension approval
+
+  # Manual installs (run once on each creator machine, then Ansible is idempotent):
+  # brew install --cask ecamm-live        → then approve in System Settings → Privacy & Security
+  # brew install --cask elgato-stream-deck → then approve in System Settings → Privacy & Security
+  # brew install --cask gling             → or download from gling.ai
+  # brew install --cask davinci-resolve   → or download from blackmagicdesign.com
