@@ -69,4 +69,6 @@
       #!/bin/bash
       # DAM CLI wrapper — runs appydave-tools from source via bundler
       # Allows FliHub and other tools to call `dam` without a global gem install
+      export PATH="$HOME/.rbenv/shims:$HOME/.rbenv/bin:/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+      eval "$(rbenv init -)"
       cd "$HOME/dev/ad/appydave-tools" && bundle exec dam "$@"
