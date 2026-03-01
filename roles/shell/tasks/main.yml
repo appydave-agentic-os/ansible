@@ -40,6 +40,13 @@
     backup: true
     mode: "0644"
 
+- name: Deploy .zshenv from template
+  ansible.builtin.template:
+    src: zshenv.j2
+    dest: "{{ ansible_facts['env']['HOME'] }}/.zshenv"
+    backup: true
+    mode: "0644"
+
 - name: Create ~/.secrets placeholder
   ansible.builtin.file:
     path: "{{ ansible_facts['env']['HOME'] }}/.secrets"
@@ -47,3 +54,19 @@
     mode: "0600"
     modification_time: preserve
     access_time: preserve
+
+- name: Create ~/.local/bin directory
+  ansible.builtin.file:
+    path: "{{ ansible_facts['env']['HOME'] }}/.local/bin"
+    state: directory
+    mode: "0755"
+
+- name: Install dam wrapper script
+  ansible.builtin.copy:
+    dest: "{{ ansible_facts['env']['HOME'] }}/.local/bin/dam"
+    mode: "0755"
+    content: |
+      #!/bin/bash
+      # DAM CLI wrapper — runs appydave-tools from source via bundler
+      # Allows FliHub and other tools to call `dam` without a global gem install
+      cd "$HOME/dev/ad/appydave-tools" && bundle exec dam "$@"
