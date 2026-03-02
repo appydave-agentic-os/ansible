@@ -72,3 +72,4 @@
       export PATH="$HOME/.rbenv/shims:$HOME/.rbenv/bin:/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
       eval "$(rbenv init -)"
       cd "$HOME/dev/ad/appydave-tools" && bundle exec dam "$@"
+  when: install_dam_wrapper | default(false)
