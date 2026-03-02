@@ -19,6 +19,7 @@ homebrew_path: /opt/homebrew/bin
 # Set to true to upgrade all packages to latest versions:
 #   ansible-playbook site.yml --limit mac-mini-m2 -e upgrade_packages=true
 upgrade_packages: false
+install_dam_wrapper: false   # Only David's machines have ~/dev/ad/appydave-tools source checkout
 
 # -----------------------------------------------------------------------------
 # Homebrew taps

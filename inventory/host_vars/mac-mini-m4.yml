@@ -15,3 +15,4 @@ homebrew_casks_extra:
 
 homebrew_formulae_extra: []
 git_repos_extra: []
+install_dam_wrapper: true
