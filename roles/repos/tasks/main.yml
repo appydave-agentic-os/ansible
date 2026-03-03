@@ -10,14 +10,18 @@
     src: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519"
     dest: "~/.ssh/id_ed25519"
     mode: "0600"
-  when: inventory_hostname != 'localhost'
+  when:
+    - inventory_hostname != 'localhost'
+    - propagate_ssh_key | default(false) | bool
 
 - name: Copy SSH public key from control node
   ansible.builtin.copy:
     src: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519.pub"
     dest: "~/.ssh/id_ed25519.pub"
     mode: "0644"
-  when: inventory_hostname != 'localhost'
+  when:
+    - inventory_hostname != 'localhost'
+    - propagate_ssh_key | default(false) | bool
 
 - name: Configure git user name
   community.general.git_config:

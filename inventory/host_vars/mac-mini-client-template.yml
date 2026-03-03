@@ -1,0 +1,41 @@
+---
+# =============================================================================
+# mac-mini-client-template — Client Machine Template
+# =============================================================================
+# USAGE: Copy this file and rename it to match your actual hostname.
+# Example: mac-mini-alice.yml, mac-mini-alice.yml
+#
+# This is the starting point for provisioning a client or team member machine.
+# It inherits the universal base from group_vars/all.yml and the workstation
+# GUI apps from group_vars/workstation.yml.
+#
+# It does NOT get:
+#   - Creator tools (Ecamm, Stream Deck, DaVinci, Gling) — add manually if needed
+#   - David's personal tools (Ghostty, Alfred, Rectangle, Rust, PostgreSQL)
+#   - SSH key propagation from the control node
+#
+# AGENT NOTE: All values with "REPLACE" must be set before running the playbook.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Identity — REQUIRED: replace with the actual person's details
+# -----------------------------------------------------------------------------
+git_user_name: Joe Blow          # REPLACE with client's full name
+git_user_email: joe@example.com  # REPLACE with client's email
+
+# ansible_user is set in hosts.yml per-connection.
+# Default in all.yml is {{ lookup('env', 'USER') }} (whoever runs the playbook).
+# For client machines, set ansible_user in hosts.yml under the remote: group.
+
+# -----------------------------------------------------------------------------
+# SSH keys — clients manage their own SSH keys independently
+# (Override of the david group default of true)
+# -----------------------------------------------------------------------------
+propagate_ssh_key: false
+
+# -----------------------------------------------------------------------------
+# Machine-specific extras (add anything the client needs beyond the base)
+# -----------------------------------------------------------------------------
+homebrew_formulae_extra: []
+homebrew_casks_extra: []
+git_repos_extra: []

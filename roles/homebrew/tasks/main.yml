@@ -21,6 +21,7 @@
          + (homebrew_formulae_creator     | default([]))
          + (homebrew_formulae_agent       | default([]))
          + (homebrew_formulae_headless    | default([]))
+         + (homebrew_formulae_david       | default([]))
          + homebrew_formulae_extra }}
 
 - name: Install/upgrade Homebrew formulae

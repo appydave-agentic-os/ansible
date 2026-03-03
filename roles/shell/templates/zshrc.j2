@@ -39,11 +39,15 @@ export NVM_DIR="$HOME/.nvm"
 export PATH="{{ p }}:$PATH"
 {% endfor %}
 
-# Rust
+{% if rust_toolchain | length > 0 %}
+# Rust (installed via rustup)
 export PATH="$HOME/.cargo/bin:$PATH"
+{% endif %}
 
-# PostgreSQL client tools
+{% if enable_postgresql_paths | default(false) %}
+# PostgreSQL client tools (libpq — installed via postgresql@17)
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+{% endif %}
 
 # User scripts
 export PATH="$PATH:$HOME/scripts"
@@ -62,9 +66,11 @@ esac
 export {{ key }}="{{ value }}"
 {% endfor %}
 
-# Compiler flags for PostgreSQL
+{% if enable_postgresql_paths | default(false) %}
+# Compiler flags for PostgreSQL (needed for native gem/package builds against libpq)
 export LDFLAGS="-L/opt/homebrew/opt/libpq/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/libpq/include"
+{% endif %}
 
 # -----------------------------------------------------------------------------
 # Secrets (API keys, tokens - never committed to version control)

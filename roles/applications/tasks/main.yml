@@ -7,6 +7,7 @@
          + (homebrew_casks_creator     | default([]))
          + (homebrew_casks_agent       | default([]))
          + (homebrew_casks_headless    | default([]))
+         + (homebrew_casks_david       | default([]))
          + homebrew_casks_extra }}
 
 - name: Install/upgrade Homebrew cask applications
