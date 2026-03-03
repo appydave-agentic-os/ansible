@@ -8,8 +8,9 @@ homebrew_formulae_workstation:
   - ripgrep                # Fast grep (Claude Code's Grep tool uses this)
   - yt-dlp                 # Video downloader (YouTube + 1000+ sites)
   - gitleaks               # Scan for secrets in git repos
-  - displayplacer          # Programmatic display arrangement (meaningless on headless)
   - whisper-cpp            # Local speech-to-text
+  # displayplacer — David-specific (programmatic display arrangement for streaming/multi-monitor)
+  #                 Add to homebrew_formulae_extra or group_vars/david.yml if needed
 
 homebrew_casks_workstation:
   # === BROWSERS & COMMUNICATION ===
@@ -20,14 +21,14 @@ homebrew_casks_workstation:
 
   # === DEVELOPMENT ===
   - visual-studio-code
-  - ghostty                # Primary terminal (ADR-0003)
-  - iterm2                 # Alternative terminal
+  - iterm2                 # Terminal — see david.yml for Ghostty (David's preference)
 
   # === PRODUCTIVITY ===
   - obsidian               # Note-taking (markdown)
-  - alfred                 # Launcher (requires license)
-  - rectangle              # Window management
   - hammerspoon            # macOS automation
+  # ghostty  — David-specific terminal (group_vars/david.yml) — ADR-0003
+  # alfred   — David-specific launcher (group_vars/david.yml) — requires license
+  # rectangle — David-specific window manager (group_vars/david.yml)
 
   # === UTILITIES ===
   - loom                   # Screen recording
