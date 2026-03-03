@@ -2,7 +2,7 @@
 
 > Opinionated macOS provisioning for developers who build with AI. Installs a complete development environment across one or more Macs using Ansible and Homebrew.
 
-Built by [AppyDave](https://appydave.com) — part of the [Agentic OS](https://github.com/appydave/agentic-os) project.
+Built by [AppyDave](https://appydave.com) — part of the [Agentic OS](https://github.com/appydave-agentic-os) project.
 
 ---
 
@@ -258,4 +258,4 @@ MIT — use it, fork it, adapt it for your own machines.
 
 ---
 
-*Part of the [Agentic OS](https://github.com/appydave/agentic-os) project by [AppyDave](https://appydave.com)*
+*Part of the [Agentic OS](https://github.com/appydave-agentic-os) project by [AppyDave](https://appydave.com)*
