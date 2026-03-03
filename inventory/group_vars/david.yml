@@ -1,0 +1,58 @@
+---
+# =============================================================================
+# David group — machines operated by David Cruwys
+# Applies to: macbook-pro-m4, mac-mini-m4, mac-mini-m2
+# =============================================================================
+# These are David-specific defaults that should NOT be in all.yml (which is
+# the public template baseline). Clients and team members get different values
+# in their own host_vars or group (e.g. group_vars/client.yml).
+#
+# AGENT NOTE — OPINIONATED DEFAULTS:
+#   The values in this file represent David's personal preferences.
+#   See CLAUDE.md §Opinionated Defaults for the reasoning behind each choice
+#   and how to override them for your own setup.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Identity — git config (per-machine in host_vars overrides these if needed)
+# -----------------------------------------------------------------------------
+git_user_name: David Cruwys
+git_user_email: david@ideasmen.com.au
+
+# -----------------------------------------------------------------------------
+# SSH key propagation
+# David pattern: control node's ~/.ssh/id_ed25519 is copied to all remote machines
+# (same GitHub account across all David's machines — single SSH identity)
+# Clients should set this to false and manage SSH keys independently.
+# -----------------------------------------------------------------------------
+propagate_ssh_key: true
+
+# -----------------------------------------------------------------------------
+# Homebrew formulae — David-specific tools
+# -----------------------------------------------------------------------------
+homebrew_formulae_david:
+  - rustup                 # Rust toolchain manager (David uses Rust; not a client default)
+  - postgresql@17          # Standalone Postgres — psql client + direct DB access for Rails dev
+                           # (Supabase CLI bundles its own Postgres via Docker; this is separate)
+  - displayplacer          # Programmatic display arrangement — streaming/multi-monitor setup
+
+# -----------------------------------------------------------------------------
+# Homebrew casks — David-specific apps
+# -----------------------------------------------------------------------------
+homebrew_casks_david:
+  - ghostty                # Primary terminal (ADR-0003) — David's preference over iTerm2
+  - alfred                 # Launcher — David's preference (requires license)
+  - rectangle              # Window management — David's preference over macOS native tiling
+
+# -----------------------------------------------------------------------------
+# Rust toolchain
+# Default in all.yml is "" (disabled). Set here for David's machines.
+# -----------------------------------------------------------------------------
+rust_toolchain: stable
+rust_components: []
+
+# -----------------------------------------------------------------------------
+# PostgreSQL PATH exports in .zshrc (libpq client tools + compiler flags)
+# Set to true only on machines where postgresql@17 is installed.
+# -----------------------------------------------------------------------------
+enable_postgresql_paths: true

@@ -20,6 +20,8 @@ homebrew_path: /opt/homebrew/bin
 #   ansible-playbook site.yml --limit mac-mini-m2 -e upgrade_packages=true
 upgrade_packages: false
 install_dam_wrapper: false   # Only David's machines have ~/dev/ad/appydave-tools source checkout
+ansible_user: "{{ lookup('env', 'USER') }}"  # Defaults to whoever runs the playbook — override in host_vars for named users
+propagate_ssh_key: false     # Copies ~/.ssh/id_ed25519 from control node to remote machines. David sets true in david.yml.
 
 # -----------------------------------------------------------------------------
 # Homebrew taps
@@ -50,11 +52,11 @@ homebrew_formulae:
   - python@3.14
   - rbenv
   - ruby-build
-  - rustup
+  # rustup — David-specific (group_vars/david.yml). Add to homebrew_formulae_extra if you need Rust.
 
   # Services — every machine
-  - postgresql@17
-  - supabase
+  # postgresql@17 — David-specific (group_vars/david.yml). Supabase CLI bundles its own Postgres via Docker.
+  - supabase               # Supabase CLI — local Supabase stack (includes bundled Postgres via Docker)
 
 homebrew_formulae_extra: []
 
@@ -256,6 +258,13 @@ macos_defaults:
 macos_defaults_extra: []
 
 # -----------------------------------------------------------------------------
+# Shell template feature flags
+# -----------------------------------------------------------------------------
+# Controls whether .zshrc includes PostgreSQL libpq PATH + compiler flags.
+# Set to true in group_vars/david.yml (or host_vars) when postgresql@17 is installed.
+enable_postgresql_paths: false
+
+# -----------------------------------------------------------------------------
 # Language version managers
 # -----------------------------------------------------------------------------
 # Ruby (rbenv)
@@ -280,22 +289,27 @@ pyenv_python_versions:
 pyenv_python_global: "3.14.3"
 pyenv_global_packages: []
 
-# Rust (rustup — installed via Homebrew, toolchain managed here)
-rust_toolchain: stable
+# Rust (rustup — David-specific, see group_vars/david.yml)
+# Empty string disables Rust installation entirely (the languages/rust.yml task checks for non-empty)
+rust_toolchain: ""
 rust_components: []
 
 # -----------------------------------------------------------------------------
 # Git settings
 # -----------------------------------------------------------------------------
-git_user_name: David Cruwys
-git_user_email: david@ideasmen.com.au
+# Git identity — REQUIRED per machine or group.
+# Set in group_vars/david.yml (David's machines) or host_vars/<hostname>.yml (clients/team).
+# Tasks in repos role already guard on: when: git_user_name | length > 0
+git_user_name: ""
+git_user_email: ""
 
 # -----------------------------------------------------------------------------
 # Git repositories to clone/update
 # -----------------------------------------------------------------------------
 git_repos: []
   # Example:
-  # - repo: git@github.com:appydave/appydave.git
-  #   dest: "{{ ansible_env.HOME }}/dev/ad/appydave/appydave"
+  # Example (replace with your own repos):
+  # - repo: git@github.com:your-org/your-repo.git
+  #   dest: "{{ ansible_env.HOME }}/dev/your-repo"
 
 git_repos_extra: []
