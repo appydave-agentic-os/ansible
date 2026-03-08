@@ -30,6 +30,9 @@ propagate_ssh_key: true
 # -----------------------------------------------------------------------------
 # Homebrew formulae — David-specific tools
 # -----------------------------------------------------------------------------
+pyenv_global_packages:
+  - mlx-whisper            # Apple Silicon ML speech-to-text — David only, not for client machines
+
 homebrew_formulae_david:
   - rustup                 # Rust toolchain manager (David uses Rust; not a client default)
   - postgresql@17          # Standalone Postgres — psql client + direct DB access for Rails dev
