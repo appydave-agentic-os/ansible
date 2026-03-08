@@ -28,7 +28,8 @@ host_vars/<hostname>.yml    — machine-specific overrides (git identity, extras
 - Core CLI tools: git, gh, ffmpeg, fzf, rsync, tmux, uv, sqlite
 - AI tooling: Claude desktop app, Supabase CLI, Ollama
 - Shell: Oh My Zsh with zsh-autosuggestions + zsh-syntax-highlighting
-- Apps: 1Password, Chrome, VSCode, Zoom, Teams, WhatsApp, Obsidian, Hammerspoon, Loom, ngrok
+- Apps (workstation): 1Password, Chrome, VSCode, WhatsApp, Obsidian, Hammerspoon, Loom, iTerm2
+- Apps (David only): Zoom, ngrok, Ghostty, Alfred, Rectangle, Codex
 
 ---
 
@@ -267,6 +268,43 @@ site.yml           # Main playbook — runs all roles against all hosts
 discovery.yml      # Read-only — queries current state of a machine
 POST-ANSIBLE.md    # Manual steps required after running site.yml
 ```
+
+---
+
+## Planned Work — ansible-starter Repo
+
+**Status**: Design decision made, not yet implemented. Do not start without reading this section.
+
+### The Problem
+This repo (`appydave-agentic-os/ansible`) is David's personal infrastructure AND a template for clients/team members. These are different audiences with different trust levels. Clients currently need write access to David's repo to push their machine configs — that's wrong.
+
+### The Design
+Two repos, single source of truth:
+
+```
+appydave-agentic-os/ansible          ← SOURCE OF TRUTH (this repo, David's private infra)
+appydave-agentic-os/ansible-starter  ← PUBLISHED TEMPLATE (never edited directly)
+```
+
+**Rule**: `ansible-starter` is generated from this repo via a publish script. Never edit `ansible-starter` by hand.
+
+**Clients**: Fork `ansible-starter`, own their fork, David never appears in it.
+
+**Publish script** (to be built): strips David-specific content from this repo and pushes a clean version to `ansible-starter`:
+- Removes `group_vars/david.yml` (or replaces with a blank operator template)
+- Removes `host_vars/mac-mini-m2.yml`, `mac-mini-m4.yml`, `macbook-pro-m4.yml` (David's machines)
+- Keeps `host_vars/mac-mini-client-template.yml` as the only host example
+- Strips David-specific tools from `all.yml` (mlx-whisper, supabase, yt-dlp etc. — move to david.yml first)
+- Keeps `BOOTSTRAP.md`, `README.md`, `POST-ANSIBLE.md`, all roles
+
+### What Needs to Happen First (prerequisites)
+Before the publish script is useful, `all.yml` needs a genuine audit:
+- Everything in `all.yml` should be truly universal (any developer, any Mac)
+- David-specific tools must be in `david.yml` only
+- Today's audit showed leakage: `mlx-whisper`, `supabase`, `whisper-cpp`, `yt-dlp`, `gitleaks` are David's workflow, not universal
+
+### Why Not Today
+This is a separate focused session. Don't attempt while provisioning client machines.
 
 ---
 
