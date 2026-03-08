@@ -15,5 +15,6 @@
     name: "{{ item }}"
     state: "{{ 'upgraded' if upgrade_packages | bool else 'present' }}"
     path: "{{ homebrew_path }}"
+    accept_external_apps: true
   loop: "{{ _all_casks }}"
   when: _all_casks | length > 0
