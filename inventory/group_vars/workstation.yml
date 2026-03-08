@@ -16,7 +16,7 @@ homebrew_casks_workstation:
   # === BROWSERS & COMMUNICATION ===
   - google-chrome
   # - zoom             # Manual install — pkg installer requires sudo, fails non-interactively
-  - microsoft-teams
+  # - microsoft-teams  # Manual install — pkg installer requires sudo, fails non-interactively
   - whatsapp
 
   # === DEVELOPMENT ===
@@ -36,6 +36,7 @@ homebrew_casks_workstation:
   - ngrok                  # Tunnel localhost to internet
 
   # Manual installs (pkg installers requiring sudo or system extensions — brew cask unreliable):
-  # zoom              → https://zoom.us/download (pkg installer requires sudo, fails non-interactively)
-  # Docker            → https://www.docker.com/products/docker-desktop/ (brew cask unreliable)
-  # logi-options-plus → no Homebrew cask available → download from logitech.com/software/logi-options-plus.html
+  # zoom              → https://zoom.us/download
+  # microsoft-teams   → https://www.microsoft.com/en/microsoft-teams/download-app
+  # Docker            → https://www.docker.com/products/docker-desktop/
+  # logi-options-plus → no Homebrew cask available → logitech.com/software/logi-options-plus.html
