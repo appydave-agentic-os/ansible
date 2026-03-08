@@ -35,6 +35,7 @@ homebrew_formulae_david:
   - postgresql@17          # Standalone Postgres — psql client + direct DB access for Rails dev
                            # (Supabase CLI bundles its own Postgres via Docker; this is separate)
   - displayplacer          # Programmatic display arrangement — streaming/multi-monitor setup
+  - gemini-cli             # Google Gemini AI CLI agent
 
 # -----------------------------------------------------------------------------
 # Homebrew casks — David-specific apps
@@ -43,6 +44,10 @@ homebrew_casks_david:
   - ghostty                # Primary terminal (ADR-0003) — David's preference over iTerm2
   - alfred                 # Launcher — David's preference (requires license)
   - rectangle              # Window management — David's preference over macOS native tiling
+  - codex                  # OpenAI Codex CLI — AI coding agent
+  - zoom                   # Video calls — moved here from workstation (pkg installer fails on client machines)
+  - ngrok                  # Localhost tunnelling — moved here from workstation (antivirus flags on client machines)
+  # - microsoft-teams      # Add here if needed — removed from workstation baseline
 
 # -----------------------------------------------------------------------------
 # Rust toolchain
