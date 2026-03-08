@@ -1,0 +1,20 @@
+# {{ ansible_managed }}
+# =============================================================================
+# .zshenv - Managed by Ansible
+# Loads for ALL shell types: login, interactive, and non-interactive SSH
+# =============================================================================
+# WHY THIS FILE EXISTS:
+# SSH non-login shells skip .zprofile, so Homebrew and nvm are invisible
+# to plain `ssh host "command"` calls. Putting them here fixes that.
+# This is what makes `ssh mac-mini-m2 "claude --version"` work.
+# =============================================================================
+
+# Homebrew (Apple Silicon)
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# nvm (Node version manager) — claude binary lives here
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# Rust / cargo
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
