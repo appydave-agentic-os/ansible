@@ -1,0 +1,70 @@
+---
+# =============================================================================
+# filtcore — Lars Filtenberg's MacBook Air M2 15"
+# =============================================================================
+# Groups: workstation + client
+# Inherits universal base from group_vars/all.yml
+# Inherits GUI apps from group_vars/workstation.yml
+#
+# Does NOT get:
+#   - Creator tools (Ecamm, Stream Deck, DaVinci, Gling)
+#   - David's personal tools (Ghostty, Alfred, Rectangle, Rust, PostgreSQL)
+#   - SSH key propagation from the control node
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Identity
+# -----------------------------------------------------------------------------
+git_user_name: Lars
+git_user_email: lars@filt.dk
+
+# -----------------------------------------------------------------------------
+# SSH keys — Lars manages independently
+# -----------------------------------------------------------------------------
+propagate_ssh_key: false
+
+# -----------------------------------------------------------------------------
+# Machine-specific extras
+# -----------------------------------------------------------------------------
+homebrew_formulae_extra: []
+homebrew_casks_extra: []
+git_repos_extra: []
+
+# -----------------------------------------------------------------------------
+# Ruby not needed for Lars
+# -----------------------------------------------------------------------------
+rbenv_ruby_versions: []
+rbenv_gems: []
+
+# -----------------------------------------------------------------------------
+# Python — skip heavy ML packages
+# -----------------------------------------------------------------------------
+pyenv_global_packages: []
+
+# -----------------------------------------------------------------------------
+# macOS defaults — Lars-specific overrides (applied after all.yml base)
+# -----------------------------------------------------------------------------
+macos_defaults_extra:
+  # Danish locale (temporary — revert to en_AU once setup is complete)
+  - domain: NSGlobalDomain
+    key: AppleLocale
+    type: string
+    value: en_DK
+
+  # Light mode — Lars's preference
+  - domain: NSGlobalDomain
+    key: AppleInterfaceStyle
+    type: string
+    value: Light
+
+  # Restore natural scrolling (macOS default) — don't force David's preference
+  - domain: NSGlobalDomain
+    key: com.apple.swipescrolldirection
+    type: bool
+    value: true
+
+  # Re-enable press-and-hold — required for Danish characters (æ, ø, å)
+  - domain: NSGlobalDomain
+    key: ApplePressAndHoldEnabled
+    type: bool
+    value: true
