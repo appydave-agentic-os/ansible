@@ -33,7 +33,7 @@ homebrew_casks_workstation:
   # === UTILITIES ===
   - loom                   # Screen recording
   - ollama                 # Local LLMs
-  - ngrok                  # Tunnel localhost to internet
+  # - ngrok               # Removed — antivirus (McAfee) blocks unpack; install manually if needed
 
   # Manual installs (pkg installers requiring sudo or system extensions — brew cask unreliable):
   # zoom              → https://zoom.us/download
