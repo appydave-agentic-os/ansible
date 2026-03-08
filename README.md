@@ -26,9 +26,12 @@ Works on **Apple Silicon Macs only** (Homebrew at `/opt/homebrew`).
 
 ### Prerequisites
 
+> **Starting from scratch (no Homebrew)?** See [BOOTSTRAP.md](BOOTSTRAP.md) first — it walks through the day-zero steps before Ansible can run.
+
 1. **Control machine**: The Mac you'll run Ansible from (can be the machine you're provisioning — `localhost` mode)
-2. **Ansible**: `pip install ansible` or `brew install ansible`
-3. **Galaxy collections**: `ansible-galaxy collection install -r requirements.yml`
+2. **Homebrew**: Required first. See [BOOTSTRAP.md](BOOTSTRAP.md) if not installed.
+3. **Ansible**: `brew install ansible`
+4. **Galaxy collections**: `ansible-galaxy collection install -r requirements.yml`
 
 ### Provision your own Mac (localhost)
 
