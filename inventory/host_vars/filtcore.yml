@@ -51,11 +51,12 @@ macos_defaults_extra:
     type: string
     value: en_DK
 
-  # Light mode — Lars's preference
+  # Light mode — delete the key (absence = light, presence of "Dark" = dark)
   - domain: NSGlobalDomain
     key: AppleInterfaceStyle
     type: string
-    value: Light
+    value: ""
+    state: absent
 
   # Restore natural scrolling (macOS default) — don't force David's preference
   - domain: NSGlobalDomain
