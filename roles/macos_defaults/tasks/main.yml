@@ -7,6 +7,18 @@
     value: "{{ item.value }}"
     state: present
   loop: "{{ macos_defaults + macos_defaults_extra }}"
+  when: item.state | default('present') == 'present'
+  notify:
+    - Restart Dock
+    - Restart Finder
+
+- name: Remove macOS defaults (for keys that must be absent)
+  community.general.osx_defaults:
+    domain: "{{ item.domain }}"
+    key: "{{ item.key }}"
+    state: absent
+  loop: "{{ macos_defaults + macos_defaults_extra }}"
+  when: item.state | default('present') == 'absent'
   notify:
     - Restart Dock
     - Restart Finder
