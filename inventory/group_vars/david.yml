@@ -33,19 +33,10 @@ propagate_ssh_key: true
 pyenv_global_packages:
   - mlx-whisper            # Apple Silicon ML speech-to-text — David only, not for client machines
 
-homebrew_taps_extra:
-  - cloudflare/cloudflare  # Required for cloudflared formula
-
 homebrew_formulae_david:
   - rustup                 # Rust toolchain manager (David uses Rust; not a client default)
-  - yt-dlp                 # Video downloader — David's content workflow
-  - gitleaks               # Secret scanning — David's security workflow
-  - whisper-cpp            # Local speech-to-text — David's audio pipeline
-  - postgresql@17          # Standalone Postgres — psql client + direct DB access for Rails dev
-                           # (Supabase CLI bundles its own Postgres via Docker; this is separate)
   - displayplacer          # Programmatic display arrangement — streaming/multi-monitor setup
   - gemini-cli             # Google Gemini AI CLI agent
-  - cloudflared                        # Localhost tunnelling (no account needed for quick tunnels)
 
 # -----------------------------------------------------------------------------
 # Homebrew casks — David-specific apps
@@ -55,7 +46,7 @@ homebrew_casks_david:
   - alfred                 # Launcher — David's preference (requires license)
   - rectangle              # Window management — David's preference over macOS native tiling
   - codex                  # OpenAI Codex CLI — AI coding agent
-  - zoom                   # Video calls — moved here from workstation (pkg installer fails on client machines)
+  # - zoom                 # Manual install — pkg installer requires interactive sudo: brew install --cask zoom
   - ngrok                  # Localhost tunnelling — moved here from workstation (antivirus flags on client machines)
   # - microsoft-teams      # Add here if needed — removed from workstation baseline
 
@@ -74,18 +65,4 @@ rust_components: []
 # -----------------------------------------------------------------------------
 install_dam_wrapper: true
 
-# -----------------------------------------------------------------------------
-# PostgreSQL PATH exports in .zshrc (libpq client tools + compiler flags)
-# Set to true only on machines where postgresql@17 is installed.
-# -----------------------------------------------------------------------------
-enable_postgresql_paths: true
-
-# -----------------------------------------------------------------------------
-# Locale — Australian English (David only)
-# Philippines machines get en_PH via group_vars/philippines.yml
-# -----------------------------------------------------------------------------
-macos_defaults_extra:
-  - domain: NSGlobalDomain
-    key: AppleLocale
-    type: string
-    value: en_AU
+enable_postgresql_paths: false
