@@ -3,15 +3,52 @@
 # Creator group — video production and live streaming machines
 # Applies to: macbook-pro-m4, mac-mini-m4
 # =============================================================================
+#
+# COMPOSABILITY NOTE:
+#   This file covers the "creator role" — config that belongs to any machine
+#   used for video production and live streaming, regardless of who operates it.
+#   Things here are role-specific, not person-specific.
+#   David-as-person config (git identity, personal tools, SSH keys) → group_vars/david.yml
+#   Machine-specific quirks                                         → host_vars/<hostname>.yml
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Physical production peripherals — Mac Mini M4 (documentation only)
+# -----------------------------------------------------------------------------
+# All Elgato devices are USB-connected to the Mac Mini M4.
+# The Elgato app and Stream Deck software require GUI approval (System Extension)
+# and cannot be fully automated by Ansible. These are documented here so the
+# provisioning intent is clear and future machines can replicate the setup.
+#
+# Devices:
+#   Elgato Stream Deck XL       — 32 LCD buttons (8×4), USB
+#                                  Primary production control surface
+#   Elgato Stream Deck Standard — 15 LCD buttons (5×3), USB
+#                                  Secondary shortcuts / scene switching
+#   Elgato Stream Deck Pedal    — 3 foot switches, no display, USB
+#                                  Hands-free control (mute, record, etc.)
+#   Ajazz AKP03                 — 9 keys + dial/encoder, USB
+#                                  Separate ecosystem from Elgato; used for
+#                                  volume/scrubbing without Stream Deck software
+#
+# Manual install path for Stream Deck software:
+#   brew install --cask elgato-stream-deck
+#   → approve in System Settings → Privacy & Security → System Extensions
+#   → configure profiles via Stream Deck GUI (not automatable via Ansible)
+# -----------------------------------------------------------------------------
 
 homebrew_formulae_creator: []
   # Nothing formula-specific yet for creator machines
 
-homebrew_casks_creator: []
-  # Nothing automated — creator casks require system extension approval
+homebrew_casks_creator:
+  - blackhole-2ch          # Virtual audio driver — routes mic to multiple apps simultaneously
+                           # Solves: Ecamm Live hijacking the microphone from Wispr Flow
+                           # After install: open Audio MIDI Setup → create Aggregate Device
+                           #   combining BlackHole + built-in/USB mic → set as default input in Ecamm
+                           # Required on every creator machine running Ecamm Live
 
-  # Manual installs (run once on each creator machine, then Ansible is idempotent):
-  # brew install --cask ecamm-live        → then approve in System Settings → Privacy & Security
+  # The following require system extension approval — cannot be fully automated:
+  # brew install --cask ecamm-live         → then approve in System Settings → Privacy & Security
   # brew install --cask elgato-stream-deck → then approve in System Settings → Privacy & Security
-  # brew install --cask gling             → or download from gling.ai
-  # brew install --cask davinci-resolve   → or download from blackmagicdesign.com
+  # brew install --cask gling              → or download from gling.ai
+  # brew install --cask davinci-resolve    → or download from blackmagicdesign.com

@@ -60,6 +60,14 @@ rust_toolchain: stable
 rust_components: []
 
 # -----------------------------------------------------------------------------
+# DAM wrapper — appydave-tools source checkout
+# Only David's machines have ~/dev/ad/appydave-tools checked out locally.
+# The dam wrapper script requires this path to exist.
+# Client and team machines leave this false (default in all.yml).
+# -----------------------------------------------------------------------------
+install_dam_wrapper: true
+
+# -----------------------------------------------------------------------------
 # PostgreSQL PATH exports in .zshrc (libpq client tools + compiler flags)
 # Set to true only on machines where postgresql@17 is installed.
 # -----------------------------------------------------------------------------

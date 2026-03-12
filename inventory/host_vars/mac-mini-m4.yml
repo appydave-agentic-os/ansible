@@ -1,18 +1,40 @@
 ---
 # =============================================================================
-# Mac Mini M4 — Primary Workstation
-# Groups: workstation + creator + thailand
+# Mac Mini M4 — Primary Workstation (David's production hub, Thailand)
+# Groups: workstation + creator + david + thailand
 # =============================================================================
-# workstation group provides: Chrome, VSCode, iTerm, Ghostty, Docker, Alfred,
-#                             Rectangle, Zoom, WhatsApp, Claude, Ollama, etc.
-# creator group provides:     Ecamm Live, Elgato Stream Deck
+#
+# COMPOSABILITY MODEL — what belongs here vs. elsewhere:
+#
+#   host_vars/mac-mini-m4.yml  (THIS FILE)
+#     → Machine-specific config only: hardware quirks, per-machine overrides,
+#       anything that would differ if this exact machine were reimaged or replaced.
+#     → Ask: "Is this true of this physical box, regardless of who uses it?"
+#       If yes → put it here. If no → put it in a group.
+#
+#   group_vars/david.yml
+#     → David-as-operator config: git identity, SSH key propagation, David's
+#       preferred tools (Ghostty, Alfred, Rectangle, Rust, PostgreSQL),
+#       install_dam_wrapper (appydave-tools checkout), mlx-whisper, etc.
+#
+#   group_vars/creator.yml
+#     → Creator-role config: Ecamm Live, Stream Deck, DaVinci, Gling,
+#       BlackHole audio routing (required for Ecamm Live production workflows),
+#       and documentation of physical production peripherals.
+#
+#   group_vars/all.yml
+#     → Universal baseline for every machine: core formulae, casks, shell config,
+#       macOS defaults, language version managers.
+#
+# RESULT: mac-mini-m4.yml should stay nearly empty. A future mac-mini-m4b or
+# client machine can use the same group composition without inheriting anything
+# personal or creator-specific from here.
 # =============================================================================
 
-homebrew_casks_extra:
-  - blackhole-2ch          # Virtual audio driver — routes mic to multiple apps
-                           # Solves: Ecamm Live hijacking audio from Wispr Flow
-                           # Requires manual Aggregate Device setup in Audio MIDI Setup
+# Nothing machine-specific beyond the group defaults at this time.
+# All David-specific config → group_vars/david.yml
+# All creator-role config   → group_vars/creator.yml
 
 homebrew_formulae_extra: []
+homebrew_casks_extra: []
 git_repos_extra: []
-install_dam_wrapper: true
