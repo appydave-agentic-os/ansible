@@ -41,8 +41,8 @@ homebrew_formulae_creator: []
   # Nothing formula-specific yet for creator machines
 
 homebrew_casks_creator:
-  - blackhole-2ch          # Virtual audio driver — routes mic to multiple apps simultaneously
-                           # Solves: Ecamm Live hijacking the microphone from Wispr Flow
+  # - blackhole-2ch        # Manual install — pkg installer requires interactive sudo
+                           # Run: brew install --cask blackhole-2ch
                            # After install: open Audio MIDI Setup → create Aggregate Device
                            #   combining BlackHole + built-in/USB mic → set as default input in Ecamm
                            # Required on every creator machine running Ecamm Live

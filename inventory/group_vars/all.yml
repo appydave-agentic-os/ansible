@@ -284,8 +284,8 @@ nvm_global_packages:
 
 # Python (pyenv)
 pyenv_python_versions:
-  - "3.14.3"
-pyenv_python_global: "3.14.3"
+  - "3.13.3"
+pyenv_python_global: "3.13.3"
 pyenv_global_packages: []
 
 # Rust (rustup — David-specific, see group_vars/david.yml)
