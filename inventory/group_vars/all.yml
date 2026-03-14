@@ -37,6 +37,8 @@ homebrew_formulae:
   # Core utilities — every machine
   - ffmpeg
   - fzf
+  - jq                     # JSON processor — used by app launcher, aliases, and agent tooling
+  - overmind               # Process manager for Procfile-based apps (tmux-backed)
   - rsync                  # Modern rsync v3.x (macOS ships with ancient v2.6.9 from 2006)
   - gh
   - git
