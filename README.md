@@ -24,21 +24,44 @@ Works on **Apple Silicon Macs only** (Homebrew at `/opt/homebrew`).
 
 ## Quick Start
 
-### Prerequisites
+### Step 1 — Install Homebrew (if not already installed)
 
-> **Starting from scratch (no Homebrew)?** See [BOOTSTRAP.md](BOOTSTRAP.md) first — it walks through the day-zero steps before Ansible can run.
-
-1. **Control machine**: The Mac you'll run Ansible from (can be the machine you're provisioning — `localhost` mode)
-2. **Homebrew**: Required first. See [BOOTSTRAP.md](BOOTSTRAP.md) if not installed.
-3. **Ansible**: `brew install ansible`
-4. **Galaxy collections**: `ansible-galaxy collection install -r requirements.yml`
-
-### Provision your own Mac (localhost)
+macOS doesn't ship with Homebrew, but its installer also pulls down Xcode Command Line Tools, which gives you `git`. Everything else depends on this.
 
 ```bash
-git clone <this-repo>
-cd ansible
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
 
+After it completes, add Homebrew to your PATH:
+
+```bash
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv)"
+```
+
+### Step 2 — Install Ansible
+
+```bash
+brew install ansible
+```
+
+### Step 3 — Clone this repo
+
+```bash
+mkdir -p ~/dev/ad
+git clone https://github.com/appydave-agentic-os/ansible.git ~/dev/ad/agent-os/ansible
+cd ~/dev/ad/agent-os/ansible
+```
+
+### Step 4 — Install Ansible Galaxy collections
+
+```bash
+ansible-galaxy collection install -r requirements.yml
+```
+
+### Step 5 — Provision your own Mac (localhost)
+
+```bash
 # 1. Set your identity
 cat >> inventory/host_vars/macbook-pro-m4.yml << EOF
 git_user_name: Your Name
