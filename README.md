@@ -280,37 +280,47 @@ CLAUDE.md          # Agent context (preparation pattern format)
 
 ## Private Inventory
 
-Real hostnames, IP addresses, names, and emails are kept out of this repo. They live in a gitignored directory alongside the public inventory:
+Real hostnames, IP addresses, names, and emails are kept out of this repo entirely. They live in a **sibling repo** — a separate private git repository alongside this one:
 
 ```
-inventory-private/
-  hosts.yml                     # Real Tailscale hostnames/IPs (mirrors public structure)
-  host_vars/
-    filtcore.yml                # Real git_user_name, git_user_email for client machine
-    mac-mini-jan.yml            # Real values when machine is acquired
-    mac-mini-mary.yml           # Real values when machine is acquired
+~/dev/ad/agent-os/
+├── ansible/           ← this repo (public)
+└── ansible-private/   ← your private repo (never pushed publicly)
+    ├── hosts.yml                 # Real Tailscale hostnames/IPs
+    └── host_vars/
+        ├── mac-mini-alice.yml    # Real git_user_name, git_user_email
+        └── mac-mini-bob.yml
 ```
 
-`inventory-private/` is listed in `.gitignore` — it is never committed. The public `inventory/` contains sanitised placeholder values (`"Your Name"`, `"you@example.com"`) so the repo is safe to publish.
+The public `inventory/` contains sanitised placeholder values (`"Your Name"`, `"you@example.com"`) so this repo is safe to share, fork, and publish.
 
 ### Setting up your private inventory
 
 ```bash
-# 1. Create the directory
-mkdir -p inventory-private/host_vars
+# 1. Create the sibling repo
+mkdir -p ~/dev/ad/agent-os/ansible-private/host_vars
+cd ~/dev/ad/agent-os/ansible-private && git init
 
-# 2. Start from the client template
-cp inventory/host_vars/mac-mini-client-template.yml inventory-private/host_vars/my-machine.yml
+# 2. Copy the public hosts.yml as your starting point
+cp ~/dev/ad/agent-os/ansible/inventory/hosts.yml hosts.yml
 
-# 3. Edit with real values (name, email, Tailscale hostname)
+# 3. Copy and fill in real values for each machine
+cp ~/dev/ad/agent-os/ansible/inventory/host_vars/mac-mini-client-template.yml \
+   host_vars/mac-mini-alice.yml
+# Edit: ansible_host (Tailscale hostname/IP), ansible_user, git_user_name, git_user_email
+
+# 4. Push to a private GitHub repo
+gh repo create your-org/ansible-private --private
+git remote add origin git@github.com:your-org/ansible-private.git
+git push -u origin main
 ```
 
 ### Running with both inventories
 
-Ansible merges multiple `-i` sources — variables in `inventory-private/` override the sanitised defaults in `inventory/`:
+Ansible merges multiple `-i` sources — variables in `ansible-private/` override the sanitised defaults in `inventory/`:
 
 ```bash
-ansible-playbook site.yml -i inventory/ -i inventory-private/
+ansible-playbook site.yml -i inventory/ -i ../ansible-private/
 ```
 
 ---
