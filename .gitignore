@@ -4,4 +4,12 @@
 *.pyc
 __pycache__/
 .DS_Store
+
+# Private inventory (real hostnames, IPs, names, emails)
+inventory-private/
+
+# Sensitive host_vars with real identity data
+inventory/host_vars/filtcore.yml
+
+# Machine discovery output (real hardware/app details)
 discovery_output/

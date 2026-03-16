@@ -1,6 +1,7 @@
 ---
+# Real values in inventory-private/host_vars/mac-mini-jan.yml
 # =============================================================================
-# Mac Mini Jan - Philippines Node (Jan's machine)
+# Mac Mini - Philippines Node (Team member machine)
 # =============================================================================
 # Location: Philippines (remote — Tailscale only, no .local access)
 # Role: Automation / agent node — NOT a creator machine

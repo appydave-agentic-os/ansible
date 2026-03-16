@@ -278,6 +278,43 @@ CLAUDE.md          # Agent context (preparation pattern format)
 
 ---
 
+## Private Inventory
+
+Real hostnames, IP addresses, names, and emails are kept out of this repo. They live in a gitignored directory alongside the public inventory:
+
+```
+inventory-private/
+  hosts.yml                     # Real Tailscale hostnames/IPs (mirrors public structure)
+  host_vars/
+    filtcore.yml                # Real git_user_name, git_user_email for client machine
+    mac-mini-jan.yml            # Real values when machine is acquired
+    mac-mini-mary.yml           # Real values when machine is acquired
+```
+
+`inventory-private/` is listed in `.gitignore` — it is never committed. The public `inventory/` contains sanitised placeholder values (`"Your Name"`, `"you@example.com"`) so the repo is safe to publish.
+
+### Setting up your private inventory
+
+```bash
+# 1. Create the directory
+mkdir -p inventory-private/host_vars
+
+# 2. Start from the client template
+cp inventory/host_vars/mac-mini-client-template.yml inventory-private/host_vars/my-machine.yml
+
+# 3. Edit with real values (name, email, Tailscale hostname)
+```
+
+### Running with both inventories
+
+Ansible merges multiple `-i` sources — variables in `inventory-private/` override the sanitised defaults in `inventory/`:
+
+```bash
+ansible-playbook site.yml -i inventory/ -i inventory-private/
+```
+
+---
+
 ## License
 
 MIT — use it, fork it, adapt it for your own machines.
