@@ -3,7 +3,7 @@
 # mac-mini-client-template — Client Machine Template
 # =============================================================================
 # USAGE: Copy this file and rename it to match your actual hostname.
-# Example: mac-mini-alice.yml, mac-mini-alice.yml
+# Example: mac-mini-alice.yml, mac-mini-bob.yml
 #
 # This is the starting point for provisioning a client or team member machine.
 # It inherits the universal base from group_vars/all.yml and the workstation
