@@ -42,3 +42,4 @@
 
     - role: tailscale
       tags: [tailscale]
+      when: inventory_hostname in groups['thailand']
