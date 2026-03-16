@@ -33,12 +33,16 @@ propagate_ssh_key: true
 pyenv_global_packages:
   - mlx-whisper            # Apple Silicon ML speech-to-text — David only, not for client machines
 
+homebrew_taps_extra:
+  - cloudflare/cloudflare  # Required for cloudflared formula
+
 homebrew_formulae_david:
   - rustup                 # Rust toolchain manager (David uses Rust; not a client default)
   - postgresql@17          # Standalone Postgres — psql client + direct DB access for Rails dev
                            # (Supabase CLI bundles its own Postgres via Docker; this is separate)
   - displayplacer          # Programmatic display arrangement — streaming/multi-monitor setup
   - gemini-cli             # Google Gemini AI CLI agent
+  - cloudflare/cloudflare/cloudflared  # Localhost tunnelling (no account needed for quick tunnels)
 
 # -----------------------------------------------------------------------------
 # Homebrew casks — David-specific apps
