@@ -5,8 +5,7 @@
 # =============================================================================
 # Location: Philippines (remote — Tailscale only, no .local access)
 # Role: Automation / agent node — NOT a creator machine
-# Spec: Mac Mini M4, ~16GB RAM, 512GB SSD (not yet purchased)
-# Status: PLANNED — machine not yet acquired
+# Status: ACTIVE — provisioned 2026-03-18
 # =============================================================================
 
 # Creator tools are excluded from this machine.

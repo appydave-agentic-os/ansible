@@ -1,12 +1,11 @@
 ---
 # Real values in inventory-private/host_vars/mac-mini-mary.yml
 # =============================================================================
-# Mac Mini - Philippines Node (Team member machine)
+# Mac Mini - Mary (Philippines)
 # =============================================================================
 # Location: Philippines (remote — Tailscale only, no .local access)
-# Role: Automation / agent node — NOT a creator machine
-# Spec: Mac Mini M4, ~16GB RAM, 512GB SSD (not yet purchased)
-# Status: PLANNED — machine not yet acquired
+# Role: Workstation + agent node — NOT a creator machine
+# Status: ACTIVE — provisioned 2026-03-18
 # =============================================================================
 
 # Creator tools are excluded from this machine.

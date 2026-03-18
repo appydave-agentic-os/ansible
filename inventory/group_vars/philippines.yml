@@ -1,0 +1,13 @@
+---
+# =============================================================================
+# Philippines group — remote team members (Jan, Mary)
+# Applies to: mac-mini-jan, mac-mini-mary
+# Tailscale-only access (no .local routing)
+# =============================================================================
+
+# Locale override — Philippines English
+macos_defaults_extra:
+  - domain: NSGlobalDomain
+    key: AppleLocale
+    type: string
+    value: en_PH
