@@ -6,11 +6,7 @@
 
 homebrew_formulae_workstation:
   - ripgrep                # Fast grep (Claude Code's Grep tool uses this)
-  - yt-dlp                 # Video downloader (YouTube + 1000+ sites)
-  - gitleaks               # Scan for secrets in git repos
-  - whisper-cpp            # Local speech-to-text
-  # displayplacer — David-specific (programmatic display arrangement for streaming/multi-monitor)
-  #                 Add to homebrew_formulae_extra or group_vars/david.yml if needed
+  # yt-dlp, gitleaks, whisper-cpp — David-specific, moved to group_vars/david.yml
 
 homebrew_casks_workstation:
   # === BROWSERS & COMMUNICATION ===
@@ -21,6 +17,7 @@ homebrew_casks_workstation:
 
   # === DEVELOPMENT ===
   - visual-studio-code
+  - antigravity            # Google AI Coding Agent IDE (VS Code fork)
   - iterm2                 # Terminal — see david.yml for Ghostty (David's preference)
 
   # === PRODUCTIVITY ===

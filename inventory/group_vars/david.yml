@@ -38,11 +38,14 @@ homebrew_taps_extra:
 
 homebrew_formulae_david:
   - rustup                 # Rust toolchain manager (David uses Rust; not a client default)
+  - yt-dlp                 # Video downloader — David's content workflow
+  - gitleaks               # Secret scanning — David's security workflow
+  - whisper-cpp            # Local speech-to-text — David's audio pipeline
   - postgresql@17          # Standalone Postgres — psql client + direct DB access for Rails dev
                            # (Supabase CLI bundles its own Postgres via Docker; this is separate)
   - displayplacer          # Programmatic display arrangement — streaming/multi-monitor setup
   - gemini-cli             # Google Gemini AI CLI agent
-  - cloudflare/cloudflare/cloudflared  # Localhost tunnelling (no account needed for quick tunnels)
+  - cloudflared                        # Localhost tunnelling (no account needed for quick tunnels)
 
 # -----------------------------------------------------------------------------
 # Homebrew casks — David-specific apps
@@ -76,3 +79,13 @@ install_dam_wrapper: true
 # Set to true only on machines where postgresql@17 is installed.
 # -----------------------------------------------------------------------------
 enable_postgresql_paths: true
+
+# -----------------------------------------------------------------------------
+# Locale — Australian English (David only)
+# Philippines machines get en_PH via group_vars/philippines.yml
+# -----------------------------------------------------------------------------
+macos_defaults_extra:
+  - domain: NSGlobalDomain
+    key: AppleLocale
+    type: string
+    value: en_AU

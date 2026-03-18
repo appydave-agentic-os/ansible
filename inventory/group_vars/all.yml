@@ -198,11 +198,7 @@ macos_defaults:
     type: string
     value: Dark
 
-  # Locale: Australian English
-  - domain: NSGlobalDomain
-    key: AppleLocale
-    type: string
-    value: en_AU
+  # Locale — set per group (david.yml → en_AU, philippines.yml → en_PH)
 
   # Fn keys act as standard function keys (not media keys)
   - domain: NSGlobalDomain
