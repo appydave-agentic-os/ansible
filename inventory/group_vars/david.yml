@@ -37,6 +37,7 @@ homebrew_formulae_david:
   - rustup                 # Rust toolchain manager (David uses Rust; not a client default)
   - displayplacer          # Programmatic display arrangement — streaming/multi-monitor setup
   - gemini-cli             # Google Gemini AI CLI agent
+  - syncthing              # P2P file sync for ~/.claude/skills/ across all 3 Macs (role handles service start)
 
 # -----------------------------------------------------------------------------
 # Homebrew casks — David-specific apps

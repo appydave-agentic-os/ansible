@@ -43,3 +43,6 @@
     - role: tailscale
       tags: [tailscale]
       when: inventory_hostname in groups['thailand']
+
+    - role: syncthing
+      tags: [syncthing]

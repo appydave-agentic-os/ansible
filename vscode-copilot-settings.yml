@@ -1,0 +1,100 @@
+---
+# =============================================================================
+# VSCode Copilot Agent — Disable auto-build / autopilot
+# Merges settings safely without clobbering existing config
+#
+# Usage:
+#   # Dry run first (check mode — no changes applied):
+#   ansible-playbook vscode-copilot-settings.yml --check --diff
+#
+#   # Apply for real:
+#   ansible-playbook vscode-copilot-settings.yml
+#
+#   # Single machine:
+#   ansible-playbook vscode-copilot-settings.yml --limit mac-mini-m4
+#
+# Settings applied:
+#   github.copilot.chat.agent.runTasks: false  — stops auto-running build tasks
+#   chat.autopilot.enabled: false              — requires manual approval per tool call
+# =============================================================================
+
+- name: VSCode Copilot Agent — Disable auto-build settings
+  hosts: all
+  ignore_unreachable: true
+
+  gather_facts: true
+
+  tasks:
+
+    - name: Capture home directory
+      ansible.builtin.set_fact:
+        home_dir: "{{ ansible_facts['env']['HOME'] }}"
+
+    - name: Ensure jq is installed
+      community.general.homebrew:
+        name: jq
+        state: present
+
+    - name: Ensure VSCode settings directory exists
+      ansible.builtin.file:
+        path: "{{ home_dir }}/Library/Application Support/Code/User"
+        state: directory
+        mode: "0755"
+
+    - name: Ensure settings.json exists and is valid JSON
+      ansible.builtin.shell: |
+        SETTINGS="{{ home_dir }}/Library/Application Support/Code/User/settings.json"
+        if [ ! -f "$SETTINGS" ]; then
+          echo '{}' > "$SETTINGS"
+          echo "created"
+        elif ! /opt/homebrew/bin/jq empty "$SETTINGS" 2>/dev/null; then
+          echo '{}' > "$SETTINGS"
+          echo "reset"
+        else
+          echo "ok"
+        fi
+      register: settings_init
+      changed_when: "'ok' not in settings_init.stdout"
+      args:
+        executable: /bin/zsh
+
+    - name: Read settings before change
+      ansible.builtin.shell: |
+        /opt/homebrew/bin/jq '{
+          "github.copilot.chat.agent.runTasks": .["github.copilot.chat.agent.runTasks"],
+          "chat.autopilot.enabled": .["chat.autopilot.enabled"]
+        }' "{{ home_dir }}/Library/Application Support/Code/User/settings.json"
+      register: settings_before
+      changed_when: false
+      args:
+        executable: /bin/zsh
+
+    - name: Merge Copilot agent settings
+      ansible.builtin.shell: |
+        SETTINGS="{{ home_dir }}/Library/Application Support/Code/User/settings.json"
+        tmp=$(mktemp)
+        /opt/homebrew/bin/jq '. + {
+          "github.copilot.chat.agent.runTasks": false,
+          "chat.autopilot.enabled": false
+        }' "$SETTINGS" > "$tmp" && mv "$tmp" "$SETTINGS"
+      register: merge_result
+      changed_when: true
+      args:
+        executable: /bin/zsh
+
+    - name: Read settings after change
+      ansible.builtin.shell: |
+        /opt/homebrew/bin/jq '{
+          "github.copilot.chat.agent.runTasks": .["github.copilot.chat.agent.runTasks"],
+          "chat.autopilot.enabled": .["chat.autopilot.enabled"]
+        }' "{{ home_dir }}/Library/Application Support/Code/User/settings.json"
+      register: settings_after
+      changed_when: false
+      args:
+        executable: /bin/zsh
+
+    - name: "RESULT — {{ inventory_hostname }}"
+      ansible.builtin.debug:
+        msg:
+          - "Before: {{ settings_before.stdout }}"
+          - "After:  {{ settings_after.stdout }}"

@@ -1,0 +1,43 @@
+---
+# =============================================================================
+# Syncthing — P2P file sync for ~/.claude/skills/ across all 3 Macs
+#
+# Syncthing syncs ~/.claude/skills/ only. Never point it at Git repos.
+# Bind to Tailscale IPs — eliminates public relay servers entirely.
+#
+# Manual steps required after provisioning (one-time per machine):
+#   1. Open http://127.0.0.1:8384
+#   2. Settings → Connections → Sync Protocol Listen Addresses
+#      Change to: tcp://<TAILSCALE_IP>:22000
+#   3. Add each machine by device ID (shown in web UI)
+#   4. Share ~/.claude/skills/ across all 3
+#   5. Set fsWatcherDelayS=1 in Advanced settings for ~2s propagation
+#   6. Enable file versioning (safety net for accidental deletes)
+# =============================================================================
+
+- name: Install Syncthing
+  community.general.homebrew:
+    name: syncthing
+    state: present
+    path: "{{ homebrew_path }}"
+
+- name: Start Syncthing service (brew services)
+  community.general.homebrew_services:
+    name: syncthing
+    state: present
+    path: "{{ homebrew_path }}"
+  when: syncthing_enable | bool
+
+- name: Remind user to configure Tailscale IP binding
+  ansible.builtin.debug:
+    msg: |
+      ⚠️  Syncthing is running on {{ inventory_hostname }}.
+          Manual config required (one-time per machine):
+            Open http://127.0.0.1:8384
+            Settings → Connections → Sync Protocol Listen Addresses
+            Change to: tcp://<TAILSCALE_IP>:22000
+            Add each machine by Device ID
+            Share ~/.claude/skills/ across all 3 Macs
+            Set fsWatcherDelayS=1 in Advanced config
+          Reference: brains/til/2026-03-14-multi-mac-file-sync-options.md
+  when: syncthing_tailscale_reminder | bool
