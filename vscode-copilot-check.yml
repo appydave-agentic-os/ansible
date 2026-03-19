@@ -1,0 +1,67 @@
+---
+# =============================================================================
+# VSCode Copilot Agent — Diagnostic Check
+# Checks all dependencies and current settings state WITHOUT making changes
+#
+# Usage:
+#   ansible-playbook vscode-copilot-check.yml
+#   ansible-playbook vscode-copilot-check.yml --limit mac-mini-m4
+#   ansible-playbook vscode-copilot-check.yml --ignore-unreachable
+# =============================================================================
+
+- name: VSCode Copilot Agent — Diagnostic Check
+  hosts: david
+  ignore_unreachable: true
+
+  gather_facts: true
+
+  tasks:
+
+    - name: Check jq is installed
+      ansible.builtin.stat:
+        path: /opt/homebrew/bin/jq
+      register: jq_binary
+
+    - name: Check VSCode is installed
+      ansible.builtin.stat:
+        path: /Applications/Visual Studio Code.app
+      register: vscode_app
+
+    - name: Check VSCode settings directory exists
+      ansible.builtin.stat:
+        path: "{{ ansible_facts['env']['HOME'] }}/Library/Application Support/Code/User"
+      register: vscode_settings_dir
+
+    - name: Check VSCode settings.json exists
+      ansible.builtin.stat:
+        path: "{{ ansible_facts['env']['HOME'] }}/Library/Application Support/Code/User/settings.json"
+      register: vscode_settings_file
+
+    - name: Validate settings.json is valid JSON
+      ansible.builtin.shell: |
+        /opt/homebrew/bin/jq empty "{{ ansible_facts['env']['HOME'] }}/Library/Application Support/Code/User/settings.json" 2>&1
+        echo "exit:$?"
+      register: json_valid
+      when: jq_binary.stat.exists and vscode_settings_file.stat.exists
+      changed_when: false
+
+    - name: Read current Copilot agent settings
+      ansible.builtin.shell: |
+        /opt/homebrew/bin/jq '{
+          "github.copilot.chat.agent.runTasks": .["github.copilot.chat.agent.runTasks"],
+          "chat.autopilot.enabled": .["chat.autopilot.enabled"],
+          "chat.agent.enabled": .["chat.agent.enabled"]
+        }' "{{ ansible_facts['env']['HOME'] }}/Library/Application Support/Code/User/settings.json"
+      register: current_copilot_settings
+      when: jq_binary.stat.exists and vscode_settings_file.stat.exists
+      changed_when: false
+
+    - name: "REPORT — {{ inventory_hostname }}"
+      ansible.builtin.debug:
+        msg:
+          - "jq installed:           {{ jq_binary.stat.exists }}"
+          - "VSCode installed:       {{ vscode_app.stat.exists }}"
+          - "Settings dir exists:    {{ vscode_settings_dir.stat.exists }}"
+          - "settings.json exists:   {{ vscode_settings_file.stat.exists }}"
+          - "settings.json valid:    {{ (json_valid.stdout | default('')) is search('exit:0') }}"
+          - "Current agent settings: {{ current_copilot_settings.stdout | default('(settings.json missing or jq absent)') }}"
