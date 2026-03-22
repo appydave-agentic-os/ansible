@@ -40,6 +40,9 @@
 homebrew_formulae_creator: []
   # Nothing formula-specific yet for creator machines
 
+pyenv_global_packages:
+  - mlx-whisper            # Apple Silicon ML speech-to-text — creator machines only (MacBook + M4 Mini, NOT M2)
+
 homebrew_casks_creator:
   # - blackhole-2ch        # Manual install — pkg installer requires interactive sudo
                            # Run: brew install --cask blackhole-2ch
