@@ -289,6 +289,8 @@ nvm_node_global: "24.13.0"
 nvm_global_packages:
   - yarn
   - "@anthropic-ai/claude-code"
+  - "@google/gemini-cli"
+  - "@openai/codex"
 
 # Python (pyenv)
 pyenv_python_versions:
