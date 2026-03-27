@@ -43,7 +43,16 @@
     mkdir -p "$NVM_DIR"
     [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
     nvm use {{ nvm_node_global }}
-    npm install -g {{ item }}
+    # First attempt — if EEXIST, remove conflicting symlinks and retry
+    OUTPUT=$(npm install -g {{ item }} 2>&1) && echo "$OUTPUT" && exit 0
+    CONFLICT=$(echo "$OUTPUT" | grep "File exists:" | head -1 | sed 's/.*File exists: //' | tr -d '[:space:]')
+    if [ -n "$CONFLICT" ]; then
+      rm -f "$CONFLICT"
+      npm install -g {{ item }}
+    else
+      echo "$OUTPUT" >&2
+      exit 1
+    fi
   args:
     executable: /bin/zsh
   register: npm_install
