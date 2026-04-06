@@ -254,6 +254,14 @@ macos_defaults:
     type: bool
     value: false
 
+  # iTerm: restore windows/tabs/panes after reboot via macOS window restoration
+  # false = honour macOS's built-in restore (default behaviour)
+  # true  = ignore it — iTerm starts fresh every launch (blocks reboot restoration)
+  - domain: com.googlecode.iterm2
+    key: NoSyncIgnoreSystemWindowRestoration
+    type: bool
+    value: false
+
 macos_defaults_extra: []
 
 # -----------------------------------------------------------------------------

@@ -43,7 +43,7 @@ homebrew_formulae_david:
 # Homebrew casks — David-specific apps
 # -----------------------------------------------------------------------------
 homebrew_casks_david:
-  - ghostty                # Primary terminal (ADR-0003) — David's preference over iTerm2
+  # ghostty — moved to workstation.yml (all workstations now get Ghostty, not just David's machines)
   - alfred                 # Launcher — David's preference (requires license)
   - rectangle              # Window management — David's preference over macOS native tiling
   - codex                  # OpenAI Codex CLI — AI coding agent
