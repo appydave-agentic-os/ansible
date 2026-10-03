@@ -2,8 +2,7 @@
 # =============================================================================
 # Transcription worker — CrisperWhisper + FliTools (mac-mini-m2)
 #
-# Run FROM the M4 (it pushes the wheelhouse, model weights and FliTools from there).
-#   scripts/build-crisper-wheelhouse.sh                                    # once, on the M4
+# Standard install on the worker itself — no files pushed from the control node.
 #   ansible-playbook transcription-worker.yml --check --diff                # dry run
 #   ansible-playbook transcription-worker.yml                               # for real (David's go)
 #

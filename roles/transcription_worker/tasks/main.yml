@@ -6,23 +6,6 @@
 
 # --- Preflight ---------------------------------------------------------------
 
-- name: Check control-node sources exist (build the wheelhouse first if missing)
-  ansible.builtin.stat:
-    path: "{{ item }}"
-  loop:
-    - "{{ tw_wheelhouse_src }}/requirements-offline.txt"
-    - "{{ tw_model_cache_src }}"
-  register: tw_sources
-  delegate_to: localhost
-  become: false
-
-- name: Fail if a control-node source is missing
-  ansible.builtin.assert:
-    that: tw_sources.results | rejectattr('stat.exists') | list | length == 0
-    fail_msg: >-
-      Missing on the control node: {{ tw_sources.results | rejectattr('stat.exists') | map(attribute='item') | list }}.
-      Run scripts/build-crisper-wheelhouse.sh on the M4, and run this playbook FROM the M4.
-
 - name: Warn if the worker has too little memory for CrisperWhisper
   ansible.builtin.debug:
     msg: >-
@@ -89,13 +72,13 @@
   become: true
   when: tw_disable_auto_macos_updates | bool
 
-# --- CrisperWhisper: Python 3.11 venv from the pushed wheelhouse --------------
+# --- CrisperWhisper: standard install (uv venv + pinned requirements) ----------
 
-- name: Push the CrisperWhisper wheelhouse
-  ansible.posix.synchronize:
-    src: "{{ tw_wheelhouse_src }}/"
-    dest: "{{ tw_wheelhouse }}/"
-    delete: true
+- name: Copy the pinned CrisperWhisper requirements
+  ansible.builtin.copy:
+    src: crisper-requirements.txt
+    dest: "{{ tw_venv }}-requirements.txt"
+    mode: "0644"
 
 - name: Create the CrisperWhisper venv (uv-managed Python {{ tw_python_version }})
   ansible.builtin.shell: |
@@ -105,23 +88,19 @@
     creates: "{{ tw_venv }}/bin/python"
     executable: /bin/zsh
 
-- name: Install CrisperWhisper packages offline
+- name: Install CrisperWhisper packages (transformers fork from GitHub)
   ansible.builtin.shell: |
     export PATH="{{ homebrew_path }}:$PATH"
-    uv pip install --python "{{ tw_venv }}/bin/python" --no-index \
-      --find-links "{{ tw_wheelhouse }}" -r "{{ tw_wheelhouse }}/requirements-offline.txt" 2>&1
+    uv pip install --python "{{ tw_venv }}/bin/python" -r "{{ tw_venv }}-requirements.txt" 2>&1
   args:
     executable: /bin/zsh
   register: tw_pip
-  changed_when: "'Installed' in tw_pip.stdout"
+  changed_when: "'Installed' in tw_pip.stdout"   # uv is idempotent: no-op when already satisfied
 
-- name: Push the CrisperWhisper model weights (~3.1 GB, once)
-  ansible.posix.synchronize:
-    src: "{{ tw_model_cache_src }}/"
-    dest: "{{ tw_model_cache }}/"
-    links: true
+# The ~3.1 GB model (nyrahealth/CrisperWhisper) downloads to ~/.cache/huggingface on
+# FliTools' first CrisperWhisper job — no task needed.
 
-# --- FliTools: copy pushed from the control node, run as a LaunchDaemon --------
+# --- FliTools: git clone + npm ci, run as a LaunchDaemon ----------------------
 
 - name: Clone FliTools
   ansible.builtin.git:
@@ -141,7 +120,9 @@
   environment:
     PATH: "{{ homebrew_path }}:/usr/bin:/bin"
   notify: Restart FliTools
-  when: tw_flitools_enabled | bool
+  when:
+    - tw_flitools_enabled | bool
+    - not (ansible_check_mode and tw_flitools_clone is changed)   # --check doesn't really clone
 
 - name: Ensure FliTools log directory exists
   ansible.builtin.file:

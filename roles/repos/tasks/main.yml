@@ -68,3 +68,4 @@
     state: link
     force: false
   loop: "{{ user_bin_links | default([]) }}"
+  ignore_errors: "{{ ansible_check_mode }}"   # --check doesn't really clone, so the source may not exist yet

@@ -4,23 +4,16 @@
 # =============================================================================
 # Runs on top of the usual site.yml setup (the M2 is a full peer since 2026-10-03).
 #   - FliTools: a normal git clone + npm ci (the M2 has GitHub access)
-#   - CrisperWhisper: pushed from the control node (the M4) because it's faster than
-#     rebuilding there — the wheelhouse (scripts/build-crisper-wheelhouse.sh, includes
-#     the nyrahealth transformers fork) and the ~3.1 GB model weights.
+#   - CrisperWhisper: standard install — uv venv + pinned requirements (incl. the
+#     nyrahealth transformers fork from GitHub); the ~3.1 GB model downloads from
+#     Hugging Face on first run. Reproducible without the M4.
 # =============================================================================
-
-# --- Control-node sources (paths on the machine running ansible-playbook) ----
-tw_control_home: "{{ lookup('env', 'HOME') }}"
-tw_wheelhouse_src: "{{ tw_control_home }}/.cache/appydave/crisper-wheelhouse"
-tw_model_cache_src: "{{ tw_control_home }}/.cache/huggingface/hub/models--nyrahealth--CrisperWhisper"
 
 # --- Worker paths ------------------------------------------------------------
 tw_home: "{{ ansible_facts['env']['HOME'] }}"
 tw_user: "{{ ansible_facts['user_id'] }}"
 tw_python_version: "3.11"                         # matches the M4's CrisperWhisper venv (3.11.14)
 tw_venv: "{{ tw_home }}/.venvs/flitools-crisper"  # FliTools' preferred path (docs/architecture.md)
-tw_wheelhouse: "{{ tw_home }}/.cache/appydave/crisper-wheelhouse"
-tw_model_cache: "{{ tw_home }}/.cache/huggingface/hub/models--nyrahealth--CrisperWhisper"
 tw_flitools_dir: "{{ tw_home }}/dev/ad/flivideo/flitools"
 
 # --- FliTools service ----------------------------------------------------------
