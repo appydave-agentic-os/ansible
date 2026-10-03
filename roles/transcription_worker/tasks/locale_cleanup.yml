@@ -1,0 +1,91 @@
+---
+# =============================================================================
+# Thai language / region / keyboard / time zone + staff accounts on the worker.
+# The M2 is no longer used by staff (David, 2026-10-03).
+#
+# ALWAYS: read-only report of what is there (safe in --check).
+# ONLY when tw_remove_thai_settings: true — and account deletion only for the
+# exact names in tw_remove_user_accounts — does anything change.
+# =============================================================================
+
+- name: Report local user accounts (UID >= 501)
+  ansible.builtin.shell: dscl . -list /Users UniqueID | awk '$2 >= 501 {print $1, $2}'
+  register: tw_accounts
+  changed_when: false
+  check_mode: false
+
+- name: Report language, region, keyboard and time zone
+  ansible.builtin.shell: |
+    echo "AppleLanguages: $(defaults read NSGlobalDomain AppleLanguages 2>/dev/null | tr -d '\n ')"
+    echo "AppleLocale:    $(defaults read NSGlobalDomain AppleLocale 2>/dev/null)"
+    echo "System langs:   $(defaults read /Library/Preferences/.GlobalPreferences AppleLanguages 2>/dev/null | tr -d '\n ')"
+    echo "Input sources:  $(defaults read com.apple.HIToolbox AppleEnabledInputSources 2>/dev/null | grep -E 'KeyboardLayout Name|Input Mode' | tr -d '\n ')"
+    echo "Time zone:      $(readlink /etc/localtime | sed 's|.*/zoneinfo/||')"
+  register: tw_locale_report
+  changed_when: false
+  check_mode: false
+
+- name: Show what is on the box
+  ansible.builtin.debug:
+    msg:
+      - "Accounts: {{ tw_accounts.stdout_lines }}"
+      - "{{ tw_locale_report.stdout_lines }}"
+      - "Cleanup enabled: {{ tw_remove_thai_settings }} · accounts to delete: {{ tw_remove_user_accounts }}"
+
+- name: Apply cleanup
+  when: tw_remove_thai_settings | bool
+  block:
+    - name: Refuse to delete the account Ansible runs as
+      ansible.builtin.assert:
+        that: tw_user not in tw_remove_user_accounts
+        fail_msg: "tw_remove_user_accounts includes {{ tw_user }} — the account this playbook runs as."
+
+    - name: Set user language list
+      ansible.builtin.command: defaults write NSGlobalDomain AppleLanguages -array {{ tw_languages | join(' ') }}
+      changed_when: true
+
+    - name: Set user region
+      community.general.osx_defaults:
+        domain: NSGlobalDomain
+        key: AppleLocale
+        type: string
+        value: "{{ tw_locale }}"
+
+    - name: Set login-window / system language list
+      ansible.builtin.command: defaults write /Library/Preferences/.GlobalPreferences AppleLanguages -array {{ tw_languages | join(' ') }}
+      changed_when: true
+      become: true
+
+    - name: Remove Thai keyboard input sources
+      ansible.builtin.shell: |
+        tmp=$(mktemp)
+        defaults export com.apple.HIToolbox "$tmp"
+        /usr/bin/python3 - "$tmp" <<'PY'
+        import plistlib, sys
+        p = sys.argv[1]
+        d = plistlib.load(open(p, 'rb'))
+        thai = lambda s: 'thai' in str(s).lower()
+        changed = False
+        for key in ('AppleEnabledInputSources', 'AppleSelectedInputSources', 'AppleInputSourceHistory'):
+            before = d.get(key, [])
+            after = [s for s in before if not thai(s)]
+            if len(after) != len(before):
+                d[key] = after; changed = True
+        plistlib.dump(d, open(p, 'wb'))
+        print('removed' if changed else 'none')
+        PY
+        defaults import com.apple.HIToolbox "$tmp"; rm -f "$tmp"
+      register: tw_thai_kbd
+      changed_when: "'removed' in tw_thai_kbd.stdout"
+
+    - name: Set time zone
+      ansible.builtin.command: systemsetup -settimezone {{ tw_timezone }}
+      changed_when: true
+      become: true
+      when: tw_timezone | length > 0
+
+    - name: Delete approved staff accounts (and their home folders)
+      ansible.builtin.command: sysadminctl -deleteUser {{ item }}
+      become: true
+      loop: "{{ tw_remove_user_accounts }}"
+      when: item in (tw_accounts.stdout_lines | map('split') | map('first') | list)

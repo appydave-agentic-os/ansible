@@ -14,3 +14,4 @@ pyenv_global_packages: []
 
 rust_toolchain: ""
 rust_components: []
+uv_tools: []

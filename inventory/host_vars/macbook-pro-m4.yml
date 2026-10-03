@@ -9,7 +9,10 @@
 # =============================================================================
 
 # Machine-specific extras beyond what groups provide
-homebrew_formulae_extra: []
+homebrew_formulae_extra:   # captured from discovery 2026-10-03 (Roamy only)
+  - imagemagick
+  - exiftool
+  - duti                   # Default-app associations from the CLI
 homebrew_casks_extra: []
 git_repos_extra: []
 install_dam_wrapper: true

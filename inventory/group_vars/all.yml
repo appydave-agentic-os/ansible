@@ -39,6 +39,7 @@ homebrew_formulae:
   - fzf
   - jq                     # JSON processor — used by app launcher, aliases, and agent tooling
   - overmind               # Process manager for Procfile-based apps (tmux-backed)
+  - pandoc                 # Universal document converter — .docx/.pdf/.html → Markdown and more
   - rsync                  # Modern rsync v3.x (macOS ships with ancient v2.6.9 from 2006)
   - gh
   - git
@@ -288,7 +289,6 @@ nvm_node_versions:
 nvm_node_global: "24.13.0"
 nvm_global_packages:
   - yarn
-  - "@anthropic-ai/claude-code"
   - "@google/gemini-cli"
   - "@openai/codex"
 
@@ -297,6 +297,8 @@ pyenv_python_versions:
   - "3.13.3"
 pyenv_python_global: "3.13.3"
 pyenv_global_packages: []
+  # marker-pdf → group_vars/david.yml (heavy: torch + model weights; not a universal default)
+uv_tools: []               # `uv tool install` CLIs — groups add uv_tools_david, hosts add uv_tools_extra
 
 # Rust (rustup — David-specific, see group_vars/david.yml)
 # Empty string disables Rust installation entirely (the languages/rust.yml task checks for non-empty)

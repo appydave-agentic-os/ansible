@@ -3,6 +3,11 @@
   hosts: all
   gather_facts: true
 
+  # Same as site.yml — non-interactive SSH shells don't load Homebrew onto PATH
+  environment:
+    # (static: play-level environment is templated before facts are gathered)
+    PATH: "/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+
   tasks:
     - name: Create discovery output directory
       ansible.builtin.file:
@@ -144,6 +149,38 @@
         path: "~/.oh-my-zsh"
       register: oh_my_zsh
 
+    - name: List user LaunchAgents and loaded appydave/appynet jobs
+      ansible.builtin.shell: |
+        ls ~/Library/LaunchAgents/
+        echo "--- loaded:"
+        launchctl list | grep -E 'appydave|appynet|kybernesis|homebrew.mxcl' || true
+      register: launch_agents
+      changed_when: false
+      failed_when: false
+
+    - name: Check Claude Code install (native vs npm)
+      ansible.builtin.shell: |
+        export PATH="$HOME/.local/bin:$PATH"
+        which -a claude 2>/dev/null || echo "claude not installed"
+        claude --version 2>/dev/null || true
+      args:
+        executable: /bin/zsh
+      register: claude_install
+      changed_when: false
+      failed_when: false
+
+    - name: List uv tools and Python venvs
+      ansible.builtin.shell: |
+        export PATH="$HOME/.local/bin:$PATH"
+        uv tool list 2>/dev/null || echo "uv not installed"
+        echo "--- ~/.venvs:"
+        ls ~/.venvs 2>/dev/null || echo "(none)"
+        echo "--- HF models:"
+        ls ~/.cache/huggingface/hub 2>/dev/null | grep '^models--' || echo "(none)"
+      register: python_envs
+      changed_when: false
+      failed_when: false
+
     - name: Get macOS version
       ansible.builtin.command: sw_vers -productVersion
       register: macos_version
@@ -244,6 +281,21 @@
           ### com.apple.WindowManager
           ```
           {{ macos_windowmanager_defaults.stdout }}
+          ```
+
+          ## LaunchAgents
+          ```
+          {{ launch_agents.stdout }}
+          ```
+
+          ## Claude Code
+          ```
+          {{ claude_install.stdout }}
+          ```
+
+          ## uv tools / venvs / HF models
+          ```
+          {{ python_envs.stdout }}
           ```
 
           ## Shell

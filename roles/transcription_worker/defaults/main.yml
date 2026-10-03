@@ -1,0 +1,56 @@
+---
+# =============================================================================
+# transcription_worker — keyless CrisperWhisper box (first target: mac-mini-m2)
+# =============================================================================
+# The worker holds NO keys, NO brains, NO GitHub/Claude logins and NO app repos.
+# Everything it needs is PUSHED from the control node (the M4):
+#   - the CrisperWhisper wheelhouse   (scripts/build-crisper-wheelhouse.sh builds it)
+#   - the CrisperWhisper model weights (~3.1 GB, from the M4's Hugging Face cache)
+#   - a FliTools copy, node_modules included (no git, no .git)
+# =============================================================================
+
+# --- Control-node sources (paths on the machine running ansible-playbook) ----
+tw_control_home: "{{ lookup('env', 'HOME') }}"
+tw_wheelhouse_src: "{{ tw_control_home }}/.cache/appydave/crisper-wheelhouse"
+tw_model_cache_src: "{{ tw_control_home }}/.cache/huggingface/hub/models--nyrahealth--CrisperWhisper"
+tw_flitools_src: "{{ tw_control_home }}/dev/ad/flivideo/flitools"
+
+# --- Worker paths ------------------------------------------------------------
+tw_home: "{{ ansible_facts['env']['HOME'] }}"
+tw_user: "{{ ansible_facts['user_id'] }}"
+tw_python_version: "3.11"                         # matches the M4's CrisperWhisper venv (3.11.14)
+tw_venv: "{{ tw_home }}/.venvs/flitools-crisper"  # FliTools' preferred path (docs/architecture.md)
+tw_wheelhouse: "{{ tw_home }}/.cache/appydave/crisper-wheelhouse"
+tw_model_cache: "{{ tw_home }}/.cache/huggingface/hub/models--nyrahealth--CrisperWhisper"
+tw_flitools_dir: "{{ tw_home }}/dev/ad/flivideo/flitools"
+
+# --- FliTools service ----------------------------------------------------------
+# LaunchDaemon (not LaunchAgent): it starts at boot with nobody logged in.
+tw_flitools_enabled: true
+tw_flitools_label: com.appydave.flitools
+tw_crisper_min_free_gb: 14            # FLITOOLS_CRISPER_MIN_FREE_GB — the model peaks at ~13 GB
+tw_min_memory_gb_warn: 24             # below this, the memory gate may never let a job start
+
+# --- Formulae ------------------------------------------------------------------
+tw_formulae:
+  - ffmpeg
+  - uv
+  - node                              # FliTools' run.sh finds node on /opt/homebrew/bin (needs >= 20.19)
+  - tailscale                         # open-source tailscaled — runs as a root daemon before login
+
+# --- Power / updates -----------------------------------------------------------
+tw_pmset:                             # pmset -a <key> <value>
+  sleep: 0
+  disksleep: 0
+  displaysleep: 10
+  powernap: 0
+  autorestart: 1                      # power back on after a power failure
+  womp: 1                             # wake on network access
+tw_disable_auto_macos_updates: true   # no surprise restarts for macOS updates (downloads still allowed)
+
+# --- Thai / staff cleanup — OFF until David approves the list ------------------
+tw_remove_thai_settings: false
+tw_locale: en_AU
+tw_languages: [en-AU]
+tw_timezone: ""                       # e.g. "Asia/Bangkok" — empty = leave as is (David to decide)
+tw_remove_user_accounts: []           # exact short names, filled in only after David approves

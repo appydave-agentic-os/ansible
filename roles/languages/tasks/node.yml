@@ -59,6 +59,16 @@
   changed_when: "'added' in npm_install.stdout or 'added' in npm_install.stderr"
   loop: "{{ nvm_global_packages }}"
 
+- name: Install Claude Code (native installer)
+  ansible.builtin.shell: |
+    if ! command -v claude >/dev/null 2>&1 || [[ "$(which claude)" != "$HOME/.local/bin/claude" ]]; then
+      curl -fsSL https://claude.ai/install.sh | bash
+    fi
+  args:
+    executable: /bin/zsh
+  register: claude_install
+  changed_when: "'Installed' in claude_install.stdout or 'installed' in claude_install.stdout"
+
 - name: Update global npm packages
   ansible.builtin.shell: |
     export NVM_DIR="$HOME/.nvm"

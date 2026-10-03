@@ -40,8 +40,12 @@
 homebrew_formulae_creator: []
   # Nothing formula-specific yet for creator machines
 
-pyenv_global_packages:
+# -----------------------------------------------------------------------------
+# Python packages — creator-role tools (merged with all.yml list in languages/python.yml)
+# -----------------------------------------------------------------------------
+pyenv_global_packages_creator:
   - mlx-whisper            # Apple Silicon ML speech-to-text — creator machines only (MacBook + M4 Mini, NOT M2)
+  # marker-pdf lives in all.yml pyenv_global_packages — needed on all machines
 
 homebrew_casks_creator: []
   # - blackhole-2ch        # Manual install — pkg installer requires interactive sudo

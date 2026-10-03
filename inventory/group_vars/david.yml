@@ -1,7 +1,7 @@
 ---
 # =============================================================================
 # David group — machines operated by David Cruwys
-# Applies to: macbook-pro-m4, mac-mini-m4, mac-mini-m2
+# Applies to: macbook-pro-m4, mac-mini-m4 (M2 left 2026-10-03 — see hosts.yml)
 # =============================================================================
 # These are David-specific defaults that should NOT be in all.yml (which is
 # the public template baseline). Clients and team members get different values
@@ -30,14 +30,45 @@ propagate_ssh_key: true
 # -----------------------------------------------------------------------------
 # Homebrew formulae — David-specific tools
 # -----------------------------------------------------------------------------
-pyenv_global_packages: []  # Machine-specific packages defined in host_vars
+pyenv_global_packages_david:     # mlx-whisper lives in creator.yml (M2 is not a creator)
+  - marker-pdf             # PDF → Markdown via ML layout models (pulls torch, several GB of weights on first run)
+                           # Moved from all.yml 2026-10-03: too heavy for client machines and the M2 worker
+
+# -----------------------------------------------------------------------------
+# uv tools — Python CLIs installed with `uv tool install` (languages/python.yml)
+# -----------------------------------------------------------------------------
+uv_tools_david:
+  - notebooklm-mcp-cli     # nlm + notebooklm-mcp (installed on M4 and Roamy)
+
+# -----------------------------------------------------------------------------
+# App registry — `my-app` start/stop/status for every app (repos role)
+# update: false — live working copy; never let Ansible pull over local changes
+# -----------------------------------------------------------------------------
+git_repos:
+  - repo: git@github.com:appydave/app-registry.git
+    dest: "{{ ansible_facts['env']['HOME'] }}/dev/ad/apps/app-registry"
+    update: false
+user_bin_links:
+  - src: "{{ ansible_facts['env']['HOME'] }}/dev/ad/apps/app-registry/bin/my-app"
+    dest: "{{ ansible_facts['env']['HOME'] }}/bin/my-app"
 
 homebrew_formulae_david:
   - rustup                 # Rust toolchain manager (David uses Rust; not a client default)
   - displayplacer          # Programmatic display arrangement — streaming/multi-monitor setup
   - gemini-cli             # Google Gemini AI CLI agent
   - ripgrep                # Fast grep — Claude Code's Grep tool requires this on ALL machines incl headless
-  - syncthing              # P2P file sync for ~/.claude/skills/ across all 3 Macs (role handles service start)
+  - syncthing              # P2P file sync for ~/.claude/skills/ across David's Macs (role handles service start)
+  # Captured from M4 + Roamy discovery 2026-10-03 (installed on both, previously undeclared)
+  - postgresql@17          # Standalone Postgres + psql/libpq (see CLAUDE.md §PostgreSQL)
+  - yt-dlp                 # Video download — FliVideo / transcript harvesting
+  - gitleaks               # Secret scanning before commits
+  - whisper-cpp            # Local whisper CLI (installs as whisper.cpp)
+  - espeak-ng              # Phonemiser — Kokoro TTS dependency
+  - poppler                # pdftotext / pdftoppm
+  - gifsicle               # GIF optimisation
+  - git-filter-repo        # History rewriting (secret purges)
+  - mosh                   # Roaming SSH — Roamy on hotspot ↔ M4
+  - ansible                # Control-node tooling — both M4 and Roamy run playbooks
 
 # -----------------------------------------------------------------------------
 # Homebrew casks — David-specific apps

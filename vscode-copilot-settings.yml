@@ -1,6 +1,6 @@
 ---
 # =============================================================================
-# VSCode Copilot Agent — Disable auto-build / autopilot
+# VSCode settings — disable Copilot auto-build / autopilot and editor preview tabs
 # Merges settings safely without clobbering existing config
 #
 # Usage:
@@ -14,11 +14,13 @@
 #   ansible-playbook vscode-copilot-settings.yml --limit mac-mini-m4
 #
 # Settings applied:
-#   github.copilot.chat.agent.runTasks: false  — stops auto-running build tasks
-#   chat.autopilot.enabled: false              — requires manual approval per tool call
+#   github.copilot.chat.agent.runTasks: false         — stops auto-running build tasks
+#   chat.autopilot.enabled: false                     — requires manual approval per tool call
+#   workbench.editor.enablePreview: false             — single-click opens persistent tabs
+#   workbench.editor.enablePreviewFromQuickOpen: false
 # =============================================================================
 
-- name: VSCode Copilot Agent — Disable auto-build settings
+- name: VSCode settings — disable auto-build and preview tabs
   hosts: all
   ignore_unreachable: true
 
@@ -62,20 +64,24 @@
       ansible.builtin.shell: |
         /opt/homebrew/bin/jq '{
           "github.copilot.chat.agent.runTasks": .["github.copilot.chat.agent.runTasks"],
-          "chat.autopilot.enabled": .["chat.autopilot.enabled"]
+          "chat.autopilot.enabled": .["chat.autopilot.enabled"],
+          "workbench.editor.enablePreview": .["workbench.editor.enablePreview"],
+          "workbench.editor.enablePreviewFromQuickOpen": .["workbench.editor.enablePreviewFromQuickOpen"]
         }' "{{ home_dir }}/Library/Application Support/Code/User/settings.json"
       register: settings_before
       changed_when: false
       args:
         executable: /bin/zsh
 
-    - name: Merge Copilot agent settings
+    - name: Merge VSCode settings
       ansible.builtin.shell: |
         SETTINGS="{{ home_dir }}/Library/Application Support/Code/User/settings.json"
         tmp=$(mktemp)
         /opt/homebrew/bin/jq '. + {
           "github.copilot.chat.agent.runTasks": false,
-          "chat.autopilot.enabled": false
+          "chat.autopilot.enabled": false,
+          "workbench.editor.enablePreview": false,
+          "workbench.editor.enablePreviewFromQuickOpen": false
         }' "$SETTINGS" > "$tmp" && mv "$tmp" "$SETTINGS"
       register: merge_result
       changed_when: true
@@ -86,7 +92,9 @@
       ansible.builtin.shell: |
         /opt/homebrew/bin/jq '{
           "github.copilot.chat.agent.runTasks": .["github.copilot.chat.agent.runTasks"],
-          "chat.autopilot.enabled": .["chat.autopilot.enabled"]
+          "chat.autopilot.enabled": .["chat.autopilot.enabled"],
+          "workbench.editor.enablePreview": .["workbench.editor.enablePreview"],
+          "workbench.editor.enablePreviewFromQuickOpen": .["workbench.editor.enablePreviewFromQuickOpen"]
         }' "{{ home_dir }}/Library/Application Support/Code/User/settings.json"
       register: settings_after
       changed_when: false

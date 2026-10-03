@@ -1,0 +1,177 @@
+---
+# =============================================================================
+# transcription_worker — see defaults/main.yml for the contract.
+# Run via transcription-worker.yml (targeted) rather than site.yml.
+# =============================================================================
+
+# --- Preflight ---------------------------------------------------------------
+
+- name: Check control-node sources exist (build the wheelhouse first if missing)
+  ansible.builtin.stat:
+    path: "{{ item }}"
+  loop:
+    - "{{ tw_wheelhouse_src }}/requirements-offline.txt"
+    - "{{ tw_model_cache_src }}"
+    - "{{ tw_flitools_src }}/node_modules"
+  register: tw_sources
+  delegate_to: localhost
+  become: false
+
+- name: Fail if a control-node source is missing
+  ansible.builtin.assert:
+    that: tw_sources.results | rejectattr('stat.exists') | list | length == 0
+    fail_msg: >-
+      Missing on the control node: {{ tw_sources.results | rejectattr('stat.exists') | map(attribute='item') | list }}.
+      Run scripts/build-crisper-wheelhouse.sh on the M4, and run this playbook FROM the M4.
+
+- name: Warn if the worker has too little memory for CrisperWhisper
+  ansible.builtin.debug:
+    msg: >-
+      ⚠️ {{ inventory_hostname }} has {{ (ansible_facts['memtotal_mb'] / 1024) | round(1) }} GB RAM.
+      CrisperWhisper peaks at ~13 GB and FliTools waits for {{ tw_crisper_min_free_gb }} GB free —
+      on this box jobs may wait forever. Lower tw_crisper_min_free_gb only after a measured run.
+  when: (ansible_facts['memtotal_mb'] / 1024) < tw_min_memory_gb_warn
+
+# --- Packages ----------------------------------------------------------------
+
+- name: Install worker formulae
+  community.general.homebrew:
+    name: "{{ tw_formulae }}"
+    state: present
+    path: "{{ homebrew_path }}"
+
+# --- Tailscale as a system daemon (starts before login) ------------------------
+
+- name: Check for the Tailscale GUI app (conflicts with tailscaled)
+  ansible.builtin.stat:
+    path: /Applications/Tailscale.app
+  register: tw_tailscale_app
+
+- name: Stop if the Tailscale app is installed
+  ansible.builtin.fail:
+    msg: |
+      /Applications/Tailscale.app is installed on {{ inventory_hostname }}. The app and the
+      open-source tailscaled cannot both run. Do this AT THE MACHINE or over LAN Screen Sharing
+      (removing it drops the Tailscale link Ansible may be using):
+        1. Quit Tailscale, then: brew uninstall --cask tailscale-app   (or drag the app to the Bin)
+        2. Point ansible_host for mac-mini-m2 at mac-mini-m2.local and re-run this playbook.
+        3. sudo tailscale up   → open the printed URL → log in → new IP: tailscale ip -4
+        4. Put the new IP back in inventory/hosts.yml
+  when: tw_tailscale_app.stat.exists
+
+- name: Install tailscaled as a system LaunchDaemon
+  ansible.builtin.command: "{{ homebrew_path }}/tailscaled install-system-daemon"
+  args:
+    creates: /Library/LaunchDaemons/com.tailscale.tailscaled.plist
+  become: true
+
+# --- Power: never sleep, come back after power loss, no update restarts -------
+
+- name: Apply pmset settings
+  ansible.builtin.shell: |
+    current=$(pmset -g custom | awk -v k="{{ item.key }}" '$1==k {print $2; exit}')
+    if [ "$current" != "{{ item.value }}" ]; then
+      pmset -a {{ item.key }} {{ item.value }} && echo "set {{ item.key }}"
+    fi
+  register: tw_pmset_result
+  changed_when: "'set ' in tw_pmset_result.stdout"
+  loop: "{{ tw_pmset | dict2items }}"
+  become: true
+
+- name: Restart automatically if the system freezes
+  ansible.builtin.command: systemsetup -setrestartfreeze on
+  changed_when: false
+  become: true
+
+- name: Turn off automatic macOS update installs (no surprise restarts)
+  community.general.osx_defaults:
+    domain: /Library/Preferences/com.apple.SoftwareUpdate
+    key: AutomaticallyInstallMacOSUpdates
+    type: bool
+    value: false
+  become: true
+  when: tw_disable_auto_macos_updates | bool
+
+# --- CrisperWhisper: Python 3.11 venv from the pushed wheelhouse --------------
+
+- name: Push the CrisperWhisper wheelhouse
+  ansible.posix.synchronize:
+    src: "{{ tw_wheelhouse_src }}/"
+    dest: "{{ tw_wheelhouse }}/"
+    delete: true
+
+- name: Create the CrisperWhisper venv (uv-managed Python {{ tw_python_version }})
+  ansible.builtin.shell: |
+    export PATH="{{ homebrew_path }}:$PATH"
+    uv venv --python {{ tw_python_version }} "{{ tw_venv }}"
+  args:
+    creates: "{{ tw_venv }}/bin/python"
+    executable: /bin/zsh
+
+- name: Install CrisperWhisper packages offline
+  ansible.builtin.shell: |
+    export PATH="{{ homebrew_path }}:$PATH"
+    uv pip install --python "{{ tw_venv }}/bin/python" --no-index \
+      --find-links "{{ tw_wheelhouse }}" -r "{{ tw_wheelhouse }}/requirements-offline.txt" 2>&1
+  args:
+    executable: /bin/zsh
+  register: tw_pip
+  changed_when: "'Installed' in tw_pip.stdout"
+
+- name: Push the CrisperWhisper model weights (~3.1 GB, once)
+  ansible.posix.synchronize:
+    src: "{{ tw_model_cache_src }}/"
+    dest: "{{ tw_model_cache }}/"
+    links: true
+
+# --- FliTools: copy pushed from the control node, run as a LaunchDaemon --------
+
+- name: Push FliTools (no .git, no logs)
+  ansible.posix.synchronize:
+    src: "{{ tw_flitools_src }}/"
+    dest: "{{ tw_flitools_dir }}/"
+    delete: true
+    rsync_opts:
+      - "--exclude=.git"
+      - "--exclude=.env*"
+      - "--exclude=*.log"
+  notify: Restart FliTools
+  when: tw_flitools_enabled | bool
+
+- name: Ensure FliTools log directory exists
+  ansible.builtin.file:
+    path: "{{ tw_home }}/Library/Logs/flitools"
+    state: directory
+    mode: "0755"
+  when: tw_flitools_enabled | bool
+
+- name: Install FliTools LaunchDaemon
+  ansible.builtin.template:
+    src: flitools.plist.j2
+    dest: "/Library/LaunchDaemons/{{ tw_flitools_label }}.plist"
+    owner: root
+    group: wheel
+    mode: "0644"
+  become: true
+  notify: Restart FliTools
+  when: tw_flitools_enabled | bool
+
+- name: Check whether FliTools is loaded
+  ansible.builtin.command: "launchctl print system/{{ tw_flitools_label }}"
+  register: tw_flitools_loaded
+  changed_when: false
+  failed_when: false
+  become: true
+  when: tw_flitools_enabled | bool
+
+- name: Load FliTools
+  ansible.builtin.command: "launchctl bootstrap system /Library/LaunchDaemons/{{ tw_flitools_label }}.plist"
+  become: true
+  when:
+    - tw_flitools_enabled | bool
+    - tw_flitools_loaded.rc != 0
+
+# --- Thai settings + staff accounts (report always; change only when approved) --
+
+- name: Locale and account cleanup
+  ansible.builtin.include_tasks: locale_cleanup.yml
