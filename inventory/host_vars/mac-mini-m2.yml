@@ -12,3 +12,7 @@
 homebrew_formulae_extra: []
 homebrew_casks_extra: []
 git_repos_extra: []
+
+# The M2 has its own ~/.ssh/id_ed25519 (seen 2026-10-03). david.yml's propagate_ssh_key
+# would overwrite it with the control node's key — keep the M2's own.
+propagate_ssh_key: false
