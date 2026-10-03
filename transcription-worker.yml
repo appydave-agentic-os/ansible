@@ -27,5 +27,7 @@
         fail_msg: "Install Homebrew on {{ inventory_hostname }} first — see BOOTSTRAP.md"
 
   roles:
+    - role: power                    # 24/7 on the M2 (host_vars) — owns pmset
+      tags: [power]
     - role: transcription_worker
       tags: [transcription_worker]

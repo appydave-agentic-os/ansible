@@ -73,18 +73,7 @@
   become: true
   when: tw_tailscale_daemon | bool
 
-# --- Power: never sleep, come back after power loss, no update restarts -------
-
-- name: Apply pmset settings
-  ansible.builtin.shell: |
-    current=$(pmset -g custom | awk -v k="{{ item.key }}" '$1==k {print $2; exit}')
-    if [ "$current" != "{{ item.value }}" ]; then
-      pmset -a {{ item.key }} {{ item.value }} && echo "set {{ item.key }}"
-    fi
-  register: tw_pmset_result
-  changed_when: "'set ' in tw_pmset_result.stdout"
-  loop: "{{ tw_pmset | dict2items }}"
-  become: true
+# --- Power: sleep/wake/autorestart come from the power role; this adds the rest --
 
 - name: Restart automatically if the system freezes
   ansible.builtin.command: systemsetup -setrestartfreeze on

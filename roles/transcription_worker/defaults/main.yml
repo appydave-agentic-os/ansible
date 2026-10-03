@@ -45,13 +45,7 @@ tw_formulae:
 tw_tailscale_daemon: false
 
 # --- Power / updates -----------------------------------------------------------
-tw_pmset:                             # pmset -a <key> <value>
-  sleep: 0
-  disksleep: 0
-  displaysleep: 10
-  powernap: 0
-  autorestart: 1                      # power back on after a power failure
-  womp: 1                             # wake on network access
+# Sleep, wake and power-failure restart belong to the power role (always_on group).
 tw_disable_auto_macos_updates: true   # no surprise restarts for macOS updates (downloads still allowed)
 
 # --- Thai / staff cleanup — OFF until David approves the list ------------------

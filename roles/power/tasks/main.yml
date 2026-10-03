@@ -1,0 +1,68 @@
+---
+# =============================================================================
+# power — keep always-on Macs awake & reachable on a daily schedule
+#
+# Companion to the `tailscale` role: tailscale enables SSH / VNC / SMB, this
+# role makes sure the machine is actually AWAKE so those services can be
+# reached. Without it a headless Mini idle-sleeps, drops WiFi, falls off the
+# tailnet, and becomes unreachable — the exact VNC/SSH failure this fixes.
+#
+# Designed for headless Mac Minis. NOT applied to the laptop (macbook-pro-m4),
+# which should keep sleeping normally — see the group guard in site.yml.
+#
+# IMPORTANT: we deliberately do NOT use `pmset disablesleep 1`. That blocks ALL
+# sleep, including the scheduled overnight sleep below. Instead `sleep 0` stops
+# *idle* sleep during the day, and the scheduled event handles the night.
+# =============================================================================
+
+- name: Never idle-sleep the system (awake window)
+  ansible.builtin.command: pmset -a sleep 0
+  changed_when: false
+  become: true
+  when: power_never_idle_sleep | bool
+
+- name: Wake for network access (Wake-on-LAN)
+  ansible.builtin.command: pmset -a womp 1
+  changed_when: false
+  become: true
+  when: power_wake_on_network | bool
+
+- name: Auto-restart after power failure
+  ansible.builtin.command: pmset -a autorestart 1
+  changed_when: false
+  become: true
+  when: power_auto_restart | bool
+
+- name: Never spin down the disk
+  ansible.builtin.command: pmset -a disksleep 0
+  changed_when: false
+  become: true
+  when: power_disk_never_sleep | bool
+
+- name: Schedule daily wake + sleep window (machine local time)
+  ansible.builtin.command: >-
+    pmset repeat wakeorpoweron {{ power_schedule_days }} {{ power_wake_time }}
+    sleep {{ power_schedule_days }} {{ power_sleep_time }}
+  changed_when: false
+  become: true
+  when: power_schedule_enabled | bool
+
+- name: Cancel scheduled events when running 24/7 never-sleep
+  ansible.builtin.command: pmset repeat cancel
+  changed_when: false
+  become: true
+  when: not (power_schedule_enabled | bool)
+
+- name: Read resulting power policy
+  ansible.builtin.command: pmset -g custom
+  changed_when: false
+  register: power_state
+
+- name: Read resulting schedule
+  ansible.builtin.command: pmset -g sched
+  changed_when: false
+  register: power_sched
+
+- name: Show resulting power policy + schedule
+  ansible.builtin.debug:
+    msg: "{{ power_state.stdout_lines + ['--- scheduled events ---'] + power_sched.stdout_lines }}"
