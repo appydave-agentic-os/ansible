@@ -1,0 +1,23 @@
+---
+# =============================================================================
+# power role — defaults
+# Always-on Mac power policy for headless Minis you can't physically reach.
+#
+# Override per machine in host_vars (e.g. a different window for Philippines).
+# All times are in the TARGET MACHINE'S LOCAL timezone.
+# =============================================================================
+
+# Core idle policy ----------------------------------------------------------
+power_never_idle_sleep: true     # pmset sleep 0   — never idle-sleep during the awake window
+power_wake_on_network:  true     # pmset womp 1    — Wake-on-LAN (solid on Ethernet, flaky on WiFi)
+power_auto_restart:     true     # pmset autorestart 1 — reboot automatically after a power cut
+power_disk_never_sleep: true     # pmset disksleep 0
+
+# Daily awake window --------------------------------------------------------
+# Machine is held awake & reachable between wake_time and sleep_time, then
+# allowed to sleep overnight to stay cool / quiet / low-power.
+# Set power_schedule_enabled: false for TRUE 24/7 never-sleep instead.
+power_schedule_enabled: true
+power_schedule_days: "MTWRFSU"   # all 7 days; use "MTWRF" for weekdays only
+power_wake_time:  "06:00:00"     # local time
+power_sleep_time: "18:00:00"     # local time

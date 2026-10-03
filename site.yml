@@ -44,6 +44,10 @@
       tags: [tailscale]
       when: inventory_hostname in groups['thailand']
 
+    - role: power
+      tags: [power]
+      when: inventory_hostname in groups['always_on']
+
     - role: syncthing
       tags: [syncthing]
 
