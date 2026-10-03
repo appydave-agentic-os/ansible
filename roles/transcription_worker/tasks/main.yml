@@ -74,6 +74,12 @@
 
 # --- CrisperWhisper: standard install (uv venv + pinned requirements) ----------
 
+- name: Ensure the venv parent directory exists
+  ansible.builtin.file:
+    path: "{{ tw_venv | dirname }}"
+    state: directory
+    mode: "0755"
+
 - name: Create the CrisperWhisper venv (uv-managed Python {{ tw_python_version }})
   ansible.builtin.shell: |
     export PATH="{{ homebrew_path }}:$PATH"
@@ -101,6 +107,13 @@
 # FliTools' first CrisperWhisper job — no task needed.
 
 # --- FliTools: git clone + npm ci, run as a LaunchDaemon ----------------------
+
+- name: Ensure the FliTools parent directory exists
+  ansible.builtin.file:
+    path: "{{ tw_flitools_dir | dirname }}"
+    state: directory
+    mode: "0755"
+  when: tw_flitools_enabled | bool
 
 - name: Clone FliTools
   ansible.builtin.git:
