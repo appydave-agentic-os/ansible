@@ -1,11 +1,12 @@
 ---
 # =============================================================================
-# Mac Mini M2 — Bot Machine (headless)
-# Groups: headless + agent + thailand
+# Mac Mini M2 Pro (32 GB) — full peer + transcription worker (shop, Thailand)
+# Groups: workstation + agent + david + thailand + transcription_worker
 # =============================================================================
-# headless group: no GUI apps
-# agent group:    automation tooling (future)
-# Result: minimal install — core formulae + Tailscale + 1Password only
+# Since 2026-10-03 the M2 gets the same setup as the M4 and Roamy (David:
+# "treat m2 like m4 and roamy, stop thinking of it as headless"), plus the
+# transcription_worker role (transcription-worker.yml).
+# Thai language/keyboard/time zone: left alone for now (tw_remove_thai_settings stays false).
 # =============================================================================
 
 homebrew_formulae_extra: []

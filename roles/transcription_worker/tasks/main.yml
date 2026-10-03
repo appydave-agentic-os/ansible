@@ -12,7 +12,6 @@
   loop:
     - "{{ tw_wheelhouse_src }}/requirements-offline.txt"
     - "{{ tw_model_cache_src }}"
-    - "{{ tw_flitools_src }}/node_modules"
   register: tw_sources
   delegate_to: localhost
   become: false
@@ -46,8 +45,17 @@
   ansible.builtin.stat:
     path: /Applications/Tailscale.app
   register: tw_tailscale_app
+  when: tw_tailscale_daemon | bool
+
+- name: Install the open-source Tailscale formula
+  community.general.homebrew:
+    name: tailscale
+    state: present
+    path: "{{ homebrew_path }}"
+  when: tw_tailscale_daemon | bool
 
 - name: Stop if the Tailscale app is installed
+  when: tw_tailscale_daemon | bool and tw_tailscale_app.stat.exists
   ansible.builtin.fail:
     msg: |
       /Applications/Tailscale.app is installed on {{ inventory_hostname }}. The app and the
@@ -57,13 +65,13 @@
         2. Point ansible_host for mac-mini-m2 at mac-mini-m2.local and re-run this playbook.
         3. sudo tailscale up   → open the printed URL → log in → new IP: tailscale ip -4
         4. Put the new IP back in inventory/hosts.yml
-  when: tw_tailscale_app.stat.exists
 
 - name: Install tailscaled as a system LaunchDaemon
   ansible.builtin.command: "{{ homebrew_path }}/tailscaled install-system-daemon"
   args:
     creates: /Library/LaunchDaemons/com.tailscale.tailscaled.plist
   become: true
+  when: tw_tailscale_daemon | bool
 
 # --- Power: never sleep, come back after power loss, no update restarts -------
 
@@ -126,15 +134,23 @@
 
 # --- FliTools: copy pushed from the control node, run as a LaunchDaemon --------
 
-- name: Push FliTools (no .git, no logs)
-  ansible.posix.synchronize:
-    src: "{{ tw_flitools_src }}/"
-    dest: "{{ tw_flitools_dir }}/"
-    delete: true
-    rsync_opts:
-      - "--exclude=.git"
-      - "--exclude=.env*"
-      - "--exclude=*.log"
+- name: Clone FliTools
+  ansible.builtin.git:
+    repo: "{{ tw_flitools_repo }}"
+    dest: "{{ tw_flitools_dir }}"
+    version: "{{ tw_flitools_version }}"
+    update: false            # a working copy: pull by hand, never over local changes
+    accept_hostkey: true
+  register: tw_flitools_clone
+  when: tw_flitools_enabled | bool
+
+- name: Install FliTools dependencies
+  ansible.builtin.command: "{{ homebrew_path }}/npm ci"
+  args:
+    chdir: "{{ tw_flitools_dir }}"
+    creates: "{{ tw_flitools_dir }}/node_modules"
+  environment:
+    PATH: "{{ homebrew_path }}:/usr/bin:/bin"
   notify: Restart FliTools
   when: tw_flitools_enabled | bool
 

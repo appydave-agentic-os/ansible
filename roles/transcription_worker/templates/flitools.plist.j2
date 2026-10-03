@@ -3,7 +3,7 @@
 <!--
   Managed by Ansible (roles/transcription_worker). A LaunchDaemon with UserName, so FliTools
   starts at boot with nobody logged in — the M4's copy is a LaunchAgent because someone is.
-  No secrets here: the worker is keyless, so CrisperWhisper is its only transcriber.
+  No secrets here: run.sh loads keys (e.g. GROQ_API_KEY) from ~/.config/appydave/.env.secrets on the machine.
 -->
 <plist version="1.0">
 <dict>

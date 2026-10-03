@@ -1,13 +1,13 @@
 ---
 # =============================================================================
-# Transcription worker — keyless CrisperWhisper box (mac-mini-m2)
+# Transcription worker — CrisperWhisper + FliTools (mac-mini-m2)
 #
 # Run FROM the M4 (it pushes the wheelhouse, model weights and FliTools from there).
 #   scripts/build-crisper-wheelhouse.sh                                    # once, on the M4
 #   ansible-playbook transcription-worker.yml --check --diff                # dry run
 #   ansible-playbook transcription-worker.yml                               # for real (David's go)
 #
-# Deliberately NOT site.yml: the worker gets no repos, keys, skills sync or GUI apps.
+# Also wired into site.yml (when in transcription_worker); this playbook runs just that role.
 # =============================================================================
 - name: Provision transcription worker
   hosts: transcription_worker

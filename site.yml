@@ -46,7 +46,6 @@
 
     - role: syncthing
       tags: [syncthing]
-      when: inventory_hostname not in groups['transcription_worker']   # worker holds no skills/brains
 
     - role: transcription_worker
       tags: [transcription_worker]

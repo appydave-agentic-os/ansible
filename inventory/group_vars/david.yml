@@ -1,7 +1,7 @@
 ---
 # =============================================================================
 # David group — machines operated by David Cruwys
-# Applies to: macbook-pro-m4, mac-mini-m4 (M2 left 2026-10-03 — see hosts.yml)
+# Applies to: macbook-pro-m4, mac-mini-m4, mac-mini-m2
 # =============================================================================
 # These are David-specific defaults that should NOT be in all.yml (which is
 # the public template baseline). Clients and team members get different values
