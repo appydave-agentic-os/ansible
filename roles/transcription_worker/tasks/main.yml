@@ -74,12 +74,6 @@
 
 # --- CrisperWhisper: standard install (uv venv + pinned requirements) ----------
 
-- name: Copy the pinned CrisperWhisper requirements
-  ansible.builtin.copy:
-    src: crisper-requirements.txt
-    dest: "{{ tw_venv }}-requirements.txt"
-    mode: "0644"
-
 - name: Create the CrisperWhisper venv (uv-managed Python {{ tw_python_version }})
   ansible.builtin.shell: |
     export PATH="{{ homebrew_path }}:$PATH"
@@ -88,10 +82,16 @@
     creates: "{{ tw_venv }}/bin/python"
     executable: /bin/zsh
 
+- name: Copy the pinned CrisperWhisper requirements into the venv
+  ansible.builtin.copy:
+    src: crisper-requirements.txt
+    dest: "{{ tw_venv }}/requirements.txt"
+    mode: "0644"
+
 - name: Install CrisperWhisper packages (transformers fork from GitHub)
   ansible.builtin.shell: |
     export PATH="{{ homebrew_path }}:$PATH"
-    uv pip install --python "{{ tw_venv }}/bin/python" -r "{{ tw_venv }}-requirements.txt" 2>&1
+    uv pip install --python "{{ tw_venv }}/bin/python" -r "{{ tw_venv }}/requirements.txt" 2>&1
   args:
     executable: /bin/zsh
   register: tw_pip
