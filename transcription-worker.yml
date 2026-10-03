@@ -1,0 +1,31 @@
+---
+# =============================================================================
+# Transcription worker — keyless CrisperWhisper box (mac-mini-m2)
+#
+# Run FROM the M4 (it pushes the wheelhouse, model weights and FliTools from there).
+#   scripts/build-crisper-wheelhouse.sh                                    # once, on the M4
+#   ansible-playbook transcription-worker.yml --check --diff                # dry run
+#   ansible-playbook transcription-worker.yml                               # for real (David's go)
+#
+# Deliberately NOT site.yml: the worker gets no repos, keys, skills sync or GUI apps.
+# =============================================================================
+- name: Provision transcription worker
+  hosts: transcription_worker
+
+  environment:
+    PATH: "/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+
+  pre_tasks:
+    - name: Check Homebrew is installed
+      ansible.builtin.stat:
+        path: /opt/homebrew/bin/brew
+      register: brew_binary
+
+    - name: Stop if Homebrew is missing (install it at the machine first)
+      ansible.builtin.assert:
+        that: brew_binary.stat.exists
+        fail_msg: "Install Homebrew on {{ inventory_hostname }} first — see BOOTSTRAP.md"
+
+  roles:
+    - role: transcription_worker
+      tags: [transcription_worker]

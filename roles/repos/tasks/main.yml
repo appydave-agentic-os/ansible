@@ -50,7 +50,21 @@
     repo: "{{ item.repo }}"
     dest: "{{ item.dest }}"
     version: "{{ item.version | default('main') }}"
-    update: true
+    update: "{{ item['update'] | default(true) }}"
     accept_hostkey: true
   loop: "{{ git_repos + git_repos_extra }}"
   when: (git_repos + git_repos_extra) | length > 0
+
+- name: Ensure ~/bin exists
+  ansible.builtin.file:
+    path: "{{ ansible_facts['env']['HOME'] }}/bin"
+    state: directory   # no mode: leave an existing ~/bin's permissions alone
+  when: user_bin_links | default([]) | length > 0
+
+- name: Link repo scripts into ~/bin
+  ansible.builtin.file:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+    force: false
+  loop: "{{ user_bin_links | default([]) }}"

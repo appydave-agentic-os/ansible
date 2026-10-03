@@ -1,0 +1,5 @@
+---
+- name: Restart FliTools
+  ansible.builtin.command: "launchctl kickstart -k system/{{ tw_flitools_label }}"
+  become: true
+  failed_when: false   # first run: not loaded yet — the Load task starts it

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Managed by Ansible (roles/transcription_worker). A LaunchDaemon with UserName, so FliTools
+  starts at boot with nobody logged in — the M4's copy is a LaunchAgent because someone is.
+  No secrets here: the worker is keyless, so CrisperWhisper is its only transcriber.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>{{ tw_flitools_label }}</string>
+  <key>UserName</key>
+  <string>{{ tw_user }}</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>{{ tw_flitools_dir }}/scripts/run.sh</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>{{ tw_flitools_dir }}</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>HOME</key>
+    <string>{{ tw_home }}</string>
+    <key>FLITOOLS_SUPERVISED</key>
+    <string>1</string>
+    <key>FLITOOLS_CRISPER_PYTHON</key>
+    <string>{{ tw_venv }}/bin/python</string>
+    <key>FLITOOLS_CRISPER_MIN_FREE_GB</key>
+    <string>{{ tw_crisper_min_free_gb }}</string>
+  </dict>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>{{ tw_home }}/Library/Logs/flitools/stdout.log</string>
+  <key>StandardErrorPath</key>
+  <string>{{ tw_home }}/Library/Logs/flitools/stderr.log</string>
+</dict>
+</plist>

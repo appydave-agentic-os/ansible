@@ -14,6 +14,7 @@ homebrew_casks_workstation:
   # - zoom             # Manual install — pkg installer requires sudo, fails non-interactively
   # - microsoft-teams  # Manual install — pkg installer requires sudo, fails non-interactively
   - whatsapp
+  - slack
 
   # === DEVELOPMENT ===
   - visual-studio-code
@@ -30,7 +31,7 @@ homebrew_casks_workstation:
 
   # === UTILITIES ===
   - loom                   # Screen recording
-  - ollama                 # Local LLMs
+  - ollama-app             # Local LLMs (Homebrew renamed the `ollama` cask; M4 has ollama-app)
   # - ngrok               # Removed — antivirus (McAfee) blocks unpack; install manually if needed
 
   # Manual installs (pkg installers requiring sudo or system extensions — brew cask unreliable):

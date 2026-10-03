@@ -31,6 +31,14 @@
   changed_when: false
   when: pyenv_python_global | length > 0
 
+- name: Build combined Python packages list from all applicable groups
+  ansible.builtin.set_fact:
+    _all_python_packages: >-
+      {{ pyenv_global_packages
+         + (pyenv_global_packages_creator | default([]))
+         + (pyenv_global_packages_david   | default([]))
+         + (pyenv_global_packages_extra   | default([])) }}
+
 - name: Install global Python packages
   ansible.builtin.shell: |
     export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
@@ -42,7 +50,7 @@
     executable: /bin/zsh
   register: pip_install
   changed_when: "'Successfully installed' in pip_install.stdout"
-  loop: "{{ pyenv_global_packages }}"
+  loop: "{{ _all_python_packages }}"
 
 - name: Update global Python packages
   ansible.builtin.shell: |
@@ -55,5 +63,15 @@
     executable: /bin/zsh
   register: pip_upgrade
   changed_when: "'Successfully installed' in pip_upgrade.stdout"
-  loop: "{{ pyenv_global_packages }}"
+  loop: "{{ _all_python_packages }}"
   when: upgrade_packages | bool
+
+- name: Install uv tools
+  ansible.builtin.shell: |
+    export PATH="/opt/homebrew/bin:$HOME/.local/bin:$PATH"
+    uv tool list 2>/dev/null | grep -q "^{{ item }} " && echo "present" || uv tool install {{ item }}
+  args:
+    executable: /bin/zsh
+  register: uv_tool_install
+  changed_when: "'present' not in uv_tool_install.stdout"
+  loop: "{{ uv_tools + (uv_tools_david | default([])) + (uv_tools_extra | default([])) }}"

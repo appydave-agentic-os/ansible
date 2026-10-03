@@ -1,6 +1,6 @@
 ---
 # =============================================================================
-# VSCode Copilot Agent — Diagnostic Check
+# VSCode settings — Diagnostic Check
 # Checks all dependencies and current settings state WITHOUT making changes
 #
 # Usage:
@@ -9,7 +9,7 @@
 #   ansible-playbook vscode-copilot-check.yml --ignore-unreachable
 # =============================================================================
 
-- name: VSCode Copilot Agent — Diagnostic Check
+- name: VSCode settings — Diagnostic Check
   hosts: david
   ignore_unreachable: true
 
@@ -50,7 +50,9 @@
         /opt/homebrew/bin/jq '{
           "github.copilot.chat.agent.runTasks": .["github.copilot.chat.agent.runTasks"],
           "chat.autopilot.enabled": .["chat.autopilot.enabled"],
-          "chat.agent.enabled": .["chat.agent.enabled"]
+          "chat.agent.enabled": .["chat.agent.enabled"],
+          "workbench.editor.enablePreview": .["workbench.editor.enablePreview"],
+          "workbench.editor.enablePreviewFromQuickOpen": .["workbench.editor.enablePreviewFromQuickOpen"]
         }' "{{ ansible_facts['env']['HOME'] }}/Library/Application Support/Code/User/settings.json"
       register: current_copilot_settings
       when: jq_binary.stat.exists and vscode_settings_file.stat.exists

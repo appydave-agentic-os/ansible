@@ -46,6 +46,20 @@
     backup: true
     mode: "0644"
 
+- name: Ensure ~/.config/appydave directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_facts['env']['HOME'] }}/.config/appydave"
+    state: directory
+    mode: "0755"
+
+- name: Create ~/.config/appydave/.env.secrets placeholder
+  ansible.builtin.file:
+    path: "{{ ansible_facts['env']['HOME'] }}/.config/appydave/.env.secrets"
+    state: touch
+    mode: "0600"
+    modification_time: preserve
+    access_time: preserve
+
 - name: Create ~/.secrets placeholder
   ansible.builtin.file:
     path: "{{ ansible_facts['env']['HOME'] }}/.secrets"

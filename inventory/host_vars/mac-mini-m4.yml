@@ -35,6 +35,11 @@
 # All David-specific config → group_vars/david.yml
 # All creator-role config   → group_vars/creator.yml
 
-homebrew_formulae_extra: []
+homebrew_formulae_extra:   # captured from discovery 2026-10-03 (M4 only)
+  - cloudflared            # Cloudflare tunnels
+  - coreutils              # GNU coreutils (gdate, gtimeout…)
+  - rclone                 # Cloud storage sync
 homebrew_casks_extra: []
+uv_tools_extra:
+  - it2                    # iTerm2 scripting CLI
 git_repos_extra: []
