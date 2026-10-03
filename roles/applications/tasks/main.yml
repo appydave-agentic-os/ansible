@@ -15,6 +15,11 @@
     name: "{{ item }}"
     state: "{{ 'upgraded' if upgrade_packages | bool else 'present' }}"
     path: "{{ homebrew_path }}"
+    # --adopt: if the app is already in /Applications (installed outside Homebrew),
+    # Homebrew takes it over instead of failing with "already an App at …".
+    # accept_external_apps alone no longer works: the module matches the old error
+    # text, and current brew puts the cask name in it ("Error: slack: It seems…").
+    install_options: [adopt]
     accept_external_apps: true
   loop: "{{ _all_casks }}"
   when: _all_casks | length > 0
