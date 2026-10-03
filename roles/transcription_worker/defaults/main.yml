@@ -1,19 +1,18 @@
 ---
 # =============================================================================
-# transcription_worker — keyless CrisperWhisper box (first target: mac-mini-m2)
+# transcription_worker — CrisperWhisper + FliTools on top of a normal peer (mac-mini-m2)
 # =============================================================================
-# The worker holds NO keys, NO brains, NO GitHub/Claude logins and NO app repos.
-# Everything it needs is PUSHED from the control node (the M4):
-#   - the CrisperWhisper wheelhouse   (scripts/build-crisper-wheelhouse.sh builds it)
-#   - the CrisperWhisper model weights (~3.1 GB, from the M4's Hugging Face cache)
-#   - a FliTools copy, node_modules included (no git, no .git)
+# Runs on top of the usual site.yml setup (the M2 is a full peer since 2026-10-03).
+#   - FliTools: a normal git clone + npm ci (the M2 has GitHub access)
+#   - CrisperWhisper: pushed from the control node (the M4) because it's faster than
+#     rebuilding there — the wheelhouse (scripts/build-crisper-wheelhouse.sh, includes
+#     the nyrahealth transformers fork) and the ~3.1 GB model weights.
 # =============================================================================
 
 # --- Control-node sources (paths on the machine running ansible-playbook) ----
 tw_control_home: "{{ lookup('env', 'HOME') }}"
 tw_wheelhouse_src: "{{ tw_control_home }}/.cache/appydave/crisper-wheelhouse"
 tw_model_cache_src: "{{ tw_control_home }}/.cache/huggingface/hub/models--nyrahealth--CrisperWhisper"
-tw_flitools_src: "{{ tw_control_home }}/dev/ad/flivideo/flitools"
 
 # --- Worker paths ------------------------------------------------------------
 tw_home: "{{ ansible_facts['env']['HOME'] }}"
@@ -27,6 +26,8 @@ tw_flitools_dir: "{{ tw_home }}/dev/ad/flivideo/flitools"
 # --- FliTools service ----------------------------------------------------------
 # LaunchDaemon (not LaunchAgent): it starts at boot with nobody logged in.
 tw_flitools_enabled: true
+tw_flitools_repo: git@github.com:flivideo/flitools.git
+tw_flitools_version: main
 tw_flitools_label: com.appydave.flitools
 tw_crisper_min_free_gb: 14            # FLITOOLS_CRISPER_MIN_FREE_GB — the model peaks at ~13 GB
 tw_min_memory_gb_warn: 24             # below this, the memory gate may never let a job start
@@ -36,7 +37,12 @@ tw_formulae:
   - ffmpeg
   - uv
   - node                              # FliTools' run.sh finds node on /opt/homebrew/bin (needs >= 20.19)
-  - tailscale                         # open-source tailscaled — runs as a root daemon before login
+
+# --- Tailscale -----------------------------------------------------------------
+# Default: keep Tailscale.app like the M4 and Roamy. The open-source daemon (starts
+# before login) only helps without FileVault — with FileVault on, a rebooted Mac waits
+# at the unlock screen and nothing runs until someone types the password anyway.
+tw_tailscale_daemon: false
 
 # --- Power / updates -----------------------------------------------------------
 tw_pmset:                             # pmset -a <key> <value>
