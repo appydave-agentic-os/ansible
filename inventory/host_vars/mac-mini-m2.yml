@@ -9,7 +9,14 @@
 # Thai language/keyboard/time zone: left alone for now (tw_remove_thai_settings stays false).
 # =============================================================================
 
-homebrew_formulae_extra: []
+# OpenRig trial (2026-10-08): M2 only until David has tested it; then Jan's Mac,
+# then Roamy/M4 (both already have it by hand). Pinned to the security-scanned build
+# 2620dea8 (brains/security/scan-log.md). The npm update task never loops over
+# nvm_global_packages_extra, so the pin is never bumped by upgrade_packages.
+homebrew_formulae_extra:
+  - herdr                  # terminal workspace for AI agents — OpenRig's viewer
+nvm_global_packages_extra:
+  - "@openrig/cli@0.6.6"
 homebrew_casks_extra: []
 git_repos_extra: []
 

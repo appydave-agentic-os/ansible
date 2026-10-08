@@ -57,7 +57,7 @@
     executable: /bin/zsh
   register: npm_install
   changed_when: "'added' in npm_install.stdout or 'added' in npm_install.stderr"
-  loop: "{{ nvm_global_packages }}"
+  loop: "{{ nvm_global_packages + (nvm_global_packages_extra | default([])) }}"
 
 - name: Install Claude Code (native installer)
   ansible.builtin.shell: |
