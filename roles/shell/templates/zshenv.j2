@@ -21,3 +21,11 @@ export NVM_DIR="$HOME/.nvm"
 
 # Machine-specific secrets (API keys, etc.)
 [ -f "$HOME/.config/appydave/.env.secrets" ] && set -a && . "$HOME/.config/appydave/.env.secrets" && set +a
+
+# Claude Code headless auth — SSH / headless shells ONLY (token file is 0600).
+# A local terminal must use the keychain login instead: this setup-token is
+# inference-only, and Claude in Chrome refuses to load under it (debug log:
+# "[Claude in Chrome] Disabled: OAuth token has no scope…"). Scoped 2026-09-22.
+if [[ -n "$SSH_CONNECTION" || -z "$TERM_PROGRAM" ]]; then
+  [ -f ~/.config/claude/token.sh ] && source ~/.config/claude/token.sh
+fi
