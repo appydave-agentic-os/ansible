@@ -7,20 +7,42 @@
 # Groups: workstation + client. NOT creator, NOT david, NOT thailand (so no tailscale role).
 # Tailscale: member of David's tailnet as `angela-mini`; she has no grant, so she
 #            reaches none of David's machines. Connect over Tailscale only.
-# Status: NOT provisioned yet. Run discovery.yml first, then decide below.
+# Status: discovery.yml run 2026-10-27 (report in gitignored discovery_output/).
+#         Not provisioned yet.
 #
-# Decisions before the first site.yml run (David):
-#   - She's new to macOS. group_vars/all.yml macos_defaults (dark mode, natural
-#     scrolling off, fast key repeat, hidden files, Dock auto-hide) would be a
-#     shock: run with --skip-tags macos,dock, or override macos_defaults here.
-#   - Workstation casks are a lot for her (antigravity, hammerspoon, ollama-app,
-#     loom, ghostty, obsidian, slack). Trim before running.
-#   - Remote runs need passwordless sudo on her Mac. Get her OK first.
-#   - Already present (by hand, 2026-10-25/26): Homebrew, git (Command Line
-#     Tools), gh, Claude Code (native), iTerm2, Claude desktop, Tailscale, Chrome.
+# How to run (decided 2026-10-27):
+#   ANSIBLE_BECOME_ASK_PASS=False ansible-playbook site.yml --limit mac-mini-angela \
+#     --skip-tags macos,dock,syncthing
+#   - macos/dock skipped: she's new to macOS; David's defaults (dark mode, scrolling,
+#     key repeat) and the dock role's "remove all Dock items" would be a shock.
+#   - syncthing skipped: it's for David's skills sync; she isn't part of that.
+#   - No sudo needed: the only become tasks are in power/tailscale/transcription_worker,
+#     and her groups exclude all three. So no passwordless sudo change on her Mac.
+#   - Already present by hand: Homebrew, git (CLT), gh, Claude Code (native),
+#     iTerm2, Claude desktop, Tailscale, Chrome. Casks use --adopt, so these are kept.
 # =============================================================================
 
 propagate_ssh_key: false
+
+# Base casks minus 1Password (she uses Apple Passwords).
+homebrew_casks:
+  - claude
+
+# Workstation casks trimmed to what she'll use: no slack, antigravity, ghostty,
+# obsidian, hammerspoon, loom, ollama-app.
+homebrew_casks_workstation:
+  - google-chrome
+  - whatsapp
+  - visual-studio-code
+  - iterm2
+
+# Node for dsp/website. No Ruby or pyenv Python builds (she doesn't need them; uv covers Python).
+rbenv_ruby_versions: []
+pyenv_python_versions: []
+nvm_node_versions:
+  - "24.13.0"
+nvm_global_packages:
+  - yarn
 
 homebrew_formulae_extra: []
 homebrew_casks_extra: []
