@@ -8,7 +8,7 @@
 # Tailscale: member of David's tailnet as `angela-mini`; she has no grant, so she
 #            reaches none of David's machines. Connect over Tailscale only.
 # Status: discovery.yml run 2026-10-27 (report in gitignored discovery_output/).
-#         Not provisioned yet.
+#         Provisioned 2026-10-27 with the command below (failed=0).
 #
 # How to run (decided 2026-10-27):
 #   ANSIBLE_BECOME_ASK_PASS=False ansible-playbook site.yml --limit mac-mini-angela \
