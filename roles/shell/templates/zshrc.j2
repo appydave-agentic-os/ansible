@@ -27,11 +27,6 @@ eval "$(rbenv init -)"
 # pyenv
 eval "$(pyenv init -)"
 
-# nvm
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-
 # -----------------------------------------------------------------------------
 # PATH
 # -----------------------------------------------------------------------------
@@ -58,6 +53,13 @@ case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
+
+# nvm — loaded AFTER every PATH prepend above, so nvm's node wins over Homebrew's.
+# Homebrew installs its own node as a dependency (e.g. gemini-cli); loaded first, nvm
+# lost and Captain's Log ran on node 25, where its client tests fail (2026-11-03).
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 # -----------------------------------------------------------------------------
 # Environment variables
