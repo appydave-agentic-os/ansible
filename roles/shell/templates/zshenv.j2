@@ -15,6 +15,15 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 # nvm (Node version manager) — claude binary lives here
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# Put nvm's default node FIRST. Sourcing nvm.sh never reorders a PATH that already holds
+# its bin dir (inherited from a parent shell), so Homebrew's own node (a gemini-cli
+# dependency) kept winning in `zsh -c` children such as overmind/tmux panes (2026-11-03).
+# No-op when the default alias is not a plain version (e.g. "node", "lts/*").
+if [ -s "$NVM_DIR/alias/default" ]; then
+  _nvm_bin="$NVM_DIR/versions/node/v$(sed 's/^v//' "$NVM_DIR/alias/default")/bin"
+  [ -d "$_nvm_bin" ] && path=("$_nvm_bin" ${path:#$_nvm_bin})
+  unset _nvm_bin
+fi
 
 # Rust / cargo
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
