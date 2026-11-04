@@ -1,14 +1,17 @@
 ---
+# homebrew_casks_exclude: a group or host opts out of baseline casks it doesn't want (e.g. David's machines
+# drop slack/obsidian, which stay in the team workstation baseline). Not installing is all it does: it never uninstalls.
 - name: Build combined cask list from all applicable groups
   ansible.builtin.set_fact:
     _all_casks: >-
-      {{ homebrew_casks
+      {{ (homebrew_casks
          + (homebrew_casks_workstation | default([]))
          + (homebrew_casks_creator     | default([]))
          + (homebrew_casks_agent       | default([]))
          + (homebrew_casks_headless    | default([]))
          + (homebrew_casks_david       | default([]))
-         + homebrew_casks_extra }}
+         + homebrew_casks_extra)
+         | difference(homebrew_casks_exclude | default([])) }}
 
 - name: Install/upgrade Homebrew cask applications
   community.general.homebrew_cask:
