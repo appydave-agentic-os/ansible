@@ -55,7 +55,6 @@ user_bin_links:
 homebrew_formulae_david:
   - rustup                 # Rust toolchain manager (David uses Rust; not a client default)
   - displayplacer          # Programmatic display arrangement — streaming/multi-monitor setup
-  - gemini-cli             # Google Gemini AI CLI agent
   - ripgrep                # Fast grep — Claude Code's Grep tool requires this on ALL machines incl headless
   - syncthing              # P2P file sync for ~/.claude/skills/ across David's Macs (role handles service start)
   # Captured from M4 + Roamy discovery 2026-10-03 (installed on both, previously undeclared)
@@ -73,11 +72,16 @@ homebrew_formulae_david:
 # -----------------------------------------------------------------------------
 # Homebrew casks — David-specific apps
 # -----------------------------------------------------------------------------
+# Baseline casks David doesn't use (removed from his machines 2026-11-04). They stay in the team workstation baseline.
+# Roamy keeps Slack: see host_vars/macbook-pro-m4.yml.
+homebrew_casks_exclude:
+  - slack
+  - obsidian
+
 homebrew_casks_david:
   # ghostty — moved to workstation.yml (all workstations now get Ghostty, not just David's machines)
   - alfred                 # Launcher — David's preference (requires license)
-  - rectangle              # Window management — David's preference over macOS native tiling
-  - codex                  # OpenAI Codex CLI — AI coding agent
+  - codex                  # OpenAI Codex CLI — the ONE install (native binary, no node). Not also an npm global (removed 2026-11-04)
   # - zoom                 # Manual install — pkg installer requires interactive sudo: brew install --cask zoom
   - ngrok                  # Localhost tunnelling — moved here from workstation (antivirus flags on client machines)
   # - microsoft-teams      # Add here if needed — removed from workstation baseline
