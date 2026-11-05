@@ -102,3 +102,11 @@ rust_components: []
 install_dam_wrapper: true
 
 enable_postgresql_paths: false
+
+# -----------------------------------------------------------------------------
+# OpenRig: pin and bump (policy 2026-11-05). openrig-orch bumps this in one commit
+# at the end of every fleet upgrade. NOT version-scanned: the only scan-log entry
+# is the repo-level one of 2026-10-06. Roamy also has a second copy by hand.
+# -----------------------------------------------------------------------------
+nvm_global_packages_extra:
+  - "@openrig/cli@0.7.7"

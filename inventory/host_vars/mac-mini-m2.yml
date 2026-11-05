@@ -9,16 +9,9 @@
 # Thai language/keyboard/time zone: left alone for now (tw_remove_thai_settings stays false).
 # =============================================================================
 
-# OpenRig trial (2026-10-08): M2 only until David has tested it; then a team member's Mac,
-# then Roamy/M4 (both already have it by hand). Originally pinned to 0.6.6 as the "security-scanned
-# build 2620dea8"; repinned 2026-11-03 to the deployed version (see the pin). The npm update task never loops over
-# nvm_global_packages_extra, so the pin is never bumped by upgrade_packages.
+# OpenRig's pin moved to group_vars/david.yml on 2026-11-05 (all three of David's Macs). Herdr stays here.
 homebrew_formulae_extra:
   - herdr                  # terminal workspace for AI agents — OpenRig's viewer
-nvm_global_packages_extra:
-  - "@openrig/cli@0.7.7"   # 2026-11-03: matches the deployed fleet (M2, M4, Roamy all 0.7.7 on 2026-11-03; 0.6.13 -> 0.7.4 on
-                           # 2026-10-29, brains/openrig/upstream-changes-2026-10-30.md). NOT version-scanned: the only
-                           # scan-log entry is the repo-level one of 2026-10-06, and "2620dea8" (0.6.6) is not in it either.
 homebrew_casks_extra: []
 git_repos_extra: []
 
