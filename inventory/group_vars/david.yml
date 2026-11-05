@@ -104,6 +104,16 @@ install_dam_wrapper: true
 enable_postgresql_paths: false
 
 # -----------------------------------------------------------------------------
+# Node: David's Macs run 24.22.0 (fleet-wide 2026-11-05). Older versions stay listed
+# until David decides to delete them. Team and client machines keep all.yml's values.
+# -----------------------------------------------------------------------------
+nvm_node_versions:
+  - "24.22.0"
+  - "24.13.0"
+  - "22.14.0"
+nvm_node_global: "24.22.0"
+
+# -----------------------------------------------------------------------------
 # OpenRig: pin and bump (policy 2026-11-05). openrig-orch bumps this in one commit
 # at the end of every fleet upgrade. NOT version-scanned: the only scan-log entry
 # is the repo-level one of 2026-10-06. Roamy also has a second copy by hand.
