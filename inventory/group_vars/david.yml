@@ -51,6 +51,10 @@ git_repos:
 user_bin_links:
   - src: "{{ ansible_facts['env']['HOME'] }}/dev/ad/apps/app-registry/bin/my-app"
     dest: "{{ ansible_facts['env']['HOME'] }}/bin/my-app"
+  # Stable Node path for rig specs, Rigby and services. Follows nvm_node_global, so a
+  # version bump moves the link on the next run. Languages runs first and creates the source.
+  - src: "{{ ansible_facts['env']['HOME'] }}/.nvm/versions/node/v{{ nvm_node_global }}"
+    dest: "{{ ansible_facts['env']['HOME'] }}/.local/node-current"
 
 homebrew_formulae_david:
   - rustup                 # Rust toolchain manager (David uses Rust; not a client default)
