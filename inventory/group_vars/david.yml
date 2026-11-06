@@ -123,4 +123,4 @@ nvm_node_global: "24.22.0"
 # is the repo-level one of 2026-10-06. Roamy also has a second copy by hand.
 # -----------------------------------------------------------------------------
 nvm_global_packages_extra:
-  - "@openrig/cli@0.7.7"
+  - "@openrig/cli@0.7.8"
