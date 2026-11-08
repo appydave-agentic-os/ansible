@@ -23,8 +23,8 @@ homebrew_casks_workstation:
   - ghostty                # Primary terminal for Claude Code (Metal GPU rendering, no lag on heavy AI output)
 
   # === PRODUCTIVITY ===
-  # obsidian — removed 2026-11-08, David uninstalled it
-  # hammerspoon — removed 2026-11-08, David: no longer used (Herdr panes replaced its iTerm layouts)
+  - obsidian               # Note-taking (markdown)
+  - hammerspoon            # macOS automation
   # ghostty  — David-specific terminal (group_vars/david.yml) — ADR-0003
   # alfred   — David-specific launcher (group_vars/david.yml) — requires license
   # rectangle — David-specific window manager (group_vars/david.yml)

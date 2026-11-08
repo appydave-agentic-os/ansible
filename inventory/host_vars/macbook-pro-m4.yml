@@ -16,6 +16,7 @@ homebrew_formulae_extra:   # captured from discovery 2026-10-03 (Roamy only)
 homebrew_casks_extra: []
 homebrew_casks_exclude:   # overrides david.yml's list: Roamy keeps Slack (2026-11-04)
   - obsidian
+  - hammerspoon
 git_repos_extra: []
 install_dam_wrapper: true
 

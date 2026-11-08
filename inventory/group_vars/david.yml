@@ -81,6 +81,7 @@ homebrew_formulae_david:
 homebrew_casks_exclude:
   - slack
   - obsidian
+  - hammerspoon   # removed from M4 + M2 2026-11-08; Herdr replaced its iTerm layouts
 
 homebrew_casks_david:
   # ghostty — moved to workstation.yml (all workstations now get Ghostty, not just David's machines)

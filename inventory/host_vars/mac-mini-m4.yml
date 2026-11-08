@@ -40,6 +40,11 @@ homebrew_formulae_extra:   # captured from discovery 2026-10-03 (M4 only)
   - coreutils              # GNU coreutils (gdate, gtimeout…)
   - rclone                 # Cloud storage sync
 homebrew_casks_extra: []
+homebrew_casks_exclude:   # overrides david.yml's list; M4 also drops ollama-app (2026-11-08: no models here, local LLMs run on the M2)
+  - slack
+  - obsidian
+  - hammerspoon
+  - ollama-app
 uv_tools_extra:
   - it2                    # iTerm2 scripting CLI
 git_repos_extra: []
