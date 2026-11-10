@@ -1,6 +1,6 @@
 ---
 # =============================================================================
-# David group — machines operated by David Cruwys
+# David group — machines operated by the owner
 # Applies to: macbook-pro-m4, mac-mini-m4, mac-mini-m2
 # =============================================================================
 # These are David-specific defaults that should NOT be in all.yml (which is
@@ -16,8 +16,7 @@
 # -----------------------------------------------------------------------------
 # Identity — git config (per-machine in host_vars overrides these if needed)
 # -----------------------------------------------------------------------------
-git_user_name: David Cruwys
-git_user_email: you@example.com
+# git_user_name / git_user_email: set in inventory-private/group_vars/david.yml
 
 # -----------------------------------------------------------------------------
 # SSH key propagation

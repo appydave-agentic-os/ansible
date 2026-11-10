@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<!-- Installed on the M2 2026-10-12 by David. Install = ~/.local/share/claude-account-alarm/ + this plist in ~/Library/LaunchAgents + launchctl bootstrap gui/$(id -u). -->
+<!-- Replace __HOME__ and __EXPECTED_EMAIL__ before installing. Install = ~/.local/share/claude-account-alarm/ + this plist in ~/Library/LaunchAgents + launchctl bootstrap gui/$(id -u). -->
 <plist version="1.0">
 <dict>
   <key>Label</key>
@@ -13,7 +13,7 @@
   <key>EnvironmentVariables</key>
   <dict>
     <key>EXPECTED_EMAIL</key>
-    <string>you@example.com</string>
+    <string>__EXPECTED_EMAIL__</string>
     <key>CL_LOCAL_URL</key>
     <string>http://127.0.0.1:7101</string>
   </dict>

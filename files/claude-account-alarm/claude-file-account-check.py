@@ -44,7 +44,7 @@ import urllib.request
 
 PROFILE_URL = "https://api.anthropic.com/api/oauth/profile"
 REVERIFY_SECONDS = 24 * 3600
-DEFAULT_EXPECTED = "you@example.com"
+DEFAULT_EXPECTED = "you@example.com"  # set EXPECTED_EMAIL in the plist
 
 
 def now_iso():
