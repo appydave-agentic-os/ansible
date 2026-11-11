@@ -37,6 +37,12 @@
     - role: dock
       tags: [dock]
 
+    # iTerm2 "AppyDave Dark" profile — own tag, NOT macos, so it still applies when
+    # a machine is provisioned with --skip-tags macos (light Mac, dark terminal).
+    - role: iterm
+      tags: [iterm]
+      when: inventory_hostname in groups['workstation']
+
     - role: repos
       tags: [repos]
 

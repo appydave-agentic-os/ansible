@@ -1,0 +1,7 @@
+---
+# iTerm2 "AppyDave Dark" Dynamic Profile.
+# Colours + font copied from David's M4 default profile (dark set), 2026-11-11.
+# Separate light/dark colours are OFF in the profile, so it stays dark on a light Mac.
+# The GUID is fixed; it must match the "Guid" in files/appydave.json.
+iterm_profile_guid: A7D0DA5E-0000-4D4B-9A1E-A99D0DA4E001
+iterm_set_default_profile: true

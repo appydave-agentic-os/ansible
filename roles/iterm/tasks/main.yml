@@ -1,0 +1,32 @@
+---
+# iTerm2 dark profile — independent of the Mac's light/dark mode.
+# Touches only the user's iTerm2 files/prefs. No become, no system settings.
+# Takes effect when iTerm2 is next launched (quit and reopen it if it is running).
+
+- name: Ensure iTerm2 DynamicProfiles folder exists
+  ansible.builtin.file:
+    path: "{{ ansible_facts['env']['HOME'] }}/Library/Application Support/iTerm2/DynamicProfiles"
+    state: directory
+    mode: "0755"
+
+- name: Install AppyDave Dark dynamic profile
+  ansible.builtin.copy:
+    src: appydave.json
+    dest: "{{ ansible_facts['env']['HOME'] }}/Library/Application Support/iTerm2/DynamicProfiles/appydave.json"
+    mode: "0644"
+
+- name: Read current iTerm2 default profile GUID
+  ansible.builtin.command: defaults read com.googlecode.iterm2 "Default Bookmark Guid"
+  register: iterm_default_guid
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  when: iterm_set_default_profile | bool
+
+- name: Make AppyDave Dark the default iTerm2 profile
+  ansible.builtin.command: >
+    defaults write com.googlecode.iterm2 "Default Bookmark Guid" -string {{ iterm_profile_guid }}
+  changed_when: true
+  when:
+    - iterm_set_default_profile | bool
+    - (iterm_default_guid.stdout | default('') | trim) != iterm_profile_guid
