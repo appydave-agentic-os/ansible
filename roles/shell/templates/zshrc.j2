@@ -25,7 +25,7 @@ source $ZSH/oh-my-zsh.sh
 eval "$(rbenv init -)"
 
 # pyenv
-eval "$(pyenv init - --no-rehash)"  # --no-rehash: a stale shim lock stalled every new shell 60s (11 Nov 2026). Run `pyenv rehash` after installing a Python tool.
+eval "$(pyenv init - --no-rehash)"  # --no-rehash: a stale shim lock stalled every new shell 60s (11 Nov 2026). pip installs still rehash on their own (pyenv's pip-rehash hook).
 
 # -----------------------------------------------------------------------------
 # PATH
