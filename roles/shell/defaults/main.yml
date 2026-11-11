@@ -4,3 +4,7 @@ zsh_plugins:
   - git
 shell_extra_paths: []
 shell_env_vars: {}
+shell_env_vars_host: {}     # per-host additions/overrides, exported after shell_env_vars (set in host_vars)
+shell_buzz_wrapper: false   # Buzz relay wrapper functions in .zshrc (host_vars)
+shell_rc_sources: []        # extra files sourced at the end of .zshrc if present (private inventory: group)
+shell_rc_sources_host: []   # same, per host (private inventory: host_vars)

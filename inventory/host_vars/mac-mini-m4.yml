@@ -52,3 +52,9 @@ git_repos_extra: []
 # power role: 24/7, no overnight sleep window (measured 2026-10-03: the M4 already runs
 # this way — sleep 0, no scheduled events). Always-on services / transcription jobs.
 power_schedule_enabled: false
+
+# shell role (.zshrc): carried over from the M4's hand-edited file, 2026-11-11
+shell_env_vars_host:
+  EDITOR: code --wait      # the M4 edits in VS Code; other Macs keep vim
+  VISUAL: code --wait
+shell_buzz_wrapper: true   # Buzz relay key lives on the M4

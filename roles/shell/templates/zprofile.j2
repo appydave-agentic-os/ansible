@@ -12,7 +12,7 @@ export PATH="$HOME/.local/bin:$PATH"
 # pyenv (Python version manager)
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
+eval "$(pyenv init --path --no-rehash)"  # --no-rehash: `init --path` also runs `pyenv rehash`, so login shells (iTerm tabs, `ssh -t`, `zsh -l`) still hit the stale shim lock .zshrc avoids (11 Nov 2026).
 
 # nvm (Node version manager)
 export NVM_DIR="$HOME/.nvm"

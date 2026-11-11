@@ -20,3 +20,8 @@ homebrew_casks_exclude:   # overrides david.yml's list: Roamy keeps Slack (2026-
 git_repos_extra: []
 install_dam_wrapper: true
 
+# shell role (.zshrc): carried over from Roamy's hand-edited file, 2026-11-11.
+# Only Roamy sets this; the M4 and M2 set it to "0" in ~/.claude/settings.json. David to decide if it stays.
+shell_env_vars_host:
+  CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS: "1"
+

@@ -31,6 +31,7 @@
     dest: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
     backup: true
     mode: "0644"
+  tags: [zshrc]   # --tags zshrc applies only this file
 
 - name: Deploy .zprofile from template
   ansible.builtin.template:
@@ -38,6 +39,7 @@
     dest: "{{ ansible_facts['env']['HOME'] }}/.zprofile"
     backup: true
     mode: "0644"
+  tags: [zprofile]
 
 - name: Deploy .zshenv from template
   ansible.builtin.template:
@@ -45,6 +47,7 @@
     dest: "{{ ansible_facts['env']['HOME'] }}/.zshenv"
     backup: true
     mode: "0644"
+  tags: [zshenv]
 
 - name: Ensure ~/.config/appydave directory exists
   ansible.builtin.file:
