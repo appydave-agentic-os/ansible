@@ -85,6 +85,16 @@ fi
 export {{ key }}="{{ value }}"
 {% endfor %}
 
+# Strip Claude Code session markers inherited from a parent Claude session (2026-11-20).
+# A terminal host (herdr, a tmux server) started BY a Claude session hands CLAUDE_CODE_CHILD_SESSION=1
+# to every new pane; a `claude` launched there thinks it is a sub-agent and turns transcript saving off.
+# Interactive shells only: Claude's own Bash-tool shells are non-interactive and need these markers.
+if [[ -o interactive ]]; then
+  unset CLAUDECODE CLAUDE_PID AI_AGENT CLAUDE_CODE_CHILD_SESSION CLAUDE_CODE_SESSION_ID \
+    CLAUDE_CODE_BRIDGE_SESSION_ID CLAUDE_CODE_MESSAGING_SOCKET CLAUDE_CODE_MESSAGING_TOKEN \
+    CLAUDE_CODE_CHILD_NOTES_DIR CLAUDE_CODE_ENTRYPOINT CLAUDE_CODE_EXECPATH CLAUDE_CODE_SESSION_ATTENDED
+fi
+
 {% if enable_postgresql_paths | default(false) %}
 # Compiler flags for PostgreSQL (needed for native gem/package builds against libpq)
 export LDFLAGS="-L/opt/homebrew/opt/libpq/lib"
