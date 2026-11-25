@@ -1,4 +1,8 @@
 ---
+# RETIRED 2026-11-25 — no longer in site.yml. David retired Syncthing on the M4, Roamy and the M2
+# ("not the right technique for us"; relay folders unused 60+ days, skills come through git plugins).
+# Kept for history only. Retirement run:
+#   /Users/davidcruwys/dev/appyrigs/runs/disk/readings/syncthing-retire-2026-11-25/README.md
 # =============================================================================
 # Syncthing — P2P file sync for ~/.claude/skills/ across all 3 Macs
 #

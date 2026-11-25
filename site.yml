@@ -54,8 +54,8 @@
       tags: [power]
       when: inventory_hostname in groups['always_on']
 
-    - role: syncthing
-      tags: [syncthing]
+    # syncthing role RETIRED 2026-11-25 (David's call; no relay use in 60+ days, skills come via git
+    # plugins). Role kept in roles/syncthing for history; do not re-add.
 
     - role: transcription_worker
       tags: [transcription_worker]

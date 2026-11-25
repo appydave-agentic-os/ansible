@@ -59,7 +59,7 @@ homebrew_formulae_david:
   - rustup                 # Rust toolchain manager (David uses Rust; not a client default)
   - displayplacer          # Programmatic display arrangement — streaming/multi-monitor setup
   - ripgrep                # Fast grep — Claude Code's Grep tool requires this on ALL machines incl headless
-  - syncthing              # P2P file sync for ~/.claude/skills/ across David's Macs (role handles service start)
+  # syncthing — RETIRED 2026-11-25 (David's call). Not reinstalled; uninstall is manual (brew uninstall syncthing).
   # Captured from M4 + Roamy discovery 2026-10-03 (installed on both, previously undeclared)
   - postgresql@17          # Standalone Postgres + psql/libpq (see CLAUDE.md §PostgreSQL)
   - yt-dlp                 # Video download — FliVideo / transcript harvesting
